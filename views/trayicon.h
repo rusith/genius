@@ -26,6 +26,7 @@ public:
 signals:
   void showHideManagerTriggerd();
   void itemSelected(int reference);
+  void settingsDialogRequested();
 public slots:
  void managerShown();
  void managerHidden();
@@ -42,7 +43,7 @@ private:
   QAction *_showHideAction;
   QAction *_exitAction;
   QAction *_clearAction;
-
+  QAction *_settingsAction;
   void constructIcon();
 };
 

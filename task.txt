@@ -1,0 +1,3 @@
+//animate tray icon when adding item
+// create shortcut to clear history
+

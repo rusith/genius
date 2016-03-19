@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>Settings</class>
  <widget class="QDialog" name="Settings">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -52,8 +55,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>359</width>
-         <height>232</height>
+         <width>351</width>
+         <height>225</height>
         </rect>
        </property>
        <attribute name="label">

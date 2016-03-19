@@ -2,6 +2,7 @@
 #define SETTINGS_H
 
 #include <QDialog>
+#include <QCloseEvent>
 #include <controllers/gsettings.h>
 
 namespace Ui {

@@ -66,6 +66,7 @@ void Controller::makeConnections()
   connect(_manager,SIGNAL(editRequested(ClipboardItem*)),this,SLOT(editRequested(ClipboardItem*)));
   connect(_openSelectorHotkey,SIGNAL(activated()),this,SLOT(openSelectorHKtriggered()));
   connect(_selector,SIGNAL(closing(int)),this,SLOT(selectorClosed(int)));
+  connect(_trayIcon,SIGNAL(settingsDialogRequested()),this,SLOT(settingsdialogRequested()));
 }
 
 bool Controller::sameDataAgain()
