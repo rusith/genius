@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>images/dustbin16.png</file>
+        <file>images/clear16.png</file>
+        <file>images/settings16.png</file>
+        <file>images/exit16.png</file>
+        <file>images/logo16.png</file>
+        <file>images/history16.png</file>
+        <file>images/save16.png</file>
+        <file>images/cancel16.png</file>
+        <file>images/reset16.png</file>
+        <file>images/edit16.png</file>
+        <file>images/ok16.png</file>
+        <file>images/export16.png</file>
+        <file>images/import16.png</file>
+    </qresource>
+</RCC>
