@@ -27,6 +27,27 @@ void FakeKey::simulatePaste()
 #endif
 }
 
+void FakeKey::simulateCopy()
+{
+#ifdef __linux__
+  Display *display=XOpenDisplay(NULL);
+  if(display==NULL)
+  {
+    return;
+  }
+  Window winRoot=XDefaultRootWindow(display);
+  Window winFocus;
+  int revert;
+  XGetInputFocus(display, &winFocus, &revert);
+  XKeyEvent  PressEventV = createKeyEventX11(display, winFocus, winRoot, true, XK_C,ControlMask);
+  XKeyEvent  ReleasEventV = createKeyEventX11(display, winFocus, winRoot, false, XK_C,ControlMask);
+  XSelectInput(display,winFocus,KeyPressMask|KeyReleaseMask);
+  XSendEvent(PressEventV.display, PressEventV.window, True, KeyPressMask, (XEvent *)&PressEventV);
+  XSendEvent(ReleasEventV.display, ReleasEventV.window, True, KeyReleaseMask, (XEvent *)&ReleasEventV);
+  XCloseDisplay(display);
+#endif
+}
+
 #ifdef __linux__
 XKeyEvent FakeKey::createKeyEventX11(Display *display, Window &win,Window &winRoot, bool press,int keycode, int modifiers)
 {

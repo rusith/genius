@@ -109,6 +109,7 @@ void SettingsProvider::charLength(int length)
 
 void SettingsProvider::pasteAutomaticaly(bool value)
 {
+
   _settings->setValue("pasteAutomaticaly",value);
   emit settingsUpdated(this);
 }

@@ -10,7 +10,6 @@
 #include <resources/resources.h>
 #include <views/settings.h>
 #include <QSystemTrayIcon>
-
 class TrayIcon : public QWidget
 {
   Q_OBJECT
@@ -23,10 +22,11 @@ public:
   void updateImageItem(QString *text,QIcon *icon,int reference );
   void removeItem(int reference);
   void clearHistoryList();
+  void showMessage(QString title,QString message,QSystemTrayIcon::MessageIcon icon,int duration);
 signals:
   void showHideManagerTriggerd();
   void itemSelected(int reference);
-  void settingsDialogRequested();
+  //void settingsDialogRequested();
 public slots:
  void managerShown();
  void managerHidden();

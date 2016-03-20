@@ -1,23 +1,27 @@
-#include "settings.h"
-#include "ui_settings.h"
+#include "settingswindow.h"
+#include "ui_settingswindow.h"
 
-Settings::Settings(QWidget *parent) :
-  QDialog(parent),
-  ui(new Ui::Settings)
+SettingsWindow::SettingsWindow(QWidget *parent) :
+  QMainWindow(parent),
+  ui(new Ui::SettingsWindow)
 {
   ui->setupUi(this);
-  initializeUI();
 }
 
-Settings::~Settings()
+SettingsWindow::~SettingsWindow()
 {
   delete ui;
 }
 
-
-void Settings::initializeUI()
+//--------------------------------------basic functions
+void SettingsWindow::initializeUI()
 {
-  setLayout(ui->VL1);
+  ui->centralwidget->setLayout(ui->verticalLayout_2);
+  setCentralWidget(ui->centralwidget);
+}
+
+void SettingsWindow::initializeElements()
+{
   ui->openMinimizedCheckbox->setChecked(GSettings::openMinimized);
   ui->saveImages->setChecked(GSettings::saveImages);
   ui->saveURLs->setChecked(GSettings::saveUrls);
@@ -48,11 +52,9 @@ void Settings::initializeUI()
   ui->openSettingsCB->setChecked(GSettings::openSettingsHotKeyEnabled);
   ui->directCopyCB->setChecked(GSettings::directCopyHotKeyEnabled);
 
-
-
 }
 
-void Settings::on_saveButton_clicked()
+void SettingsWindow::saveData()
 {
   GSettings::openMinimized=ui->openMinimizedCheckbox->isChecked();
   GSettings::saveImages=ui->saveImages->isChecked();
@@ -70,19 +72,51 @@ void Settings::on_saveButton_clicked()
 
   GSettings::pasteAutomaticlay=ui->pasteAutomaticalyButoon->isChecked();
 
-GSettings::openSelectorHotKey=ui->openSelector->keySequence();
-GSettings::clearHistoryHotKey=ui->clearHistory->keySequence();
-GSettings::pasteLastHotKey=ui->pasteLast->keySequence();
-GSettings::openManagerHotkey=ui->openManager->keySequence();
-GSettings::openSettingsHotKey=ui->openSettings->keySequence();
-GSettings::directCopyHotKey=ui->directCopy->keySequence();
+  GSettings::openSelectorHotKey=ui->openSelector->keySequence();
+  GSettings::clearHistoryHotKey=ui->clearHistory->keySequence();
+  GSettings::pasteLastHotKey=ui->pasteLast->keySequence();
+  GSettings::openManagerHotkey=ui->openManager->keySequence();
+  GSettings::openSettingsHotKey=ui->openSettings->keySequence();
+  GSettings::directCopyHotKey=ui->directCopy->keySequence();
 
-GSettings::openSelectorHotKeyEnabled=ui->OpenSelectorCB->isChecked();
-GSettings::clearHistoryHotKeyEnabled=ui->clearHistoryCB->isChecked();
-GSettings::pasteLastHotKeyEnabled=ui->pasteLastCB->isChecked();
-GSettings::openManagerHotkeyEnabled=ui->openManagerCB->isChecked();
-GSettings::openSettingsHotKeyEnabled=ui->openSettingsCB->isChecked();
-GSettings::directCopyHotKeyEnabled=ui->directCopyCB->isChecked();
-
-accept();
+  GSettings::openSelectorHotKeyEnabled=ui->OpenSelectorCB->isChecked();
+  GSettings::clearHistoryHotKeyEnabled=ui->clearHistoryCB->isChecked();
+  GSettings::pasteLastHotKeyEnabled=ui->pasteLastCB->isChecked();
+  GSettings::openManagerHotkeyEnabled=ui->openManagerCB->isChecked();
+  GSettings::openSettingsHotKeyEnabled=ui->openSettingsCB->isChecked();
+  GSettings::directCopyHotKeyEnabled=ui->directCopyCB->isChecked();
 }
+
+//----------------------------------------------------------events
+void SettingsWindow::showEvent(QShowEvent *event)
+{
+  initializeUI();
+  initializeElements();
+  event->accept();
+}
+
+void SettingsWindow::hideEvent(QHideEvent *event)
+{
+  emit hiding();
+  event->accept();
+}
+
+void SettingsWindow::closeEvent(QCloseEvent *event)
+{
+  //ignore the close event and hide the window
+  event->ignore();
+  hide();
+}
+
+//--------------------------------------------slots
+void SettingsWindow::on_saveButton_clicked()
+{
+  saveData();
+  hide();
+}
+
+void SettingsWindow::on_cancelButton_clicked()
+{
+  hide();
+}
+

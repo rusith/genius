@@ -15,6 +15,20 @@ void GSettings::initialize()
   saveUrls=settings.value("saveURLs").toBool();
   openMinimized=settings.value("openMinimized").toBool();
   pasteAutomaticlay=settings.value("pasteAutomaticaly").toBool();
+
+  openSelectorHotKey=QKeySequence(settings.value("openSelectorHotkey").toString());
+  clearHistoryHotKey=QKeySequence(settings.value("clearHistoryHotkey").toString());
+  pasteLastHotKey=QKeySequence(settings.value("pasteLastHotkey").toString());
+  openManagerHotkey=QKeySequence(settings.value("openManagerHotkey").toString());
+  openSettingsHotKey=QKeySequence(settings.value("openSettingsHotkey").toString());
+  directCopyHotKey=QKeySequence(settings.value("directCopyHotkey").toString());
+
+  openSelectorHotKeyEnabled=settings.value("openSelectorHotKeyEnabled").toBool();
+  clearHistoryHotKeyEnabled=settings.value("clearHistoryHotKeyEnabled").toBool();
+  pasteLastHotKeyEnabled=settings.value("pasteLastHotKeyEnabled").toBool();
+  openManagerHotkeyEnabled=settings.value("openManagerHotkeyEnabled").toBool();
+  openSettingsHotKeyEnabled=settings.value("openSettingsHotKeyEnabled").toBool();
+  directCopyHotKeyEnabled=settings.value("directCopyHotKeyEnabled").toBool();
 }
 
 void GSettings::commit()
@@ -28,6 +42,21 @@ void GSettings::commit()
   settings.setValue("saveURLs",saveUrls);
   settings.setValue("openMinimized",openMinimized);
   settings.setValue("pasteAutomaticaly",pasteAutomaticlay);
+
+  settings.setValue("openSelectorHotkey",openSelectorHotKey.toString(QKeySequence::NativeText));
+  settings.setValue("clearHistoryHotkey",clearHistoryHotKey.toString(QKeySequence::NativeText));
+  settings.setValue("pasteLastHotkey",pasteLastHotKey.toString(QKeySequence::NativeText));
+  settings.setValue("openManagerHotkey",openManagerHotkey.toString(QKeySequence::NativeText));
+  settings.setValue("openSettingsHotkey",openSettingsHotKey.toString(QKeySequence::NativeText));
+  settings.setValue("directCopyHotkey",directCopyHotKey.toString(QKeySequence::NativeText));
+
+  settings.setValue("openSelectorHotKeyEnabled",openSelectorHotKeyEnabled);
+  settings.setValue("clearHistoryHotKeyEnabled",clearHistoryHotKeyEnabled);
+  settings.setValue("pasteLastHotKeyEnabled",pasteLastHotKeyEnabled);
+  settings.setValue("openManagerHotkeyEnabled",openManagerHotkeyEnabled);
+  settings.setValue("openSettingsHotKeyEnabled",openSettingsHotKeyEnabled);
+  settings.setValue("directCopyHotKeyEnabled",directCopyHotKeyEnabled);
+
 }
 
 bool GSettings::showInSingleLine=false;
@@ -38,3 +67,23 @@ bool GSettings::saveImages=false;
 bool GSettings::saveUrls=false;
 bool GSettings::openMinimized=false;
 bool GSettings::pasteAutomaticlay=false;
+
+
+QKeySequence GSettings::openSelectorHotKey=QKeySequence("Ctrl+Shift+V");
+QKeySequence GSettings::clearHistoryHotKey=QKeySequence("Ctrl+Shift+Alt+C");
+QKeySequence GSettings::pasteLastHotKey=QKeySequence("Ctrl+Alt+V");
+QKeySequence GSettings::openManagerHotkey=QKeySequence("Ctrl+Shift+Alt+M");
+QKeySequence GSettings::openSettingsHotKey=QKeySequence("Ctrl+Shift+Alt+S");
+QKeySequence GSettings::directCopyHotKey=QKeySequence("Shift+Alt+C");
+
+bool GSettings::openSelectorHotKeyEnabled=false;
+bool GSettings::clearHistoryHotKeyEnabled=false;
+bool GSettings::pasteLastHotKeyEnabled=false;
+bool GSettings::openManagerHotkeyEnabled=false;
+bool GSettings::openSettingsHotKeyEnabled=false;
+bool GSettings::directCopyHotKeyEnabled=false;
+
+
+
+
+

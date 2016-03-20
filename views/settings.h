@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QCloseEvent>
+#include <QDebug>
 #include <controllers/gsettings.h>
 
 namespace Ui {
@@ -24,6 +25,7 @@ private:
   Ui::Settings *ui;
 
   void initializeUI();
+
 };
 
 #endif // SETTINGS_H

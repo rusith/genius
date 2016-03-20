@@ -24,8 +24,38 @@ Controller::~Controller()
 
   if(_openSelectorHotkey)
   {
-    _openSelectorHotkey->setRegistered(false);
-    delete _openSelectorHotkey;
+     _openSelectorHotkey->setRegistered(false);
+     delete _openSelectorHotkey;
+  }
+
+  if(_clearHistoryHotKey)
+  {
+     _clearHistoryHotKey->setRegistered(false);
+     delete _clearHistoryHotKey ;
+  }
+
+  if(_pasteLastHotKey)
+  {
+     _pasteLastHotKey->setRegistered(false);
+     delete _pasteLastHotKey;
+  }
+
+  if(_openManagerHotKey)
+  {
+     _openManagerHotKey->setRegistered(false);
+     delete _openManagerHotKey;
+  }
+
+  if(_openSettingsHotKey)
+  {
+     _openSettingsHotKey->setRegistered(false);
+     delete _openSettingsHotKey;
+  }
+
+  if(_directCopyHotkey)
+  {
+     _directCopyHotkey->setRegistered(false);
+     delete _directCopyHotkey;
   }
 }
 
@@ -35,8 +65,9 @@ void Controller::start()
   _manager=new Manager(_history,_clipboard,0);
   _trayIcon=new TrayIcon(_history);
   _selector=new Selector(_history);
-  _openSelectorHotkey=new QHotkey(QKeySequence(tr("Ctrl+Shift+V")),false,this);
-  _openSelectorHotkey->setRegistered(true);
+  _settingsWindow=new SettingsWindow();
+
+  createHotkeysAndConnections();
   makeConnections();
 
   _manager->initialize();
@@ -65,8 +96,9 @@ void Controller::makeConnections()
   connect(_manager,SIGNAL(itemSelected(int)),this,SLOT(itemSelected(int)));
   connect(_manager,SIGNAL(editRequested(ClipboardItem*)),this,SLOT(editRequested(ClipboardItem*)));
   connect(_openSelectorHotkey,SIGNAL(activated()),this,SLOT(openSelectorHKtriggered()));
+  connect(_clearHistoryHotKey,SIGNAL(activated()),this,SLOT(clearHistoryHKTrigered()));
   connect(_selector,SIGNAL(closing(int)),this,SLOT(selectorClosed(int)));
-  connect(_trayIcon,SIGNAL(settingsDialogRequested()),this,SLOT(settingsdialogRequested()));
+  connect(_settingsWindow,SIGNAL(hiding()),this,SLOT(settingsWindow_hidden()));
 }
 
 bool Controller::sameDataAgain()
@@ -74,23 +106,36 @@ bool Controller::sameDataAgain()
   if(!_history||_history->isEmpty())return false;
   ClipboardItem *item=_history->first();
   ClipboardItem::ClipboardMimeType type=item->type();
-  if(_clipboard->mimeData()->hasText() && type==ClipboardItem::Text){
+  if(_clipboard->mimeData()->hasText() && type==ClipboardItem::Text)
+  {
       return *item->text()==_clipboard->text();
   }
-  else if(_clipboard->mimeData()->hasImage() && type==ClipboardItem::Image){
+  else if(_clipboard->mimeData()->hasImage() && type==ClipboardItem::Image)
+  {
       return *item->image()==_clipboard->image();
   }
-  else if(_clipboard->mimeData()->hasUrls() && type==ClipboardItem::URLs){
+  else if(_clipboard->mimeData()->hasUrls() && type==ClipboardItem::URLs)
+  {
       return *item->urls()==_clipboard->mimeData()->urls();
   }
   else return false;
 }
 
+bool Controller::isClipboardEmpty()
+{
+  const QMimeData *mimeData=_clipboard->mimeData(QClipboard::Clipboard);
+  if(!mimeData)
+    return true;
+  if(mimeData->hasText() || mimeData->hasImage() || mimeData->hasUrls())
+    return false;
+  else return true;
+}
+
 void Controller::clipboardChanged(QClipboard::Mode mode)
 {
-  if(mode==QClipboard::Clipboard)
+  if(mode==QClipboard::Clipboard )
   {
-    if(!sameDataAgain())
+    if(!isClipboardEmpty() && !sameDataAgain() && !_holtCollection)
     {
       ClipboardItem *item=new ClipboardItem(_clipboard);
       ClipboardItem::ClipboardMimeType type=item->type();
@@ -269,6 +314,7 @@ void Controller::itemSelected(int reference)
       else if(type==ClipboardItem::Image)
       {
         QImage img=*item->image();
+
         _history->remove(reference);
         _clipboard->setImage(img);
       }
@@ -276,6 +322,7 @@ void Controller::itemSelected(int reference)
       {
         QMimeData *mimedata=new QMimeData();
         mimedata->setUrls(*item->urls());
+
         _history->remove(reference);
         _clipboard->setMimeData(mimedata);
       }
@@ -284,6 +331,34 @@ void Controller::itemSelected(int reference)
   }
 }
 
+void Controller::selectItemWithoutDeleting(int reference)
+{
+  if(_history->isEmpty()==false)
+  {
+    ClipboardItem *item=_history->get(reference);
+    if(item)
+    {
+      ClipboardItem::ClipboardMimeType type=item->type();
+      if(type==ClipboardItem::Text)
+      {
+        QString str=*item->text();
+        _clipboard->setText(str);
+      }
+      else if(type==ClipboardItem::Image)
+      {
+        QImage img=*item->image();
+        _clipboard->setImage(img);
+      }
+      else if(type==ClipboardItem::URLs)
+      {
+        QMimeData *mimedata=new QMimeData();
+        mimedata->setUrls(*item->urls());
+        _clipboard->setMimeData(mimedata);
+      }
+
+    }
+  }
+}
 void Controller::editRequested(ClipboardItem *item)
 {
   if(item)
@@ -339,4 +414,93 @@ void Controller::openSelectorHKtriggered()
     _selector->show();
     _selectorOpen=true;
   }
+}
+
+void Controller::clearHistoryHKTrigered()
+{
+  if(_history->isEmpty()==false)
+  {
+    int length=_history->length();
+    _history->clear();
+    _trayIcon->showMessage("history cleard",QString("clipboard history is cleard. \n%1 items was deleted").arg(length),QSystemTrayIcon::Information,1000);
+  }
+}
+
+void Controller::pasteLasteHKTrigered()
+{
+  int length=_history->length();
+  if(length>1)
+  {
+    ClipboardItem *item=_history->at(1);
+    if(item)
+    {
+      itemSelected(item->ref());
+      FakeKey::simulatePaste();
+    }
+  }
+}
+
+void Controller::openManagerHKTriggered()
+{
+  if(!_managerOpened)
+  {
+    _manager->show();
+  }
+}
+
+void Controller::openSettingsHKTriggered()
+{
+  if(!_settingsWindowOpened)
+  {
+    _settingsWindow->show();
+    _settingsWindowOpened=true;
+  }
+}
+
+void Controller::directCopyHKTriggered()
+{
+  FakeKey::simulateCopy();
+  _clipboard->clear(QClipboard::Clipboard);
+}
+
+
+void Controller::createHotkeysAndConnections()
+{
+  if(GSettings::openSelectorHotKeyEnabled)
+  {
+     _openSelectorHotkey=new QHotkey(GSettings::openSelectorHotKey,true);
+     connect(_openSelectorHotkey,SIGNAL(activated()),this,SLOT(openSelectorHKtriggered()));
+  }
+  if(GSettings::clearHistoryHotKeyEnabled)
+  {
+     _clearHistoryHotKey=new QHotkey(GSettings::clearHistoryHotKey,true);
+     connect(_clearHistoryHotKey,SIGNAL(activated()),this,SLOT(clearHistoryHKTrigered()));
+  }
+  if(GSettings::pasteLastHotKeyEnabled)
+  {
+     _pasteLastHotKey=new QHotkey(GSettings::pasteLastHotKey,true);
+     connect(_pasteLastHotKey,SIGNAL(activated()),this,SLOT(pasteLasteHKTrigered()));
+  }
+  if(GSettings::openManagerHotkeyEnabled)
+  {
+     _openManagerHotKey=new QHotkey(GSettings::openManagerHotkey,true);
+     connect(_openManagerHotKey,SIGNAL(activated()),this,SLOT(openManagerHKTriggered()));
+  }
+  if(GSettings::openSettingsHotKeyEnabled)
+  {
+     _openSettingsHotKey=new QHotkey(GSettings::openSettingsHotKey,true);
+     connect(_openSettingsHotKey,SIGNAL(activated()),this,SLOT(openSettingsHKTriggered()));
+  }
+  if(GSettings::directCopyHotKeyEnabled)
+  {
+     _directCopyHotkey=new QHotkey(GSettings::directCopyHotKey,true);
+     connect(_directCopyHotkey,SIGNAL(activated()),this,SLOT(directCopyHKTriggered()));
+  }
+}
+
+
+void Controller::settingsWindow_hidden()
+{
+  if(_settingsWindowOpened)
+    _settingsWindowOpened=false;
 }

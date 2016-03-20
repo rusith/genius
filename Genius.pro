@@ -26,7 +26,8 @@ SOURCES += main.cpp \
     views/imageeditor.cpp \
     controllers/gsettings.cpp \
     views/selector.cpp \
-    controllers/fakekey.cpp
+    controllers/fakekey.cpp \
+    views/settingswindow.cpp
 
 HEADERS  += \
     views/manager.h \
@@ -42,14 +43,16 @@ HEADERS  += \
     views/imageeditor.h \
     controllers/gsettings.h \
     views/selector.h \
-    controllers/fakekey.h
+    controllers/fakekey.h \
+    views/settingswindow.h
 
 FORMS    += \
     views/manager.ui \
     views/settings.ui \
     views/texteditor.ui \
     views/imageeditor.ui \
-    views/selector.ui
+    views/selector.ui \
+    views/settingswindow.ui
 
 DISTFILES +=
 
