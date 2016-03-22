@@ -2,10 +2,13 @@
 #define SETTINGSWINDOW_H
 
 #include <QMainWindow>
-#include <controllers/gsettings.h>
 #include <QShowEvent>
 #include <QHideEvent>
 #include <QCloseEvent>
+#include <QColorDialog>
+#include <QColor>
+#include <QDebug>
+#include <controllers/gsettings.h>
 
 namespace Ui {
 class SettingsWindow;
@@ -25,6 +28,9 @@ signals:
 private slots:
   void on_saveButton_clicked();
   void on_cancelButton_clicked();
+  void on_SBCSelectButton_clicked();
+  void on_BorderColorButton_clicked();
+  void on_animationDurationInput_textEdited(const QString &arg1);
 
 private:
   Ui::SettingsWindow *ui;

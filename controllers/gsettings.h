@@ -23,7 +23,7 @@ public:
   static QKeySequence openManagerHotkey;
   static QKeySequence openSettingsHotKey;
   static QKeySequence directCopyHotKey;
-
+  static QKeySequence closeSelectorHotkey;
 
   static bool openSelectorHotKeyEnabled;
   static bool clearHistoryHotKeyEnabled;
@@ -32,6 +32,10 @@ public:
   static bool openSettingsHotKeyEnabled;
   static bool directCopyHotKeyEnabled;
 
+  static QString selectorItemBackgroundColor;
+  static int selectorBorderSize;
+  static QString selectorBorderColor;
+  static int selectorAnimationDuration;
 
 };
 

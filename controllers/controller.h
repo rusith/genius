@@ -12,7 +12,6 @@
 #include <QThread>
 #include <tools/toolkit.h>
 #include <views/trayicon.h>
-#include <views/settings.h>
 #include <views/texteditor.h>
 #include <views/imageeditor.h>
 #include <controllers/gsettings.h>
@@ -42,7 +41,7 @@ private slots:
   void history_itemUpdated(ClipboardItem *item);
 
   //----------------------------views related slots
-  void settingsdialogRequested();
+  void settingsWindowRequested();
   void showHideManagerRequest();
   void selectorClosed(int currentIndex);
 
@@ -61,8 +60,8 @@ private slots:
 
 private:
   //------------------------basic elements
-  ClipboardHistory *_history;
-  QClipboard *_clipboard;
+  ClipboardHistory *_history=NULL;
+  QClipboard *_clipboard=NULL;
 
   //------------------------window controls
   bool _managerOpened;
@@ -71,27 +70,36 @@ private:
   bool _holtCollection;
 
   //-------------------------view elements
-  Manager *_manager;
-  TrayIcon *_trayIcon;
-  Selector *_selector;
-  SettingsWindow *_settingsWindow;
+  Manager *_manager=NULL;
+  TrayIcon *_trayIcon=NULL;
+  Selector *_selector=NULL;
+  SettingsWindow *_settingsWindow=NULL;
 
 
   //----------------------------hotkeys
-  QHotkey *_openSelectorHotkey;
-  QHotkey *_clearHistoryHotKey;
-  QHotkey *_pasteLastHotKey;
-  QHotkey *_openManagerHotKey;
-  QHotkey *_openSettingsHotKey;
-  QHotkey *_directCopyHotkey;
+  QHotkey *_openSelectorHotkey=NULL;
+  QHotkey *_clearHistoryHotKey=NULL;
+  QHotkey *_pasteLastHotKey=NULL;
+  QHotkey *_openManagerHotKey=NULL;
+  QHotkey *_openSettingsHotKey=NULL;
+  QHotkey *_directCopyHotkey=NULL;
 
-  //------------------------------functions
-  void createHotkeysAndConnections();
+  //------------------------------ basic functions
+  void createViews();
+  void showViews();
+  void addItem(ClipboardItem *item, int index);
+  void createHotkeys();
+  void createConnections();
+  void selectItem(int reference);
+  void letToEditItem(ClipboardItem *item);
+  void updateItem(ClipboardItem *item);
+  //--------------------------------view function
+  void toggleManager();
   void makeConnections();
   bool sameDataAgain();
   bool isClipboardEmpty();
-
-  void selectItemWithoutDeleting(int reference);
+  void deleteHotkeys();
+  void deleteVariables();
 };
 
 #endif // CONTROLLER_H

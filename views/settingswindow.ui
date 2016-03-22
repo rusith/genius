@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>437</width>
-    <height>350</height>
+    <height>432</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,13 +18,13 @@
     <normaloff>:/images/images/settings16.png</normaloff>:/images/images/settings16.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>10</y>
       <width>421</width>
-      <height>331</height>
+      <height>391</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -195,6 +195,163 @@
           </item>
          </layout>
         </widget>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>80</y>
+           <width>371</width>
+           <height>161</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Selector</string>
+         </property>
+         <widget class="QWidget" name="layoutWidget">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>20</y>
+            <width>284</width>
+            <height>136</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <item>
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>background Color</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="SBCPreview">
+               <property name="styleSheet">
+                <string notr="true">QLabel{
+	background: lightblue;
+ background-repeat: repeat-y;
+  background-position: left;
+}</string>
+               </property>
+               <property name="text">
+                <string>lightblue</string>
+               </property>
+               <property name="textFormat">
+                <enum>Qt::RichText</enum>
+               </property>
+               <property name="scaledContents">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="SBCSelectButton">
+               <property name="styleSheet">
+                <string notr="true">Button{
+background-color:red;
+}</string>
+               </property>
+               <property name="text">
+                <string>change</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_8">
+             <item>
+              <widget class="QLabel" name="label_4">
+               <property name="text">
+                <string>border size</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="borderSizeSpinBox">
+               <property name="maximum">
+                <number>20</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_5">
+               <property name="text">
+                <string>px</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_9">
+             <item>
+              <widget class="QLabel" name="label_6">
+               <property name="text">
+                <string>border Color</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="BorederColorPreview">
+               <property name="styleSheet">
+                <string notr="true">QLabel{
+	background: lightblue;
+ background-repeat: repeat-y;
+  background-position: left;
+}</string>
+               </property>
+               <property name="text">
+                <string>lightblue</string>
+               </property>
+               <property name="textFormat">
+                <enum>Qt::RichText</enum>
+               </property>
+               <property name="scaledContents">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="BorderColorButton">
+               <property name="styleSheet">
+                <string notr="true">Button{
+background-color:red;
+}</string>
+               </property>
+               <property name="text">
+                <string>change</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_10">
+             <item>
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>animation Duration</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="animationDurationInput"/>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_8">
+               <property name="text">
+                <string>ms</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </widget>
        </widget>
        <widget class="QWidget" name="ShortcutsTab">
         <attribute name="title">
@@ -206,7 +363,7 @@
            <x>10</x>
            <y>10</y>
            <width>394</width>
-           <height>241</height>
+           <height>270</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
@@ -243,6 +400,20 @@
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;hotkey for Open Selector&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
              </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_11">
+            <item>
+             <widget class="QLabel" name="label_9">
+              <property name="text">
+               <string>      Relese Selector</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QKeySequenceEdit" name="releseSelector"/>
             </item>
            </layout>
           </item>
@@ -415,13 +586,139 @@
      </item>
     </layout>
    </widget>
-   <zorder>tabWidget</zorder>
-   <zorder>layoutWidget_4</zorder>
-   <zorder>cancelButton</zorder>
   </widget>
  </widget>
  <resources>
   <include location="../resources/resources.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>OpenSelectorCB</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_9</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>108</x>
+     <y>78</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>121</x>
+     <y>103</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>OpenSelectorCB</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>openSelector</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>90</x>
+     <y>82</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>208</x>
+     <y>84</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>OpenSelectorCB</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>releseSelector</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>92</x>
+     <y>79</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>109</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clearHistoryCB</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>clearHistory</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>71</x>
+     <y>147</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>206</x>
+     <y>156</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pasteLastCB</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>pasteLast</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>80</x>
+     <y>181</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>192</x>
+     <y>190</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>openManagerCB</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>openManager</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>65</x>
+     <y>214</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>274</x>
+     <y>228</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>openSettingsCB</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>openSettings</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>98</x>
+     <y>252</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>197</x>
+     <y>251</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>directCopyCB</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>directCopy</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>275</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>265</x>
+     <y>289</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

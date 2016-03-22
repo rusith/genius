@@ -21,7 +21,6 @@ SOURCES += main.cpp \
     views/trayicon.cpp \
     tools/toolkit.cpp \
     resources/resources.cpp \
-    views/settings.cpp \
     views/texteditor.cpp \
     views/imageeditor.cpp \
     controllers/gsettings.cpp \
@@ -38,7 +37,6 @@ HEADERS  += \
     views/trayicon.h \
     tools/toolkit.h \
     resources/resources.h \
-    views/settings.h \
     views/texteditor.h \
     views/imageeditor.h \
     controllers/gsettings.h \
@@ -48,7 +46,6 @@ HEADERS  += \
 
 FORMS    += \
     views/manager.ui \
-    views/settings.ui \
     views/texteditor.ui \
     views/imageeditor.ui \
     views/selector.ui \

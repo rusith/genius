@@ -29,6 +29,7 @@ void Selector::initialize()
 
 void Selector::initializeUI()
 {
+
   QApplication::setActiveWindow(this);
   int length=_history->length();
   if(length>1)
@@ -85,7 +86,7 @@ QLabel *Selector::createLabel(QRect &geometry, ClipboardItem *content)
   newLabel->setGeometry(geometry);
   newLabel->setWordWrap(true);
   newLabel->setScaledContents(true);
-  newLabel->setStyleSheet("QLabel {\n    background: lightblue;\n    background-repeat: repeat-y;\n    background-position: left;\n	border-width: 2px;\n    border-style: solid;\n	\n    border-radius: 15px;\n}");
+  newLabel->setStyleSheet("QLabel {\n    background: "+GSettings::selectorItemBackgroundColor+";\n    background-repeat: repeat-y;\n    background-position: left;\n	border-width: "+GSettings::selectorBorderSize+"px;\n border-color: "+GSettings::selectorBorderColor+";\n   border-style: solid;\n	\n    border-radius: 15px;\n}");
   QGraphicsOpacityEffect *opacityEffect=new QGraphicsOpacityEffect(newLabel);
   opacityEffect->setOpacity((geometry==currentG?1:0.5));
   newLabel->setGraphicsEffect(opacityEffect);
@@ -127,7 +128,7 @@ void Selector::gotoNext()
 
   if(!lCurrent||!lNext)return;
 
-  int duration=250;
+  int duration=GSettings::selectorAnimationDuration;
   QParallelAnimationGroup *animationGroup=new QParallelAnimationGroup(this);
 
   QPropertyAnimation *aNextToCurrentG=new QPropertyAnimation(lNext,"geometry",animationGroup);
@@ -180,7 +181,7 @@ void Selector::gotoPrevious()
   QLabel *lPrevious=getLabel(-1);
 
   if(!lCurrent||!lPrevious)return;
-  int duration=250;
+  int duration=GSettings::selectorAnimationDuration;
   QParallelAnimationGroup *animationGroup=new QParallelAnimationGroup(this);
 
 
@@ -350,22 +351,53 @@ void Selector::keyPressEvent(QKeyEvent *event)
 
 void Selector::keyReleaseEvent(QKeyEvent *event)
 {
-  if(event)
+  QStringList sequences=GSettings::closeSelectorHotkey.toString().split("+",QString::SkipEmptyParts);
+  if(sequences.isEmpty()==false)
   {
-    int key=event->key();
-    if(key==Qt::Key_Shift||key==Qt::Key_Control)
+    QString currentSequence=QKeySequence(event->key()).toString();
+    foreach (QString sequence, sequences)
     {
-      hide();
+      if(sequence==currentSequence)
     }
   }
+  foreach (QK, container) {
+
+  }
+  int key=event->key();
+  QStringList keys;
+  QStringList strs=QKeySequence(GSettings::closeSelectorHotkey).toString().split(",");
+  if(!strs.isEmpty())
+  {
+    foreach (QString str, strs)
+    {
+      keys.append(str);
+    }
+  }
+  keys=QKeySequence(GSettings::closeSelectorHotkey).toString().split("+");
+
+  foreach (QString str, keys)
+  {
+    qDebug()<<str;
+  }
+hide();
+//  int count=GSettings::openSelectorHotKey.count();
+//  if(count>0)
+//  {
+//    for(int i=0;i<count;i++)
+//    {
+//      if(key==GSettings::openSelectorHotKey[i])
+//      {
+
+//      }
+//    }
+//  }
+
 }
 
 void Selector::hideEvent(QHideEvent *event)
 {
-  if(event)
-  {
-    emit closing(_currentIndex);
-  }
+  emit closing(_currentIndex);
+  event->accept();
 }
 
 void Selector::showEvent(QShowEvent *event)

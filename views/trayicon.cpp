@@ -29,11 +29,11 @@ void TrayIcon::constructIcon()
   _clearAction->setIconText("clear hisory");
   _menu->addAction(_clearAction);
 
-//  _settingsAction=new QAction(_menu);
-//  _settingsAction->setIcon(QIcon(Resources::settings16));
-//  _settingsAction->setIconText("settings");
-//  _settingsAction->setToolTip("open settings dialog");
-//  _menu->addAction(_settingsAction);
+  _settingsAction=new QAction(_menu);
+  _settingsAction->setIcon(QIcon(Resources::settings16));
+  _settingsAction->setIconText("settings");
+  _settingsAction->setToolTip("open settings dialog");
+  _menu->addAction(_settingsAction);
 
   _exitAction=new QAction(_menu);
   _exitAction->setIcon(QIcon(Resources::exit16));
@@ -221,10 +221,10 @@ void TrayIcon::menuActionTrigered(QAction *action)
     if(_history && _history->isEmpty()==false)
       _history->clear();
   }
-//  else if(action==_settingsAction)
-//  {
-//    emit settingsDialogRequested();
-//  }
+  else if(action==_settingsAction)
+  {
+    emit settingsDialogRequested();
+  }
 }
 
 void TrayIcon::historyMenuActionTriggered(QAction *action)

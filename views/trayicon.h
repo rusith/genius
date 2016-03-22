@@ -8,7 +8,6 @@
 #include <QAction>
 #include <QDebug>
 #include <resources/resources.h>
-#include <views/settings.h>
 #include <QSystemTrayIcon>
 class TrayIcon : public QWidget
 {
@@ -26,7 +25,7 @@ public:
 signals:
   void showHideManagerTriggerd();
   void itemSelected(int reference);
-  //void settingsDialogRequested();
+  void settingsDialogRequested();
 public slots:
  void managerShown();
  void managerHidden();

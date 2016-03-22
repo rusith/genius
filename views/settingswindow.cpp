@@ -22,6 +22,9 @@ void SettingsWindow::initializeUI()
 
 void SettingsWindow::initializeElements()
 {
+
+
+
   ui->openMinimizedCheckbox->setChecked(GSettings::openMinimized);
   ui->saveImages->setChecked(GSettings::saveImages);
   ui->saveURLs->setChecked(GSettings::saveUrls);
@@ -44,6 +47,7 @@ void SettingsWindow::initializeElements()
   ui->openManager->setKeySequence(GSettings::openManagerHotkey);
   ui->openSettings->setKeySequence(GSettings::openSettingsHotKey);
   ui->directCopy->setKeySequence(GSettings::directCopyHotKey);
+  ui->releseSelector->setKeySequence(GSettings::closeSelectorHotkey);
 
   ui->OpenSelectorCB->setChecked(GSettings::openSelectorHotKeyEnabled);
   ui->clearHistoryCB->setChecked(GSettings::clearHistoryHotKeyEnabled);
@@ -51,6 +55,15 @@ void SettingsWindow::initializeElements()
   ui->openManagerCB->setChecked(GSettings::openManagerHotkeyEnabled);
   ui->openSettingsCB->setChecked(GSettings::openSettingsHotKeyEnabled);
   ui->directCopyCB->setChecked(GSettings::directCopyHotKeyEnabled);
+
+  ui->SBCPreview->setStyleSheet("QLabel{\n	background:"+GSettings::selectorItemBackgroundColor+";\n background-repeat: repeat-y;\n  background-position: left;\n}");
+  ui->SBCPreview->setText(GSettings::selectorItemBackgroundColor);
+
+  ui->borderSizeSpinBox->setValue(GSettings::selectorBorderSize);
+  ui->BorederColorPreview->setStyleSheet("QLabel{\n	background:"+GSettings::selectorBorderColor+";\n background-repeat: repeat-y;\n  background-position: left;\n}");
+  ui->BorederColorPreview->setText(GSettings::selectorBorderColor);
+
+  ui->animationDurationInput->setText(QString("%1").arg(GSettings::selectorAnimationDuration));
 
 }
 
@@ -85,6 +98,13 @@ void SettingsWindow::saveData()
   GSettings::openManagerHotkeyEnabled=ui->openManagerCB->isChecked();
   GSettings::openSettingsHotKeyEnabled=ui->openSettingsCB->isChecked();
   GSettings::directCopyHotKeyEnabled=ui->directCopyCB->isChecked();
+  GSettings::closeSelectorHotkey=ui->releseSelector->keySequence();
+
+  GSettings::selectorItemBackgroundColor=ui->SBCPreview->text();
+  GSettings::selectorBorderColor=ui->BorederColorPreview->text();
+  GSettings::selectorBorderSize=ui->borderSizeSpinBox->value();
+  GSettings::selectorAnimationDuration=ui->animationDurationInput->text().toInt();
+  GSettings::commit();
 }
 
 //----------------------------------------------------------events
@@ -103,7 +123,6 @@ void SettingsWindow::hideEvent(QHideEvent *event)
 
 void SettingsWindow::closeEvent(QCloseEvent *event)
 {
-  //ignore the close event and hide the window
   event->ignore();
   hide();
 }
@@ -120,3 +139,46 @@ void SettingsWindow::on_cancelButton_clicked()
   hide();
 }
 
+
+void SettingsWindow::on_SBCSelectButton_clicked()
+{
+    QColorDialog dialog;
+    dialog.setWindowTitle("select a color for selector items background");
+    if(dialog.exec())
+    {
+      QColor color=dialog.selectedColor();
+      QString name=color.name();
+      ui->SBCPreview->setStyleSheet("QLabel{\n	background:"+name+";\n background-repeat: repeat-y;\n  background-position: left;\n}");
+      ui->SBCPreview->setText(name);
+    }
+
+}
+
+void SettingsWindow::on_BorderColorButton_clicked()
+{
+  QColorDialog dialog;
+  dialog.setWindowTitle("select a color for selector items background");
+  if(dialog.exec())
+  {
+    QColor color=dialog.selectedColor();
+    QString name=color.name();
+    ui->BorederColorPreview->setStyleSheet("QLabel{\n	background:"+name+";\n background-repeat: repeat-y;\n  background-position: left;\n}");
+    ui->BorederColorPreview->setText(name);
+  }
+}
+
+void SettingsWindow::on_animationDurationInput_textEdited(const QString &arg1)
+{
+
+  int res=arg1.toInt();
+  if(res==0)
+  {
+    ui->animationDurationInput->setText("1");
+    ui->animationDurationInput->selectAll();
+  }
+  else if(res>10000 || res<1)
+  {
+    ui->animationDurationInput->setText("1");
+    ui->animationDurationInput->selectAll();
+  }
+}

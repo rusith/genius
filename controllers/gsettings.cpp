@@ -22,6 +22,7 @@ void GSettings::initialize()
   openManagerHotkey=QKeySequence(settings.value("openManagerHotkey").toString());
   openSettingsHotKey=QKeySequence(settings.value("openSettingsHotkey").toString());
   directCopyHotKey=QKeySequence(settings.value("directCopyHotkey").toString());
+  closeSelectorHotkey=QKeySequence(settings.value("closeSelectorHotkey").toString());
 
   openSelectorHotKeyEnabled=settings.value("openSelectorHotKeyEnabled").toBool();
   clearHistoryHotKeyEnabled=settings.value("clearHistoryHotKeyEnabled").toBool();
@@ -29,6 +30,12 @@ void GSettings::initialize()
   openManagerHotkeyEnabled=settings.value("openManagerHotkeyEnabled").toBool();
   openSettingsHotKeyEnabled=settings.value("openSettingsHotKeyEnabled").toBool();
   directCopyHotKeyEnabled=settings.value("directCopyHotKeyEnabled").toBool();
+
+  selectorItemBackgroundColor=settings.value("selectorItemBackgroundColor").toString();
+  selectorBorderColor=settings.value("selectorBorderColor").toString();
+  selectorBorderSize=settings.value("selectorBorderSize").toInt();
+  selectorAnimationDuration=settings.value("selectorAnimationDuration").toInt();
+
 }
 
 void GSettings::commit()
@@ -49,6 +56,8 @@ void GSettings::commit()
   settings.setValue("openManagerHotkey",openManagerHotkey.toString(QKeySequence::NativeText));
   settings.setValue("openSettingsHotkey",openSettingsHotKey.toString(QKeySequence::NativeText));
   settings.setValue("directCopyHotkey",directCopyHotKey.toString(QKeySequence::NativeText));
+  settings.setValue("closeSelectorHotkey",closeSelectorHotkey.toString(QKeySequence::NativeText));
+
 
   settings.setValue("openSelectorHotKeyEnabled",openSelectorHotKeyEnabled);
   settings.setValue("clearHistoryHotKeyEnabled",clearHistoryHotKeyEnabled);
@@ -57,6 +66,11 @@ void GSettings::commit()
   settings.setValue("openSettingsHotKeyEnabled",openSettingsHotKeyEnabled);
   settings.setValue("directCopyHotKeyEnabled",directCopyHotKeyEnabled);
 
+
+  settings.setValue("selectorItemBackgroundColor",selectorItemBackgroundColor);
+  settings.setValue("selectorBorderColor",selectorBorderColor);
+  settings.setValue("selectorBorderSize",selectorBorderSize);
+  settings.setValue("selectorAnimationDuration",selectorAnimationDuration);
 }
 
 bool GSettings::showInSingleLine=false;
@@ -75,6 +89,7 @@ QKeySequence GSettings::pasteLastHotKey=QKeySequence("Ctrl+Alt+V");
 QKeySequence GSettings::openManagerHotkey=QKeySequence("Ctrl+Shift+Alt+M");
 QKeySequence GSettings::openSettingsHotKey=QKeySequence("Ctrl+Shift+Alt+S");
 QKeySequence GSettings::directCopyHotKey=QKeySequence("Shift+Alt+C");
+QKeySequence GSettings::closeSelectorHotkey=QKeySequence("Shift+Ctrl");
 
 bool GSettings::openSelectorHotKeyEnabled=false;
 bool GSettings::clearHistoryHotKeyEnabled=false;
@@ -82,6 +97,13 @@ bool GSettings::pasteLastHotKeyEnabled=false;
 bool GSettings::openManagerHotkeyEnabled=false;
 bool GSettings::openSettingsHotKeyEnabled=false;
 bool GSettings::directCopyHotKeyEnabled=false;
+
+QString GSettings::selectorItemBackgroundColor="";
+QString GSettings::selectorBorderColor="";
+int GSettings::selectorBorderSize=1;
+int GSettings::selectorAnimationDuration=100;
+
+
 
 
 
