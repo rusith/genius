@@ -8,7 +8,6 @@
 #include <QCloseEvent>
 #include <QListWidgetItem>
 #include <QMenu>
-#include <controllers/settingsprovider.h>
 #include <models/clipboardhistory.h>
 #include <tools/toolkit.h>
 #include <resources/resources.h>
@@ -63,7 +62,6 @@ private:
   //functions
   void initializeUI();
   void addItem(ClipboardItem *item, int index);
-  void setupSettings(SettingsProvider *settings);
 
 
   void showEvent(QShowEvent *event);

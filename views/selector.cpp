@@ -86,7 +86,8 @@ QLabel *Selector::createLabel(QRect &geometry, ClipboardItem *content)
   newLabel->setGeometry(geometry);
   newLabel->setWordWrap(true);
   newLabel->setScaledContents(true);
-  newLabel->setStyleSheet("QLabel {\n    background: "+GSettings::selectorItemBackgroundColor+";\n    background-repeat: repeat-y;\n    background-position: left;\n	border-width: "+GSettings::selectorBorderSize+"px;\n border-color: "+GSettings::selectorBorderColor+";\n   border-style: solid;\n	\n    border-radius: 15px;\n}");
+  QString style=QString("QLabel { color:"+GSettings::selectorTextColor+"; background:"+GSettings::selectorItemBackgroundColor+"; background-repeat: repeat-y; background-position: left; border:%1px solid "+GSettings::selectorBorderColor+"; border-radius: "+QString("%1").arg(GSettings::selectorBorderRadius)+"px;};").arg(GSettings::selectorBorderSize);
+  newLabel->setStyleSheet(style);
   QGraphicsOpacityEffect *opacityEffect=new QGraphicsOpacityEffect(newLabel);
   opacityEffect->setOpacity((geometry==currentG?1:0.5));
   newLabel->setGraphicsEffect(opacityEffect);
@@ -103,7 +104,6 @@ void Selector::constructLabel(QLabel *label, ClipboardItem *item)
     ClipboardItem::ClipboardMimeType type=item->type();
     if(type==item->Text)
       label->setText(*item->text());
-
     else if(type==item->Image)
     {
       QImage *image=item->image();
@@ -351,47 +351,9 @@ void Selector::keyPressEvent(QKeyEvent *event)
 
 void Selector::keyReleaseEvent(QKeyEvent *event)
 {
-  QStringList sequences=GSettings::closeSelectorHotkey.toString().split("+",QString::SkipEmptyParts);
-  if(sequences.isEmpty()==false)
-  {
-    QString currentSequence=QKeySequence(event->key()).toString();
-    foreach (QString sequence, sequences)
-    {
-      if(sequence==currentSequence)
-    }
-  }
-  foreach (QK, container) {
-
-  }
   int key=event->key();
-  QStringList keys;
-  QStringList strs=QKeySequence(GSettings::closeSelectorHotkey).toString().split(",");
-  if(!strs.isEmpty())
-  {
-    foreach (QString str, strs)
-    {
-      keys.append(str);
-    }
-  }
-  keys=QKeySequence(GSettings::closeSelectorHotkey).toString().split("+");
-
-  foreach (QString str, keys)
-  {
-    qDebug()<<str;
-  }
-hide();
-//  int count=GSettings::openSelectorHotKey.count();
-//  if(count>0)
-//  {
-//    for(int i=0;i<count;i++)
-//    {
-//      if(key==GSettings::openSelectorHotKey[i])
-//      {
-
-//      }
-//    }
-//  }
-
+  if(key==Qt::Key_Shift||key==Qt::Key_Shift)
+    hide();
 }
 
 void Selector::hideEvent(QHideEvent *event)

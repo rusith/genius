@@ -102,17 +102,15 @@ void Controller::showHideManagerRequest()
 
 void Controller::selectorClosed(int currentIndex)
 {
+  _selectorOpen=false;
   ClipboardItem *item=_history->at(currentIndex);
   if(item)
   {
     int reference=item->ref();
     itemSelected(reference);
     if(GSettings::pasteAutomaticlay)
-    {
       FakeKey::simulatePaste();
-    }
   }
-  _selectorOpen=false;
 }
 
 void Controller::settingsWindow_hidden()
@@ -279,8 +277,7 @@ void Controller::addItem(ClipboardItem *item, int index)
  */
 void Controller::createHotkeys()
 {
-  if(GSettings::openSelectorHotKeyEnabled)
-     _openSelectorHotkey=new QHotkey(GSettings::openSelectorHotKey,true);
+  _openSelectorHotkey=new QHotkey(QKeySequence("Ctrl+Shift+V"),true);
 
   if(GSettings::clearHistoryHotKeyEnabled)
      _clearHistoryHotKey=new QHotkey(GSettings::clearHistoryHotKey,true);

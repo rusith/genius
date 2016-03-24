@@ -15,7 +15,6 @@ TEMPLATE = app
 SOURCES += main.cpp \
     views/manager.cpp \
     controllers/controller.cpp \
-    controllers/settingsprovider.cpp \
     models/clipboarditem.cpp \
     models/clipboardhistory.cpp \
     views/trayicon.cpp \
@@ -31,7 +30,6 @@ SOURCES += main.cpp \
 HEADERS  += \
     views/manager.h \
     controllers/controller.h \
-    controllers/settingsprovider.h \
     models/clipboarditem.h \
     models/clipboardhistory.h \
     views/trayicon.h \

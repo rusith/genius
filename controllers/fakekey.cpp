@@ -76,4 +76,6 @@ XKeyEvent FakeKey::createKeyEventX11(Display *display, Window &win,Window &winRo
 
   return event;
 }
+
 #endif
+

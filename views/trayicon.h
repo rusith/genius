@@ -44,6 +44,7 @@ private:
   QAction *_clearAction;
   QAction *_settingsAction;
   void constructIcon();
+  void checkLimit();
 };
 
 #endif // TRAYICON_H

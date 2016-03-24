@@ -56,7 +56,7 @@ int ClipboardHistory::length()
 
 ClipboardItem *ClipboardHistory::get(int &reference)
 {
-   if(isEmpty()==false)
+   if(!isEmpty())
    {
      int length=this->length();
      ClipboardItem *item;

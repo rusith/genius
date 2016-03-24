@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QDebug>
 #include <QApplication>
-#include "settingsprovider.h"
 #include <views/manager.h>
 #include <models/clipboardhistory.h>
 #include <QObject>

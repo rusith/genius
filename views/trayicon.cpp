@@ -66,6 +66,7 @@ void TrayIcon::show()
 //functions
 void TrayIcon::addImageAction(QString *text, QIcon *icon, int reference, int index)
 {
+
   QAction *action=new QAction(_historyMenu);
   action->setIcon(*icon);
   action->setIconText(*text);
@@ -91,10 +92,12 @@ void TrayIcon::addImageAction(QString *text, QIcon *icon, int reference, int ind
     }
   }
 
+  checkLimit();
 }
 
 void TrayIcon::addTextAction(QString *text, QString *tooltipText, int reference, int index)
 {
+
   QAction *action=new QAction(_historyMenu);
   action->setText(*text);
   action->setToolTip(*tooltipText);
@@ -120,6 +123,7 @@ void TrayIcon::addTextAction(QString *text, QString *tooltipText, int reference,
     }
   }
 
+  checkLimit();
 }
 
 void TrayIcon::updateTextItem(QString *text, QString *tooltipText, int reference)
@@ -241,5 +245,17 @@ void TrayIcon::showMessage(QString title, QString message, QSystemTrayIcon::Mess
   if(_icon)
   {
     _icon->showMessage(title,message,icon,duration);
+  }
+}
+
+
+void TrayIcon::checkLimit()
+{
+  if(GSettings::historyItemLimit<_historyMenu->actions().count())
+  {
+    while (_historyMenu->actions().count()>GSettings::historyItemLimit)
+    {
+      delete _historyMenu->actions().takeLast();
+    }
   }
 }

@@ -30,6 +30,7 @@ void SettingsWindow::initializeElements()
   ui->saveURLs->setChecked(GSettings::saveUrls);
   ui->ShowInSingleLineCheckBox->setChecked(GSettings::showInSingleLine);
   ui->maximumItemsInHistory->setValue(GSettings::maximumItemsInHistory);
+  ui->HistoryMenuLimit->setValue(GSettings::historyItemLimit);
   if(GSettings::limitcharLength)
   {
       ui->LimitTextLengthCheckbox->setChecked(true);
@@ -41,15 +42,12 @@ void SettingsWindow::initializeElements()
 
   ui->pasteAutomaticalyButoon->setChecked(GSettings::pasteAutomaticlay);
 
-  ui->openSelector->setKeySequence(GSettings::openSelectorHotKey);
   ui->clearHistory->setKeySequence(GSettings::clearHistoryHotKey);
   ui->pasteLast->setKeySequence(GSettings::pasteLastHotKey);
   ui->openManager->setKeySequence(GSettings::openManagerHotkey);
   ui->openSettings->setKeySequence(GSettings::openSettingsHotKey);
   ui->directCopy->setKeySequence(GSettings::directCopyHotKey);
-  ui->releseSelector->setKeySequence(GSettings::closeSelectorHotkey);
 
-  ui->OpenSelectorCB->setChecked(GSettings::openSelectorHotKeyEnabled);
   ui->clearHistoryCB->setChecked(GSettings::clearHistoryHotKeyEnabled);
   ui->pasteLastCB->setChecked(GSettings::pasteLastHotKeyEnabled);
   ui->openManagerCB->setChecked(GSettings::openManagerHotkeyEnabled);
@@ -58,13 +56,14 @@ void SettingsWindow::initializeElements()
 
   ui->SBCPreview->setStyleSheet("QLabel{\n	background:"+GSettings::selectorItemBackgroundColor+";\n background-repeat: repeat-y;\n  background-position: left;\n}");
   ui->SBCPreview->setText(GSettings::selectorItemBackgroundColor);
+  ui->textColorPreview->setStyleSheet("QLabel{\n	background:"+GSettings::selectorTextColor+";\n background-repeat: repeat-y;\n  background-position: left;\n}");
+  ui->textColorPreview->setText(GSettings::selectorTextColor);
 
   ui->borderSizeSpinBox->setValue(GSettings::selectorBorderSize);
   ui->BorederColorPreview->setStyleSheet("QLabel{\n	background:"+GSettings::selectorBorderColor+";\n background-repeat: repeat-y;\n  background-position: left;\n}");
   ui->BorederColorPreview->setText(GSettings::selectorBorderColor);
-
   ui->animationDurationInput->setText(QString("%1").arg(GSettings::selectorAnimationDuration));
-
+  ui->BorderRadiusSpinBox->setValue(GSettings::selectorBorderRadius);
 }
 
 void SettingsWindow::saveData()
@@ -74,6 +73,7 @@ void SettingsWindow::saveData()
   GSettings::saveUrls=ui->saveURLs->isChecked();
   GSettings::showInSingleLine=ui->ShowInSingleLineCheckBox->isChecked();
   GSettings::maximumItemsInHistory=ui->maximumItemsInHistory->value();
+  GSettings::historyItemLimit=ui->HistoryMenuLimit->value();
   if(ui->LimitTextLengthCheckbox->isChecked())
   {
       GSettings::limitcharLength=true;
@@ -85,25 +85,25 @@ void SettingsWindow::saveData()
 
   GSettings::pasteAutomaticlay=ui->pasteAutomaticalyButoon->isChecked();
 
-  GSettings::openSelectorHotKey=ui->openSelector->keySequence();
   GSettings::clearHistoryHotKey=ui->clearHistory->keySequence();
   GSettings::pasteLastHotKey=ui->pasteLast->keySequence();
   GSettings::openManagerHotkey=ui->openManager->keySequence();
   GSettings::openSettingsHotKey=ui->openSettings->keySequence();
   GSettings::directCopyHotKey=ui->directCopy->keySequence();
 
-  GSettings::openSelectorHotKeyEnabled=ui->OpenSelectorCB->isChecked();
   GSettings::clearHistoryHotKeyEnabled=ui->clearHistoryCB->isChecked();
   GSettings::pasteLastHotKeyEnabled=ui->pasteLastCB->isChecked();
   GSettings::openManagerHotkeyEnabled=ui->openManagerCB->isChecked();
   GSettings::openSettingsHotKeyEnabled=ui->openSettingsCB->isChecked();
   GSettings::directCopyHotKeyEnabled=ui->directCopyCB->isChecked();
-  GSettings::closeSelectorHotkey=ui->releseSelector->keySequence();
 
   GSettings::selectorItemBackgroundColor=ui->SBCPreview->text();
+  GSettings::selectorTextColor=ui->textColorPreview->text();
   GSettings::selectorBorderColor=ui->BorederColorPreview->text();
   GSettings::selectorBorderSize=ui->borderSizeSpinBox->value();
   GSettings::selectorAnimationDuration=ui->animationDurationInput->text().toInt();
+  GSettings::selectorBorderRadius=ui->BorderRadiusSpinBox->value();
+
   GSettings::commit();
 }
 
@@ -157,7 +157,7 @@ void SettingsWindow::on_SBCSelectButton_clicked()
 void SettingsWindow::on_BorderColorButton_clicked()
 {
   QColorDialog dialog;
-  dialog.setWindowTitle("select a color for selector items background");
+  dialog.setWindowTitle("select a color for selector items border");
   if(dialog.exec())
   {
     QColor color=dialog.selectedColor();
@@ -180,5 +180,18 @@ void SettingsWindow::on_animationDurationInput_textEdited(const QString &arg1)
   {
     ui->animationDurationInput->setText("1");
     ui->animationDurationInput->selectAll();
+  }
+}
+
+void SettingsWindow::on_textColorChangeButton_clicked()
+{
+  QColorDialog dialog;
+  dialog.setWindowTitle("select a color for selector items text");
+  if(dialog.exec())
+  {
+    QColor color=dialog.selectedColor();
+    QString name=color.name();
+    ui->textColorPreview->setStyleSheet("QLabel{\n	background:"+name+";\n background-repeat: repeat-y;\n  background-position: left;\n}");
+    ui->textColorPreview->setText(name);
   }
 }

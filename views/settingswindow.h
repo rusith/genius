@@ -32,6 +32,8 @@ private slots:
   void on_BorderColorButton_clicked();
   void on_animationDurationInput_textEdited(const QString &arg1);
 
+  void on_textColorChangeButton_clicked();
+
 private:
   Ui::SettingsWindow *ui;
 

@@ -17,15 +17,15 @@ public:
   static bool saveUrls;
   static bool openMinimized;
   static bool pasteAutomaticlay;
-  static QKeySequence openSelectorHotKey;
+  static int historyItemLimit;
+
+
   static QKeySequence clearHistoryHotKey;
   static QKeySequence pasteLastHotKey;
   static QKeySequence openManagerHotkey;
   static QKeySequence openSettingsHotKey;
   static QKeySequence directCopyHotKey;
-  static QKeySequence closeSelectorHotkey;
 
-  static bool openSelectorHotKeyEnabled;
   static bool clearHistoryHotKeyEnabled;
   static bool pasteLastHotKeyEnabled;
   static bool openManagerHotkeyEnabled;
@@ -33,9 +33,11 @@ public:
   static bool directCopyHotKeyEnabled;
 
   static QString selectorItemBackgroundColor;
+  static QString selectorTextColor;
   static int selectorBorderSize;
   static QString selectorBorderColor;
   static int selectorAnimationDuration;
+  static int selectorBorderRadius;
 
 };
 

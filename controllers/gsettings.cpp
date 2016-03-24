@@ -15,16 +15,15 @@ void GSettings::initialize()
   saveUrls=settings.value("saveURLs").toBool();
   openMinimized=settings.value("openMinimized").toBool();
   pasteAutomaticlay=settings.value("pasteAutomaticaly").toBool();
+  historyItemLimit=settings.value("historyItemLimit").toInt();
 
-  openSelectorHotKey=QKeySequence(settings.value("openSelectorHotkey").toString());
   clearHistoryHotKey=QKeySequence(settings.value("clearHistoryHotkey").toString());
   pasteLastHotKey=QKeySequence(settings.value("pasteLastHotkey").toString());
   openManagerHotkey=QKeySequence(settings.value("openManagerHotkey").toString());
   openSettingsHotKey=QKeySequence(settings.value("openSettingsHotkey").toString());
   directCopyHotKey=QKeySequence(settings.value("directCopyHotkey").toString());
-  closeSelectorHotkey=QKeySequence(settings.value("closeSelectorHotkey").toString());
 
-  openSelectorHotKeyEnabled=settings.value("openSelectorHotKeyEnabled").toBool();
+
   clearHistoryHotKeyEnabled=settings.value("clearHistoryHotKeyEnabled").toBool();
   pasteLastHotKeyEnabled=settings.value("pasteLastHotKeyEnabled").toBool();
   openManagerHotkeyEnabled=settings.value("openManagerHotkeyEnabled").toBool();
@@ -32,9 +31,11 @@ void GSettings::initialize()
   directCopyHotKeyEnabled=settings.value("directCopyHotKeyEnabled").toBool();
 
   selectorItemBackgroundColor=settings.value("selectorItemBackgroundColor").toString();
+  selectorTextColor=settings.value("selectorTextColor").toString();
   selectorBorderColor=settings.value("selectorBorderColor").toString();
   selectorBorderSize=settings.value("selectorBorderSize").toInt();
   selectorAnimationDuration=settings.value("selectorAnimationDuration").toInt();
+  selectorBorderRadius=settings.value("selectorBorderRadius").toInt();
 
 }
 
@@ -49,17 +50,15 @@ void GSettings::commit()
   settings.setValue("saveURLs",saveUrls);
   settings.setValue("openMinimized",openMinimized);
   settings.setValue("pasteAutomaticaly",pasteAutomaticlay);
+  settings.setValue("historyItemLimit",historyItemLimit);
 
-  settings.setValue("openSelectorHotkey",openSelectorHotKey.toString(QKeySequence::NativeText));
   settings.setValue("clearHistoryHotkey",clearHistoryHotKey.toString(QKeySequence::NativeText));
   settings.setValue("pasteLastHotkey",pasteLastHotKey.toString(QKeySequence::NativeText));
   settings.setValue("openManagerHotkey",openManagerHotkey.toString(QKeySequence::NativeText));
   settings.setValue("openSettingsHotkey",openSettingsHotKey.toString(QKeySequence::NativeText));
   settings.setValue("directCopyHotkey",directCopyHotKey.toString(QKeySequence::NativeText));
-  settings.setValue("closeSelectorHotkey",closeSelectorHotkey.toString(QKeySequence::NativeText));
 
 
-  settings.setValue("openSelectorHotKeyEnabled",openSelectorHotKeyEnabled);
   settings.setValue("clearHistoryHotKeyEnabled",clearHistoryHotKeyEnabled);
   settings.setValue("pasteLastHotKeyEnabled",pasteLastHotKeyEnabled);
   settings.setValue("openManagerHotkeyEnabled",openManagerHotkeyEnabled);
@@ -68,9 +67,11 @@ void GSettings::commit()
 
 
   settings.setValue("selectorItemBackgroundColor",selectorItemBackgroundColor);
+  settings.setValue("selectorTextColor",selectorTextColor);
   settings.setValue("selectorBorderColor",selectorBorderColor);
   settings.setValue("selectorBorderSize",selectorBorderSize);
   settings.setValue("selectorAnimationDuration",selectorAnimationDuration);
+  settings.setValue("selectorBorderRadius",selectorBorderRadius);
 }
 
 bool GSettings::showInSingleLine=false;
@@ -81,17 +82,14 @@ bool GSettings::saveImages=false;
 bool GSettings::saveUrls=false;
 bool GSettings::openMinimized=false;
 bool GSettings::pasteAutomaticlay=false;
+int GSettings::historyItemLimit=10;
 
-
-QKeySequence GSettings::openSelectorHotKey=QKeySequence("Ctrl+Shift+V");
 QKeySequence GSettings::clearHistoryHotKey=QKeySequence("Ctrl+Shift+Alt+C");
 QKeySequence GSettings::pasteLastHotKey=QKeySequence("Ctrl+Alt+V");
 QKeySequence GSettings::openManagerHotkey=QKeySequence("Ctrl+Shift+Alt+M");
 QKeySequence GSettings::openSettingsHotKey=QKeySequence("Ctrl+Shift+Alt+S");
 QKeySequence GSettings::directCopyHotKey=QKeySequence("Shift+Alt+C");
-QKeySequence GSettings::closeSelectorHotkey=QKeySequence("Shift+Ctrl");
 
-bool GSettings::openSelectorHotKeyEnabled=false;
 bool GSettings::clearHistoryHotKeyEnabled=false;
 bool GSettings::pasteLastHotKeyEnabled=false;
 bool GSettings::openManagerHotkeyEnabled=false;
@@ -99,13 +97,8 @@ bool GSettings::openSettingsHotKeyEnabled=false;
 bool GSettings::directCopyHotKeyEnabled=false;
 
 QString GSettings::selectorItemBackgroundColor="";
+QString GSettings::selectorTextColor="";
 QString GSettings::selectorBorderColor="";
 int GSettings::selectorBorderSize=1;
 int GSettings::selectorAnimationDuration=100;
-
-
-
-
-
-
-
+int GSettings::selectorBorderRadius=1;

@@ -12,7 +12,7 @@
 #include <QParallelAnimationGroup>
 #include <QKeyEvent>
 #include <QHideEvent>
-
+#include <QDebug>
 #include <models/clipboarditem.h>
 #include <models/clipboardhistory.h>
 
