@@ -4,9 +4,13 @@
 #include <QClipboard>
 #include <QImage>
 #include <QList>
+#include <QDebug>
 #include <QUrl>
 #include <QMimeData>
 #include <QTime>
+#include <QTemporaryFile>
+#include <QPixmap>
+#include <resources/resources.h>
 
 class ClipboardItem
 {
@@ -19,7 +23,11 @@ public:
   ~ClipboardItem();
 
   //getters
-  QImage *image();
+  QImage image();
+  QImage *imagePreview();
+  int imageWidth();
+  int imageHight();
+  bool constructedSuccessfully();
   QString *text();
   QList<QUrl> *urls();
   const QTime *addedTime();
@@ -38,13 +46,18 @@ private:
   ClipboardMimeType _type;
 
   //private fealds
+  QFile *_imageFile=NULL;
   QImage *_image=NULL;
   QString *_text=NULL;
   QString *_html=NULL;
   QList<QUrl> *_urls=NULL;
   QTime _addedTime;
   int _ref;
-  bool _pinned;
+  bool _inFile;
+  int _imageWidth=0;
+  int _imageHight=0;
+  bool _constructedSuccessfully;
+
 
   //private functions
   void setTimeToNow();

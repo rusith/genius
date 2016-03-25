@@ -7,6 +7,7 @@
 #include <QGraphicsScene>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <models/clipboarditem.h>
 
 namespace Ui {
 class ImageEditor;
@@ -17,7 +18,7 @@ class ImageEditor : public QDialog
   Q_OBJECT
 
 public:
-  explicit ImageEditor(QImage *image, QWidget *parent = 0);
+  explicit ImageEditor(ClipboardItem *item, QWidget *parent = 0);
   ~ImageEditor();
 
 private slots:
@@ -35,7 +36,7 @@ private:
   QImage _image_backup;
 
   void initializeView();
-
+  ClipboardItem *_item;
   void showEvent(QShowEvent *event);
   void fixFileNameExtension(QString *fileName, QString mimeType);
 };

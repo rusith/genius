@@ -1,15 +1,17 @@
 #include "imageeditor.h"
 #include "ui_imageeditor.h"
 
-ImageEditor::ImageEditor(QImage *image,QWidget *parent) :
+ImageEditor::ImageEditor(ClipboardItem *item,QWidget *parent) :
   QDialog(parent),
   ui(new Ui::ImageEditor)
 {
   ui->setupUi(this);
-  if(image)
+  if(item && item->type()==ClipboardItem::Image)
   {
-    _image=image;
-    _image_backup=QImage(*image);
+    _item=item;
+
+    _image=new QImage(item->image());
+    _image_backup=QImage(item->image());
   }
 }
 
@@ -38,7 +40,11 @@ void ImageEditor::showEvent(QShowEvent *event)
 
 void ImageEditor::on_okButton_clicked()
 {
-    accept();
+  if(_item)
+  {
+    _item->image(*_image);
+  }
+  accept();
 }
 
 void ImageEditor::on_cancelButton_clicked()
@@ -73,7 +79,8 @@ void ImageEditor::on_exportButton_clicked()
          else
            break;
        }
-       break;
+       else
+        break;
     }
     else
       break;

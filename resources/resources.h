@@ -1,6 +1,7 @@
 #ifndef RESOURCES_H
 #define RESOURCES_H
 #include <QString>
+#include <QTemporaryDir>
 
 class Resources
 {
@@ -22,6 +23,9 @@ public:
   const static QString colorpicker16;
   const static QString off16;
   const static QString on16;
+
+  static QTemporaryDir tempDir;
+
 };
 
 #endif // RESOURCES_H

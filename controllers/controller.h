@@ -16,8 +16,8 @@
 #include <controllers/gsettings.h>
 #include <views/selector.h>
 #include <views/settingswindow.h>
+#include <controllers/tempfolder.h>
 #include <controllers/fakekey.h>
-
 class Controller : public QObject
 {
   Q_OBJECT
@@ -25,6 +25,13 @@ public:
   explicit Controller(QObject *parent = 0);
   ~Controller();
   void start();
+
+
+
+  /**
+   * @brief temp folder of the application
+   */
+  static TempFolder tempFolder;
 
 signals:
 private slots:
@@ -50,6 +57,7 @@ private slots:
   void settingsWindow_hidden();
   void turnOffRequest();
   void turnOnRequest();
+  void exitRequested();
 
   //---------------------------------hotKey slots
   void openSelectorHKtriggered();
@@ -58,6 +66,10 @@ private slots:
   void openManagerHKTriggered();
   void openSettingsHKTriggered();
   void directCopyHKTriggered();
+
+
+
+
 
 private:
   //------------------------basic elements
@@ -101,6 +113,8 @@ private:
   bool isClipboardEmpty();
   void deleteHotkeys();
   void deleteVariables();
+
+
 };
 
 #endif // CONTROLLER_H

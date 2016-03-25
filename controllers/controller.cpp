@@ -14,6 +14,7 @@ Controller::Controller(QObject *parent) : QObject(parent)
 
 Controller::~Controller()
 {
+  Resources::tempDir.remove();
   deleteVariables();
   deleteHotkeys();
 }
@@ -39,6 +40,8 @@ void Controller::clipboardChanged(QClipboard::Mode mode)
     if(!isClipboardEmpty() && !sameDataAgain())
     {
       ClipboardItem *item=new ClipboardItem(_clipboard);
+      if(!item->constructedSuccessfully())
+      {delete item;return;}
       ClipboardItem::ClipboardMimeType type=item->type();
       if((type==ClipboardItem::Image && GSettings::saveImages)||(type==ClipboardItem::URLs && GSettings::saveUrls)||type==ClipboardItem::Text )
       {
@@ -128,6 +131,14 @@ void Controller::turnOffRequest()
 void Controller::turnOnRequest()
 {
   _holtCollection=false;
+}
+
+void Controller::exitRequested()
+{
+  Resources::tempDir.remove();
+  deleteVariables();
+  deleteHotkeys();
+  exit(0);
 }
 
 //-------------------------------------------Hotkey activation controls (Slots)---------------------------------
@@ -256,10 +267,10 @@ void Controller::addItem(ClipboardItem *item, int index)
   else if(type==ClipboardItem::Image)
   {
 
-    QImage *image=item->image();
+    QImage *image=item->imagePreview();
     QIcon icon(QPixmap::fromImage(*image));
-    QString text(QString("width : %1").arg(image->width()));
-    text+=QString("  height : %1").arg(image->height());
+    QString text(QString("width : %1").arg(item->imageWidth()));
+    text+=QString("  height : %1").arg(item->imageHight());
     text+="  added time : "+item->addedTime()->toString("hh.mm.ss.zzz AP");
 
     _manager->addImageItem(&text,&icon,reference,index);
@@ -336,6 +347,7 @@ void Controller::createConnections()
   connect(_trayIcon,SIGNAL(settingsDialogRequested()),this,SLOT(settingsWindowRequested()));
   connect(_trayIcon,SIGNAL(turnOffGenius()),this,SLOT(turnOffRequest()));
   connect(_trayIcon,SIGNAL(turnOnGenius()),this,SLOT(turnOnRequest()));
+  connect(_trayIcon,SIGNAL(exitRequested()),this,SLOT(exitRequested()));
 
   //----------------------------------------connection with selector
   connect(_selector,SIGNAL(closing(int)),this,SLOT(selectorClosed(int)));
@@ -385,7 +397,7 @@ void Controller::selectItem(int reference)
         }
         else if(type==ClipboardItem::Image)
         {
-          QImage img=*item->image();
+          QImage img=item->image();
           _history->remove(reference);
           _clipboard->setImage(img);
         }
@@ -424,13 +436,12 @@ void Controller::letToEditItem(ClipboardItem *item)
     }
     else if(type==ClipboardItem::Image)
     {
-      QImage temp(*item->image());
-      ImageEditor IE(item->image());
+
+      ImageEditor IE(item);
       bool accept=IE.exec();
       if(accept)
       {
-        if(temp!=*item->image())
-          _history->itemUpdated(item);
+         _history->itemUpdated(item);
       }
     }
   }
@@ -463,11 +474,10 @@ void Controller::updateItem(ClipboardItem *item)
     }
     else if(type==ClipboardItem::Image)
     {
-
-      QImage *image=item->image();
+      QImage *image=item->imagePreview();
       QIcon icon(QPixmap::fromImage(*image));
-      QString text(QString("width : %1").arg(image->width()));
-      text+=QString("  height : %1").arg(image->height());
+      QString text(QString("width : %1").arg(item->imageWidth()));
+      text+=QString("  height : %1").arg(item->imageHight());
       text+="  added time : "+item->addedTime()->toString("hh.mm.ss.zzz AP");
       int ref=item->ref();
       _manager->updateImageItem(&text,&icon,ref);
@@ -522,7 +532,7 @@ bool Controller::sameDataAgain()
   }
   else if(_clipboard->mimeData()->hasImage() && type==ClipboardItem::Image)
   {
-      return *item->image()==_clipboard->image();
+      return item->image()==_clipboard->image();
   }
   else if(_clipboard->mimeData()->hasUrls() && type==ClipboardItem::URLs)
   {
@@ -603,3 +613,4 @@ void Controller::toggleManager()
   else
     _manager->show();
 }
+

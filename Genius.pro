@@ -25,7 +25,8 @@ SOURCES += main.cpp \
     controllers/gsettings.cpp \
     views/selector.cpp \
     controllers/fakekey.cpp \
-    views/settingswindow.cpp
+    views/settingswindow.cpp \
+    controllers/tempfolder.cpp
 
 HEADERS  += \
     views/manager.h \
@@ -40,7 +41,8 @@ HEADERS  += \
     controllers/gsettings.h \
     views/selector.h \
     controllers/fakekey.h \
-    views/settingswindow.h
+    views/settingswindow.h \
+    controllers/tempfolder.h
 
 FORMS    += \
     views/manager.ui \

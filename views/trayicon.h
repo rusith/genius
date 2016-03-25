@@ -28,6 +28,7 @@ signals:
   void settingsDialogRequested();
   void turnOffGenius();
   void turnOnGenius();
+  void exitRequested();
 public slots:
  void managerShown();
  void managerHidden();

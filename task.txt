@@ -1,3 +1,4 @@
-//animate tray icon when adding item
-// create shortcut to clear history
+add setting to maximum image size -- PENDING
+modify image editor -- PENDING
+
 

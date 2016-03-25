@@ -106,10 +106,10 @@ void Selector::constructLabel(QLabel *label, ClipboardItem *item)
       label->setText(*item->text());
     else if(type==item->Image)
     {
-      QImage *image=item->image();
+      QImage *image=item->imagePreview();
       if(image)
       {
-        label->setPixmap(QPixmap::fromImage(*item->image()));
+        label->setPixmap(QPixmap::fromImage(*item->imagePreview()));
       }
     }
   }

@@ -221,7 +221,7 @@ void TrayIcon::menuActionTrigered(QAction *action)
 {
   if(action==_exitAction)
   {
-    exit(0);
+    emit exitRequested();
   }
   else if(action==_showHideAction)
   {
