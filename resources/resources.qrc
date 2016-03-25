@@ -13,5 +13,8 @@
         <file>images/ok16.png</file>
         <file>images/export16.png</file>
         <file>images/import16.png</file>
+        <file>images/on16.png</file>
+        <file>images/colorPicker16.png</file>
+        <file>images/off16.png</file>
     </qresource>
 </RCC>

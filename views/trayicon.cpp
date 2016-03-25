@@ -35,11 +35,18 @@ void TrayIcon::constructIcon()
   _settingsAction->setToolTip("open settings dialog");
   _menu->addAction(_settingsAction);
 
+  _onOffAction=new QAction(_menu);
+  _onOffAction->setIconText("turn off");
+  _onOffAction->setIcon(QIcon(Resources::on16));
+  _onOffAction->setToolTip("turn off genius . new items will not added to the list until turn on");
+  _menu->addAction(_onOffAction);
+
   _exitAction=new QAction(_menu);
   _exitAction->setIcon(QIcon(Resources::exit16));
   _exitAction->setIconText("exit");
   _exitAction->setToolTip("exit from Genius");
   _menu->addAction(_exitAction);
+
   connect(_historyMenu,SIGNAL(triggered(QAction*)),this,SLOT(historyMenuActionTriggered(QAction*)));
   connect(_menu,SIGNAL(triggered(QAction*)),this,SLOT(menuActionTrigered(QAction*)));
   _icon->setContextMenu(_menu);
@@ -228,6 +235,24 @@ void TrayIcon::menuActionTrigered(QAction *action)
   else if(action==_settingsAction)
   {
     emit settingsDialogRequested();
+  }
+  else if(action==_onOffAction)
+  {
+    if(_onOffAction->iconText()=="turn off")
+    {
+      _onOffAction->setIconText("turn on");
+      _onOffAction->setIcon(QIcon(Resources::off16));
+      _onOffAction->setToolTip("turn on genius . new items will saved in the history");
+      emit turnOffGenius();
+
+    }
+    else
+    {
+      _onOffAction->setIconText("turn off");
+      _onOffAction->setIcon(QIcon(Resources::on16));
+      _onOffAction->setToolTip("turn off genius . new items will not added to the list until turn on");
+      emit turnOnGenius();
+    }
   }
 }
 

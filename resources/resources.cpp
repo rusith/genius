@@ -17,3 +17,6 @@ const QString Resources::edit16=":/images/images/edit16.png";
 const QString Resources::ok16=":/images/images/ok16.png";
 const QString Resources::import16=":/images/images/import16.png";
 const QString Resources::Export16=":/images/images/export16.png";
+const QString Resources::colorpicker16=":/images/images/colorPicker16.png";
+const QString Resources::off16=":/images/images/off16.png";
+const QString Resources::on16=":/images/images/on16.png";

@@ -34,6 +34,8 @@ private slots:
 
   void on_textColorChangeButton_clicked();
 
+  void on_defaultButton_clicked();
+
 private:
   Ui::SettingsWindow *ui;
 
@@ -41,7 +43,7 @@ private:
   void initializeUI();
   void initializeElements();
   void saveData();
-
+  void setToDefault();
   //----------------------------------events
   void showEvent(QShowEvent *event);
   void hideEvent(QHideEvent *event);

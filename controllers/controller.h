@@ -48,6 +48,8 @@ private slots:
   void manager_hidden();
 
   void settingsWindow_hidden();
+  void turnOffRequest();
+  void turnOnRequest();
 
   //---------------------------------hotKey slots
   void openSelectorHKtriggered();

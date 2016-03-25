@@ -33,9 +33,10 @@ void Controller::editRequested(ClipboardItem *item)
 
 void Controller::clipboardChanged(QClipboard::Mode mode)
 {
-  if(mode==QClipboard::Clipboard )
+  if(mode==QClipboard::Clipboard)
   {
-    if(!isClipboardEmpty() && !sameDataAgain() && !_holtCollection)
+    if(_holtCollection) return;
+    if(!isClipboardEmpty() && !sameDataAgain())
     {
       ClipboardItem *item=new ClipboardItem(_clipboard);
       ClipboardItem::ClipboardMimeType type=item->type();
@@ -117,6 +118,16 @@ void Controller::settingsWindow_hidden()
 {
   if(_settingsWindowOpened)
     _settingsWindowOpened=false;
+}
+
+void Controller::turnOffRequest()
+{
+  _holtCollection=true;
+}
+
+void Controller::turnOnRequest()
+{
+  _holtCollection=false;
 }
 
 //-------------------------------------------Hotkey activation controls (Slots)---------------------------------
@@ -323,6 +334,8 @@ void Controller::createConnections()
   connect(_trayIcon,SIGNAL(showHideManagerTriggerd()),this,SLOT(showHideManagerRequest()));
   connect(_trayIcon,SIGNAL(itemSelected(int)),this,SLOT(itemSelected(int)));
   connect(_trayIcon,SIGNAL(settingsDialogRequested()),this,SLOT(settingsWindowRequested()));
+  connect(_trayIcon,SIGNAL(turnOffGenius()),this,SLOT(turnOffRequest()));
+  connect(_trayIcon,SIGNAL(turnOnGenius()),this,SLOT(turnOnRequest()));
 
   //----------------------------------------connection with selector
   connect(_selector,SIGNAL(closing(int)),this,SLOT(selectorClosed(int)));
@@ -383,6 +396,7 @@ void Controller::selectItem(int reference)
           _history->remove(reference);
           _clipboard->setMimeData(mimedata);
         }
+        else{}
       }
     }
   }

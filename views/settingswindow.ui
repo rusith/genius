@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>434</width>
-    <height>415</height>
+    <height>307</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,7 @@
       <x>10</x>
       <y>10</y>
       <width>421</width>
-      <height>401</height>
+      <height>291</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -43,7 +43,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="General_Tab">
         <attribute name="title">
@@ -152,376 +152,104 @@
         <attribute name="title">
          <string>View</string>
         </attribute>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QWidget" name="layoutWidget_5">
          <property name="geometry">
           <rect>
-           <x>110</x>
-           <y>90</y>
-           <width>291</width>
-           <height>231</height>
-          </rect>
-         </property>
-         <property name="title">
-          <string>Selector</string>
-         </property>
-        </widget>
-        <widget class="QToolBox" name="toolBox">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
+           <x>10</x>
            <y>10</y>
-           <width>401</width>
-           <height>301</height>
+           <width>391</width>
+           <height>111</height>
           </rect>
          </property>
-         <property name="currentIndex">
-          <number>0</number>
-         </property>
-         <widget class="QWidget" name="page">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>401</width>
-            <height>239</height>
-           </rect>
+         <layout class="QVBoxLayout" name="VL3">
+          <property name="leftMargin">
+           <number>5</number>
           </property>
-          <attribute name="label">
-           <string>General</string>
-          </attribute>
-          <widget class="QWidget" name="layoutWidget">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>401</width>
-             <height>111</height>
-            </rect>
-           </property>
-           <layout class="QVBoxLayout" name="VL3">
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+          <property name="rightMargin">
+           <number>5</number>
+          </property>
+          <property name="bottomMargin">
+           <number>5</number>
+          </property>
+          <item>
+           <widget class="QCheckBox" name="ShowInSingleLineCheckBox">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;if this is checked all text items in the&lt;span style=&quot; font-weight:600;&quot;&gt; history manager and menus will show in single line&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>Show In Single Line</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="HL2">
             <item>
-             <widget class="QCheckBox" name="ShowInSingleLineCheckBox">
+             <widget class="QCheckBox" name="LimitTextLengthCheckbox">
               <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;if this is checked all text items in the&lt;span style=&quot; font-weight:600;&quot;&gt; history manager and menus will show in single line&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;limit charactor length of items &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="text">
-               <string>Show In Single Line</string>
+               <string>Limit View Item Text Length to</string>
               </property>
              </widget>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="HL2">
-              <item>
-               <widget class="QCheckBox" name="LimitTextLengthCheckbox">
-                <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;limit charactor length of items &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                </property>
-                <property name="text">
-                 <string>Limit View Item Text Length to</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QSpinBox" name="TextLimitSpinBox">
-                <property name="minimum">
-                 <number>1</number>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_4">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
+             <widget class="QSpinBox" name="TextLimitSpinBox">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+             </widget>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_12">
-              <item>
-               <widget class="QLabel" name="label_12">
-                <property name="text">
-                 <string>History Menu Item Limit</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QSpinBox" name="HistoryMenuLimit">
-                <property name="minimum">
-                 <number>1</number>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_3">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
+             <spacer name="horizontalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
-          </widget>
-         </widget>
-         <widget class="QWidget" name="page_2">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>401</width>
-            <height>239</height>
-           </rect>
-          </property>
-          <attribute name="label">
-           <string>Selector</string>
-          </attribute>
-          <widget class="QWidget" name="layoutWidget">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>5</y>
-             <width>401</width>
-             <height>231</height>
-            </rect>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_3">
-            <property name="leftMargin">
-             <number>5</number>
-            </property>
-            <property name="topMargin">
-             <number>5</number>
-            </property>
-            <property name="rightMargin">
-             <number>5</number>
-            </property>
-            <property name="bottomMargin">
-             <number>5</number>
-            </property>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_12">
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_11">
-              <item>
-               <widget class="QLabel" name="label_9">
-                <property name="text">
-                 <string>Text Color</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="textColorPreview">
-                <property name="styleSheet">
-                 <string notr="true">QLabel{
-	background: lightblue;
- background-repeat: repeat-y;
-  background-position: left;
-}</string>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-                <property name="text">
-                 <string>lightblue</string>
-                </property>
-                <property name="textFormat">
-                 <enum>Qt::RichText</enum>
-                </property>
-                <property name="scaledContents">
-                 <bool>true</bool>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="textColorChangeButton">
-                <property name="styleSheet">
-                 <string notr="true">Button{
-background-color:red;
-}</string>
-                </property>
-                <property name="text">
-                 <string>change</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>History Menu Item Limit</string>
+              </property>
+             </widget>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_7">
-              <item>
-               <widget class="QLabel" name="label_3">
-                <property name="text">
-                 <string>Background Color</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="SBCPreview">
-                <property name="styleSheet">
-                 <string notr="true">QLabel{
-	background: lightblue;
- background-repeat: repeat-y;
-  background-position: left;
-}</string>
-                </property>
-                <property name="text">
-                 <string>lightblue</string>
-                </property>
-                <property name="textFormat">
-                 <enum>Qt::RichText</enum>
-                </property>
-                <property name="scaledContents">
-                 <bool>true</bool>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="SBCSelectButton">
-                <property name="styleSheet">
-                 <string notr="true">Button{
-background-color:red;
-}</string>
-                </property>
-                <property name="text">
-                 <string>change</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <widget class="QSpinBox" name="HistoryMenuLimit">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+             </widget>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_8">
-              <item>
-               <widget class="QLabel" name="label_4">
-                <property name="text">
-                 <string>Border size</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QSpinBox" name="borderSizeSpinBox">
-                <property name="maximum">
-                 <number>20</number>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_5">
-                <property name="text">
-                 <string>px</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_9">
-              <item>
-               <widget class="QLabel" name="label_6">
-                <property name="text">
-                 <string>Border Color</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="BorederColorPreview">
-                <property name="styleSheet">
-                 <string notr="true">QLabel{
-	background: lightblue;
- background-repeat: repeat-y;
-  background-position: left;
-}</string>
-                </property>
-                <property name="text">
-                 <string>lightblue</string>
-                </property>
-                <property name="textFormat">
-                 <enum>Qt::RichText</enum>
-                </property>
-                <property name="scaledContents">
-                 <bool>true</bool>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="BorderColorButton">
-                <property name="styleSheet">
-                 <string notr="true">Button{
-background-color:red;
-}</string>
-                </property>
-                <property name="text">
-                 <string>change</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_10">
-              <item>
-               <widget class="QLabel" name="label_7">
-                <property name="text">
-                 <string>Animation Duration</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="animationDurationInput"/>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_8">
-                <property name="text">
-                 <string>ms</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout">
-              <item>
-               <widget class="QLabel" name="label_10">
-                <property name="text">
-                 <string>Border Radius</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QSpinBox" name="BorderRadiusSpinBox"/>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_11">
-                <property name="text">
-                 <string>px</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
-          </widget>
-         </widget>
+          </item>
+         </layout>
         </widget>
        </widget>
        <widget class="QWidget" name="ShortcutsTab">
@@ -534,7 +262,7 @@ background-color:red;
            <x>10</x>
            <y>10</y>
            <width>394</width>
-           <height>241</height>
+           <height>201</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
@@ -657,6 +385,255 @@ background-color:red;
              <widget class="QKeySequenceEdit" name="directCopy">
               <property name="toolTip">
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;hotkey for Direct copy&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>Selector</string>
+        </attribute>
+        <widget class="QWidget" name="layoutWidget_4">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>391</width>
+           <height>214</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="leftMargin">
+           <number>5</number>
+          </property>
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+          <property name="rightMargin">
+           <number>5</number>
+          </property>
+          <property name="bottomMargin">
+           <number>5</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_11">
+            <item>
+             <widget class="QLabel" name="label_9">
+              <property name="text">
+               <string>Text Color</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="textColorPreview">
+              <property name="styleSheet">
+               <string notr="true">QLabel{
+	background: lightblue;
+ background-repeat: repeat-y;
+  background-position: left;
+}</string>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <property name="text">
+               <string>lightblue</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::RichText</enum>
+              </property>
+              <property name="scaledContents">
+               <bool>true</bool>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="textColorChangeButton">
+              <property name="styleSheet">
+               <string notr="true">Button{
+background-color:red;
+}</string>
+              </property>
+              <property name="text">
+               <string>change</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../resources/resources.qrc">
+                <normaloff>:/images/images/colorPicker16.png</normaloff>:/images/images/colorPicker16.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>Background Color</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="SBCPreview">
+              <property name="styleSheet">
+               <string notr="true">QLabel{
+	background: lightblue;
+ background-repeat: repeat-y;
+  background-position: left;
+}</string>
+              </property>
+              <property name="text">
+               <string>lightblue</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::RichText</enum>
+              </property>
+              <property name="scaledContents">
+               <bool>true</bool>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="SBCSelectButton">
+              <property name="styleSheet">
+               <string notr="true">Button{
+background-color:red;
+}</string>
+              </property>
+              <property name="text">
+               <string>change</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../resources/resources.qrc">
+                <normaloff>:/images/images/colorPicker16.png</normaloff>:/images/images/colorPicker16.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <item>
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Border size</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="borderSizeSpinBox">
+              <property name="maximum">
+               <number>20</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>px</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_9">
+            <item>
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>Border Color</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="BorederColorPreview">
+              <property name="styleSheet">
+               <string notr="true">QLabel{
+	background: lightblue;
+ background-repeat: repeat-y;
+  background-position: left;
+}</string>
+              </property>
+              <property name="text">
+               <string>lightblue</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::RichText</enum>
+              </property>
+              <property name="scaledContents">
+               <bool>true</bool>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="BorderColorButton">
+              <property name="styleSheet">
+               <string notr="true">Button{
+background-color:red;
+}</string>
+              </property>
+              <property name="text">
+               <string>change</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../resources/resources.qrc">
+                <normaloff>:/images/images/colorPicker16.png</normaloff>:/images/images/colorPicker16.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <item>
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>Animation Duration</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="animationDurationInput"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>ms</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QLabel" name="label_10">
+              <property name="text">
+               <string>Border Radius</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="BorderRadiusSpinBox"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_11">
+              <property name="text">
+               <string>px</string>
               </property>
              </widget>
             </item>

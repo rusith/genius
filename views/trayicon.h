@@ -26,23 +26,26 @@ signals:
   void showHideManagerTriggerd();
   void itemSelected(int reference);
   void settingsDialogRequested();
+  void turnOffGenius();
+  void turnOnGenius();
 public slots:
  void managerShown();
  void managerHidden();
  void menuActionTrigered(QAction *action);
  void historyMenuActionTriggered(QAction *action);
 
-private:
-  QSystemTrayIcon *_icon;
-  QMenu *_menu;
-  ClipboardHistory *_history;
+  private:
+  QSystemTrayIcon *_icon=NULL;
+  QMenu *_menu=NULL;
+  ClipboardHistory *_history=NULL;
   bool *_managerOpen;
 
-  QMenu *_historyMenu;
-  QAction *_showHideAction;
-  QAction *_exitAction;
-  QAction *_clearAction;
-  QAction *_settingsAction;
+  QMenu *_historyMenu=NULL;
+  QAction *_showHideAction=NULL;
+  QAction *_exitAction=NULL;
+  QAction *_clearAction=NULL;
+  QAction *_settingsAction=NULL;
+  QAction *_onOffAction=NULL;
   void constructIcon();
   void checkLimit();
 };

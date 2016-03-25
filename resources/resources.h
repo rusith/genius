@@ -19,7 +19,9 @@ public:
   const static QString ok16;
   const static QString import16;
   const static QString Export16;
-
+  const static QString colorpicker16;
+  const static QString off16;
+  const static QString on16;
 };
 
 #endif // RESOURCES_H
