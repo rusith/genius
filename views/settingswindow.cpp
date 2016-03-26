@@ -64,6 +64,9 @@ void SettingsWindow::initializeElements()
   ui->BorederColorPreview->setText(GSettings::selectorBorderColor);
   ui->animationDurationInput->setText(QString("%1").arg(GSettings::selectorAnimationDuration));
   ui->BorderRadiusSpinBox->setValue(GSettings::selectorBorderRadius);
+
+  ui->maximumImageWidth_sb->setValue(GSettings::maximumImageWidth);
+  ui->maximumImageHight_sb->setValue(GSettings::maximumImageHight);
 }
 
 void SettingsWindow::saveData()
@@ -103,6 +106,9 @@ void SettingsWindow::saveData()
   GSettings::selectorBorderSize=ui->borderSizeSpinBox->value();
   GSettings::selectorAnimationDuration=ui->animationDurationInput->text().toInt();
   GSettings::selectorBorderRadius=ui->BorderRadiusSpinBox->value();
+
+  GSettings::maximumImageWidth=ui->maximumImageWidth_sb->value();
+  GSettings::maximumImageHight=ui->maximumImageHight_sb->value();
 
   GSettings::commit();
 }
@@ -233,4 +239,7 @@ void SettingsWindow::setToDefault()
   ui->BorederColorPreview->setText("blue");
   ui->animationDurationInput->setText(QString("%1").arg(100));
   ui->BorderRadiusSpinBox->setValue(10);
+
+  ui->maximumImageWidth_sb->setValue(100);
+  ui->maximumImageHight_sb->setValue(100);
 }

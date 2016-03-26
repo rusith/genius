@@ -26,7 +26,9 @@ SOURCES += main.cpp \
     views/selector.cpp \
     controllers/fakekey.cpp \
     views/settingswindow.cpp \
-    controllers/tempfolder.cpp
+    controllers/tempfolder.cpp \
+    models/clipboardimageitem.cpp \
+    models/clipboardtextitem.cpp
 
 HEADERS  += \
     views/manager.h \
@@ -42,7 +44,9 @@ HEADERS  += \
     views/selector.h \
     controllers/fakekey.h \
     views/settingswindow.h \
-    controllers/tempfolder.h
+    controllers/tempfolder.h \
+    models/clipboardimageitem.h \
+    models/clipboardtextitem.h
 
 FORMS    += \
     views/manager.ui \

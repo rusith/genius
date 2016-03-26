@@ -37,11 +37,15 @@ void GSettings::initialize()
   selectorAnimationDuration=settings.value("selectorAnimationDuration").toInt();
   selectorBorderRadius=settings.value("selectorBorderRadius").toInt();
 
+  maximumImageWidth=settings.value("maximumImageWidth").toInt();
+  maximumImageHight=settings.value("maximumImageHight").toInt();
+  inMemoryTextLength=settings.value("inMemoryTextLength").toInt();
 }
 
 void GSettings::commit()
 {
   QSettings settings("rusith","Genius");
+
   settings.setValue("showInSingleLine",showInSingleLine);
   settings.setValue("limitViewCharactorLength",limitcharLength);
   settings.setValue("charactorLimitOfItem",limitedCharLength);
@@ -72,6 +76,10 @@ void GSettings::commit()
   settings.setValue("selectorBorderSize",selectorBorderSize);
   settings.setValue("selectorAnimationDuration",selectorAnimationDuration);
   settings.setValue("selectorBorderRadius",selectorBorderRadius);
+
+  settings.setValue("maximumImageWidth",maximumImageWidth);
+  settings.setValue("maximumImageHight",maximumImageHight);
+  settings.setValue("inMemoryTextLength",inMemoryTextLength);
 }
 
 bool GSettings::showInSingleLine=false;
@@ -102,3 +110,9 @@ QString GSettings::selectorBorderColor="";
 int GSettings::selectorBorderSize=1;
 int GSettings::selectorAnimationDuration=100;
 int GSettings::selectorBorderRadius=1;
+
+
+int GSettings::maximumImageWidth=1;
+int GSettings::maximumImageHight=1;
+
+int GSettings::inMemoryTextLength=500;

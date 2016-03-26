@@ -39,6 +39,21 @@ public:
   static int selectorAnimationDuration;
   static int selectorBorderRadius;
 
+  /**
+   * @brief maximum image width.images larger than this  are saved in a file
+   */
+  static int maximumImageWidth;
+
+  /**
+   * @brief maximum image width.images larger than this are saved in a file
+   */
+  static int maximumImageHight;
+
+  /**
+   * @brief  maximum text length an item can save in memory
+   */
+  static int inMemoryTextLength;
+
 };
 
 #endif // GSETTINGS_H
