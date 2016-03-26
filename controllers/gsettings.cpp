@@ -40,6 +40,10 @@ void GSettings::initialize()
   maximumImageWidth=settings.value("maximumImageWidth").toInt();
   maximumImageHight=settings.value("maximumImageHight").toInt();
   inMemoryTextLength=settings.value("inMemoryTextLength").toInt();
+
+
+  historyMenuHotkeyEnabled=settings.value("historyMenuHotkeyEnabled").toBool();
+  historyMenuHotkey=QKeySequence(settings.value("historyMenuHotkey").toString());
 }
 
 void GSettings::commit()
@@ -80,6 +84,10 @@ void GSettings::commit()
   settings.setValue("maximumImageWidth",maximumImageWidth);
   settings.setValue("maximumImageHight",maximumImageHight);
   settings.setValue("inMemoryTextLength",inMemoryTextLength);
+
+
+  settings.setValue("historyMenuHotkeyEnabled",historyMenuHotkeyEnabled);
+  settings.setValue("historyMenuHotkey",historyMenuHotkey.toString(QKeySequence::NativeText));
 }
 
 bool GSettings::showInSingleLine=false;
@@ -116,3 +124,6 @@ int GSettings::maximumImageWidth=1;
 int GSettings::maximumImageHight=1;
 
 int GSettings::inMemoryTextLength=500;
+
+bool GSettings::historyMenuHotkeyEnabled=false;
+QKeySequence GSettings::historyMenuHotkey=QKeySequence("Ctrl+Shif+Alt+V");

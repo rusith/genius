@@ -4,18 +4,22 @@
 #include <QObject>
 #include <QDebug>
 #include <QApplication>
-#include <views/manager.h>
-#include <models/clipboardhistory.h>
 #include <QObject>
 #include <QHotkey>
 #include <QThread>
+#include <views/manager.h>
+#include <models/clipboardhistory.h>
+#include <models/clipboardimageitem.h>
+#include <models/clipboarditem.h>
+#include <models/clipboardtextitem.h>
+#include <models/clipboardurlitem.h>
 #include <tools/toolkit.h>
 #include <views/trayicon.h>
 #include <views/texteditor.h>
 #include <views/imageeditor.h>
-#include <controllers/gsettings.h>
-#include <views/selector.h>
 #include <views/settingswindow.h>
+#include <views/selector.h>
+#include <controllers/gsettings.h>
 #include <controllers/tempfolder.h>
 #include <controllers/fakekey.h>
 class Controller : public QObject
@@ -26,16 +30,13 @@ public:
   ~Controller();
   void start();
 
-
-
-  /**
-   * @brief temp folder of the application
-   */
-  static TempFolder tempFolder;
-
 signals:
 private slots:
   //--------------------------basic control slots
+  /**
+   * @brief calls when the clipboard is changed effect only when CLipboar is chaned && not holted && not samedata again
+   * @param mode of the change (effect inly if mode is Clipboard)
+   */
   void clipboardChanged(QClipboard::Mode mode);
   void itemSelected(int reference);
   void editRequested(ClipboardItem *item);
@@ -67,6 +68,11 @@ private slots:
   void openSettingsHKTriggered();
   void directCopyHKTriggered();
 
+  /**
+   * @brief calls when _historyMenuHotKey activated. (connected using signal and slots)
+   */
+  void historyMenuHotkeyActivated();
+
 
 
 
@@ -97,7 +103,17 @@ private:
   QHotkey *_openSettingsHotKey=NULL;
   QHotkey *_directCopyHotkey=NULL;
 
+  /**
+   * @brief hotkey for show history menu (inside the trayIcon). then user can select item from the menu
+   */
+  QHotkey *_historyMenuHotKey=NULL;
+
   //------------------------------ basic functions
+
+  /**
+   * @brief add current content in the System clipboard to History.
+   */
+  void addClipboardContentToHistory();
   void createViews();
   void showViews();
   void addItem(ClipboardItem *item, int index);
@@ -109,10 +125,21 @@ private:
   //--------------------------------view function
   void toggleManager();
   void makeConnections();
+
+  /**
+   * @brief check last item and new item is same
+   * @return true if same thing again otherwise false
+   */
   bool sameDataAgain();
   bool isClipboardEmpty();
   void deleteHotkeys();
   void deleteVariables();
+
+  /**
+   * @brief enable or disable all hotkeys
+   * @param enable or disable
+   */
+  void enableHotkeys(bool enable);
 
 
 };

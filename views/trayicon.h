@@ -4,11 +4,14 @@
 #include <QWidget>
 #include <QSystemTrayIcon>
 #include <QMenu>
-#include <models/clipboardhistory.h>
 #include <QAction>
 #include <QDebug>
-#include <resources/resources.h>
 #include <QSystemTrayIcon>
+#include <QPoint>
+#include <models/clipboardhistory.h>
+#include <resources/resources.h>
+#include <controllers/fakekey.h>
+
 class TrayIcon : public QWidget
 {
   Q_OBJECT
@@ -22,6 +25,13 @@ public:
   void removeItem(int reference);
   void clearHistoryList();
   void showMessage(QString title,QString message,QSystemTrayIcon::MessageIcon icon,int duration);
+
+  /**
+   * @brief show the HistoryMenu then user can select an item . then it will call simulatePaste()
+   */
+  void showHistoryMenu();
+
+
 signals:
   void showHideManagerTriggerd();
   void itemSelected(int reference);
@@ -47,6 +57,12 @@ public slots:
   QAction *_clearAction=NULL;
   QAction *_settingsAction=NULL;
   QAction *_onOffAction=NULL;
+
+  /**
+   * @brief paste when a item in historyMenu is selected
+   * if this is true whene item selected in historyMenu it will pasted to the active window
+   */
+  bool _pasteWhenSelected;
   void constructIcon();
   void checkLimit();
 };

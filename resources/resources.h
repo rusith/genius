@@ -2,6 +2,7 @@
 #define RESOURCES_H
 #include <QString>
 #include <QTemporaryDir>
+#include <controllers/tempfolder.h>
 
 class Resources
 {
@@ -24,7 +25,11 @@ public:
   const static QString off16;
   const static QString on16;
 
-  static QTemporaryDir tempDir;
+
+  /**
+   * @brief temp folder of the application
+   */
+  static TempFolder tempFolder;
 
 };
 

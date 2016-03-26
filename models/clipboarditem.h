@@ -23,7 +23,7 @@ public:
   /**
     * @brief main destructor
     */
-  ~ClipboardItem();
+  virtual ~ClipboardItem();
   /**
    * @brief holds next itemReference ID
    */
@@ -51,6 +51,12 @@ public:
    * @return bool constructed
    */
   bool constructed();
+
+  /**
+   * @brief time of this object created
+   * @return Qtime creatad time
+   */
+  QTime *addedTime();
 protected:
 
   /**
@@ -66,7 +72,7 @@ protected:
   /**
    * @brief time the item was created
    */
-  QTime _addedTime;
+  QTime *_addedTime;
 
   /**
    * @brief the object is successfully constructed or not

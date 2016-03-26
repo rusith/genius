@@ -1,5 +1,6 @@
 #include "clipboarditem.h"
 
+int ClipboardItem::clipboardItemRef=1;
 
 ClipboardItem::ClipboardItem()
 {
@@ -31,17 +32,10 @@ bool ClipboardItem::constructed()
   return _constructed;
 }
 
-
-
-
-
-
-
-
-
-
-
-
+QTime *ClipboardItem::addedTime()
+{
+  return _addedTime;
+}
 
 
 //int ClipboardItem::clipboardItemRef=0;

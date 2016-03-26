@@ -54,6 +54,17 @@ public:
    */
   static int inMemoryTextLength;
 
+  /**
+   * @brief is the historyMenu hotkey enabled ?
+   */
+  static bool historyMenuHotkeyEnabled;
+
+  /**
+   * @brief global hotkey for open history menu inside the trayIcon
+   */
+  static QKeySequence historyMenuHotkey;
+
+
 };
 
 #endif // GSETTINGS_H

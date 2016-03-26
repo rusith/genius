@@ -102,16 +102,20 @@ void Selector::constructLabel(QLabel *label, ClipboardItem *item)
   if(label && item)
   {
     ClipboardItem::ClipboardMimeType type=item->type();
-    if(type==item->Text)
-      label->setText(*item->text());
-    else if(type==item->Image)
+    if(type==ClipboardItem::Text)
+      label->setText(*dynamic_cast<ClipboardTextItem*>(item)->preview());
+    else if(type==ClipboardItem::Image)
     {
-      QImage *image=item->imagePreview();
+      QImage *image=dynamic_cast<ClipboardImageItem*>(item)->preview();
       if(image)
       {
-        label->setPixmap(QPixmap::fromImage(*item->imagePreview()));
+        label->setPixmap(QPixmap::fromImage(*image));
       }
     }
+    else if(type==ClipboardItem::URLs)
+      label->setText(dynamic_cast<ClipboardURLItem*>(item)->toString("|"));
+
+
   }
 }
 
@@ -343,9 +347,7 @@ void Selector::keyPressEvent(QKeyEvent *event)
   }
   else if(key==Qt::Key_Escape)
   {
-
-    close();
-    emit closing(_currentIndex);
+    hide();
   }
 }
 

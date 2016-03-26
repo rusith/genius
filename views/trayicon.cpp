@@ -262,6 +262,8 @@ void TrayIcon::historyMenuActionTriggered(QAction *action)
   {
     int reference=action->data().toInt();
     emit itemSelected(reference);
+    if(_pasteWhenSelected)
+      FakeKey::simulatePaste();
   }
 }
 
@@ -282,5 +284,16 @@ void TrayIcon::checkLimit()
     {
       delete _historyMenu->actions().takeLast();
     }
+  }
+}
+
+void TrayIcon::showHistoryMenu()
+{
+  if(_historyMenu->actions().count()>0)
+  {
+    _pasteWhenSelected=true;
+    QPoint point=_historyMenu->mapFromGlobal(QCursor::pos());
+    _historyMenu->exec(point);
+    _pasteWhenSelected=false;
   }
 }

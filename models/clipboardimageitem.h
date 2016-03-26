@@ -5,7 +5,7 @@
 #include <QImage>
 #include <models/clipboarditem.h>
 #include <controllers/gsettings.h>
-#include <controllers/controller.h>
+#include <controllers/tempfolder.h>
 
 /**
  * @brief The ClipboardImageItem class is a type of ClipboardItem . that constins an image in it. this image maintained as a file inside Genius temp folder file will
@@ -32,7 +32,7 @@ public:
    * @brief constructor that get the image from a QImage object
    * @param image
    */
-  ClipboardImageItem(QImage &image);
+  ClipboardImageItem(const QImage &image);
 
   /**
     *removes _image , _imageFiles
@@ -59,6 +59,18 @@ public:
    */
   QImage *preview();
 
+  /**
+   * @brief use to get the width of the image
+   * @return int width of the image
+   */
+  int width();
+
+  /**
+   * @brief use to get the hight of the image
+   * @return int hight of the image
+   */
+  int hight();
+
 
 private:
 
@@ -71,6 +83,15 @@ private:
    * @brief image file of the object
    */
   QFile *_imageFile=NULL;
+
+  /**
+   * @brief pixel width of the main image
+   */
+  int _width;
+  /**
+   * @brief pixel hight of the main image
+   */
+  int _hight;
 
   /**
    * @brief check the given image can store in the memory (<=10000 px)

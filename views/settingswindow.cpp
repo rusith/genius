@@ -67,6 +67,11 @@ void SettingsWindow::initializeElements()
 
   ui->maximumImageWidth_sb->setValue(GSettings::maximumImageWidth);
   ui->maximumImageHight_sb->setValue(GSettings::maximumImageHight);
+  ui->inMemoryTextLimit_sb->setValue(GSettings::inMemoryTextLength);
+
+
+  ui->historyMenuHotkey_kse->setKeySequence(GSettings::historyMenuHotkey);
+  ui->historyMenu_cb->setChecked(GSettings::historyMenuHotkeyEnabled);
 }
 
 void SettingsWindow::saveData()
@@ -109,6 +114,10 @@ void SettingsWindow::saveData()
 
   GSettings::maximumImageWidth=ui->maximumImageWidth_sb->value();
   GSettings::maximumImageHight=ui->maximumImageHight_sb->value();
+  GSettings::inMemoryTextLength=ui->inMemoryTextLimit_sb->value();
+
+  GSettings::historyMenuHotkeyEnabled=ui->historyMenu_cb->isChecked();
+  GSettings::historyMenuHotkey=ui->historyMenuHotkey_kse->keySequence();
 
   GSettings::commit();
 }
@@ -242,4 +251,8 @@ void SettingsWindow::setToDefault()
 
   ui->maximumImageWidth_sb->setValue(100);
   ui->maximumImageHight_sb->setValue(100);
+  ui->inMemoryTextLimit_sb->setValue(500);
+
+  ui->historyMenu_cb->setChecked(true);
+  ui->historyMenuHotkey_kse->setKeySequence(QKeySequence("Ctrl+Alt+Shift+V"));
 }

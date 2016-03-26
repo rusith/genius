@@ -12,13 +12,14 @@ ClipboardImageItem::ClipboardImageItem(QClipboard *clipboard)
 ClipboardImageItem::ClipboardImageItem(QImage *image)
 {
   if(image)
-    _constructed=image(image);
+    _constructed=this->image(image);
   _type=ClipboardMimeType::Image;
 }
 
-ClipboardImageItem::ClipboardImageItem(QImage &image)
+ClipboardImageItem::ClipboardImageItem(const QImage &image)
 {
-  _constructed=image(&image);
+  QImage img(image);
+  _constructed=this->image(&img);
   _type=ClipboardMimeType::Image;
 }
 
@@ -54,20 +55,30 @@ bool ClipboardImageItem::image(QImage *image)
 {
   if(image)
   {
-    deleteImageFile();
-
+    int W=image->width();
+    int H=image->height();
+    if(W<1 || H<1)
+    {
+      return false;
+    }
     if(!CanStoreOnMemory(image))
     {
-      QFile file=new QFile(QString(Controller::tempFolder.path()+"/%1IMG.png").arg(_ref));
-      bool flSvd=image->save(file.fileName());
+      QFile *file=new QFile(QString(Resources::tempFolder.path()+"/%1IMG.png").arg(_ref));
+      bool flSvd=image->save(file->fileName());
       if(flSvd)
-        _imageFile=file;
+      {
+        if(!(_imageFile && _imageFile->fileName()==file->fileName()))
+        {
+          deleteImageFile();
+          _imageFile=file;
+        }
+
+      }
       else
       {
         qDebug()<<"cannot save image ClipboardImageItem::setImage(QImage &image)";
         return false;
       }
-
       QImage *img =new QImage(image->scaled(GSettings::maximumImageWidth,GSettings::maximumImageHight,Qt::KeepAspectRatio));
       if(img)
       {
@@ -76,13 +87,23 @@ bool ClipboardImageItem::image(QImage *image)
         _image=img;
       }
       else
-        _image=img;
+        _image=new QImage;
+
+
+      _width=W;
+      _hight=H;
+      return true;
     }
     else
     {
+      deleteImageFile();
       if(_image)
         delete _image;
       _image=new QImage(*image);
+
+      _width=W;
+      _hight=H;
+      return true;
     }
   }
   else
@@ -112,7 +133,7 @@ QImage *ClipboardImageItem::preview()
 {
   if(_image)
     return _image;
-  return new QImage();
+  return NULL;
 }
 
 bool ClipboardImageItem::CanStoreOnMemory(QImage *image)
@@ -121,6 +142,18 @@ bool ClipboardImageItem::CanStoreOnMemory(QImage *image)
   {
     if(image->width()>GSettings::maximumImageWidth || image->height()>GSettings::maximumImageHight)
       return false;
-    else return true;\
+    else return true;
   }
+  else
+    return false;
+}
+
+int ClipboardImageItem::width()
+{
+  return _width;
+}
+
+int ClipboardImageItem::hight()
+{
+  return _hight;
 }

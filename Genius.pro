@@ -28,7 +28,8 @@ SOURCES += main.cpp \
     views/settingswindow.cpp \
     controllers/tempfolder.cpp \
     models/clipboardimageitem.cpp \
-    models/clipboardtextitem.cpp
+    models/clipboardtextitem.cpp \
+    models/clipboardurlitem.cpp
 
 HEADERS  += \
     views/manager.h \
@@ -46,7 +47,8 @@ HEADERS  += \
     views/settingswindow.h \
     controllers/tempfolder.h \
     models/clipboardimageitem.h \
-    models/clipboardtextitem.h
+    models/clipboardtextitem.h \
+    models/clipboardurlitem.h
 
 FORMS    += \
     views/manager.ui \

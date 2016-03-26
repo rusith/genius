@@ -1,7 +1,7 @@
 #include "imageeditor.h"
 #include "ui_imageeditor.h"
 
-ImageEditor::ImageEditor(ClipboardItem *item,QWidget *parent) :
+ImageEditor::ImageEditor(ClipboardImageItem *item,QWidget *parent) :
   QDialog(parent),
   ui(new Ui::ImageEditor)
 {
@@ -9,9 +9,13 @@ ImageEditor::ImageEditor(ClipboardItem *item,QWidget *parent) :
   if(item && item->type()==ClipboardItem::Image)
   {
     _item=item;
-
-    _image=new QImage(item->image());
-    _image_backup=QImage(item->image());
+    QImage *image=item->image();
+    if(image)
+    {
+      _image=new QImage(*image);
+      _image_backup=QImage(*image);
+    }
+    delete image;
   }
 }
 
@@ -42,7 +46,7 @@ void ImageEditor::on_okButton_clicked()
 {
   if(_item)
   {
-    _item->image(*_image);
+    _item->image(_image);
   }
   accept();
 }
