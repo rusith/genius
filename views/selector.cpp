@@ -86,6 +86,7 @@ QLabel *Selector::createLabel(QRect &geometry, ClipboardItem *content)
   newLabel->setGeometry(geometry);
   newLabel->setWordWrap(true);
   newLabel->setScaledContents(true);
+  newLabel->setAlignment(Qt::AlignCenter);
   QString style=QString("QLabel { color:"+GSettings::selectorTextColor+"; background:"+GSettings::selectorItemBackgroundColor+"; background-repeat: repeat-y; background-position: left; border:%1px solid "+GSettings::selectorBorderColor+"; border-radius: "+QString("%1").arg(GSettings::selectorBorderRadius)+"px;};").arg(GSettings::selectorBorderSize);
   newLabel->setStyleSheet(style);
   QGraphicsOpacityEffect *opacityEffect=new QGraphicsOpacityEffect(newLabel);
@@ -144,6 +145,7 @@ void Selector::gotoNext()
   aNextToCurrentO->setEndValue(1.0);
   aNextToCurrentO->setDuration(duration);
   animationGroup->addAnimation(aNextToCurrentO);
+
   _currentIndex++;
 
   QPropertyAnimation *aCurrentToPreviousG =new QPropertyAnimation(lCurrent,"geometry",animationGroup);

@@ -7,6 +7,7 @@
 #include <QObject>
 #include <QHotkey>
 #include <QThread>
+#include <QBuffer>
 #include <views/manager.h>
 #include <models/clipboardhistory.h>
 #include <models/clipboardimageitem.h>
@@ -21,6 +22,7 @@
 #include <views/selector.h>
 #include <controllers/gsettings.h>
 #include <controllers/tempfolder.h>
+#include <models/filing/datafile.h>
 #include <controllers/fakekey.h>
 class Controller : public QObject
 {

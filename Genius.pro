@@ -29,7 +29,9 @@ SOURCES += main.cpp \
     controllers/tempfolder.cpp \
     models/clipboardimageitem.cpp \
     models/clipboardtextitem.cpp \
-    models/clipboardurlitem.cpp
+    models/clipboardurlitem.cpp \
+    models/filing/datafile.cpp \
+    models/clipboardentity.cpp
 
 HEADERS  += \
     views/manager.h \
@@ -48,7 +50,9 @@ HEADERS  += \
     controllers/tempfolder.h \
     models/clipboardimageitem.h \
     models/clipboardtextitem.h \
-    models/clipboardurlitem.h
+    models/clipboardurlitem.h \
+    models/filing/datafile.h \
+    models/clipboardentity.h
 
 FORMS    += \
     views/manager.ui \
@@ -57,7 +61,8 @@ FORMS    += \
     views/selector.ui \
     views/settingswindow.ui
 
-DISTFILES +=
+DISTFILES += \
+    models/filing/test.txt
 
 RESOURCES += \
     resources/resources.qrc

@@ -215,6 +215,31 @@ void Controller::start()
 void Controller::addClipboardContentToHistory()
 {
   const QMimeData *MD=_clipboard->mimeData();
+  DataFile *dataFile=new DataFile(MD,Resources::tempFolder.path()+"/SRL.txt");
+  QByteArray *BR=dataFile->data("text/plain");
+  qDebug()<<"PRINTING PLAIN TEXT_______________________________";
+  qDebug()<<QString(*BR);
+  delete BR;
+  BR=dataFile->at(1);
+  qDebug()<<"PRINTING HTML_______________________________";
+  qDebug()<<QString(*BR);
+  delete BR;
+//  QFile file(Resources::tempFolder.path()+"/TEST.genius");
+//  file.open(QFile::ReadWrite);
+//  QDataStream stream(&file);
+//  int i=0;
+//  foreach (QString str, MD->formats())
+//  {
+
+//    QFile file_(Resources::tempFolder.path()+QString("/TEST_%1.genius").arg(i));
+//    file_.open(QFile::ReadWrite);
+//    qDebug()<<"Writing "<<str;
+//    qDebug()<<"Wrote "<<file_.write(MD->data(str))<<" bytes";
+//    file_.close();
+//    i++;
+//  }
+//  qDebug()<<file.size();
+//  file.close();
   ClipboardItem *item=NULL;
   if(MD->hasImage())
     item=new ClipboardImageItem(_clipboard->image());
@@ -259,6 +284,7 @@ void Controller::showViews()
  */
 void Controller::addItem(ClipboardItem *item, int index)
 {
+
   if(!item)return;
   int reference=item->ref();
   ClipboardItem::ClipboardMimeType type=item->type();

@@ -32,7 +32,7 @@ public:
   /**
    * @brief represents 3 CLipboardItemTypes
    */
-  enum ClipboardMimeType{Image,Text,URLs};
+  enum ClipboardMimeType{Image,Text,URLs,GnomeCopiedFiles};
 
   /**
    * @brief get the type of the object
