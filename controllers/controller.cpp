@@ -215,15 +215,19 @@ void Controller::start()
 void Controller::addClipboardContentToHistory()
 {
   const QMimeData *MD=_clipboard->mimeData();
-  DataFile *dataFile=new DataFile(MD,Resources::tempFolder.path()+"/SRL.txt");
-  QByteArray *BR=dataFile->data("text/plain");
-  qDebug()<<"PRINTING PLAIN TEXT_______________________________";
-  qDebug()<<QString(*BR);
-  delete BR;
-  BR=dataFile->at(1);
-  qDebug()<<"PRINTING HTML_______________________________";
-  qDebug()<<QString(*BR);
-  delete BR;
+  foreach (QString str, MD->formats())
+  {
+      qDebug()<<str;
+  }
+//  DataFile *dataFile=new DataFile(MD,Resources::tempFolder.path()+"/SRL.txt");
+//  QByteArray *BR=dataFile->data("text/plain");
+//  qDebug()<<"PRINTING PLAIN TEXT_______________________________";
+//  qDebug()<<QString(*BR);
+//  delete BR;
+//  BR=dataFile->at(1);
+//  qDebug()<<"PRINTING HTML_______________________________";
+//  qDebug()<<QString(*BR);
+//  delete BR;
 //  QFile file(Resources::tempFolder.path()+"/TEST.genius");
 //  file.open(QFile::ReadWrite);
 //  QDataStream stream(&file);
