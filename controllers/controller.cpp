@@ -7,9 +7,7 @@ Controller::Controller(QObject *parent) : QObject(parent)
   _managerOpened=false;
   _settingsWindowOpened=false;
   _selectorOpen=false;
-
   GSettings::initialize();
-
 }
 
 Controller::~Controller()
@@ -19,24 +17,22 @@ Controller::~Controller()
   deleteHotkeys();
 }
 
-//----------------------------------------------------basic SLOTS------------------------------------------
-
 void Controller::itemSelected(int reference)
 {
  selectItem(reference);
 }
 
-void Controller::editRequested(ClipboardItem *item)
-{
-  letToEditItem(item);
-}
+//void Controller::editRequested(ClipboardItem *item)
+//{
+//  letToEditItem(item);
+//}
 
 
 void Controller::clipboardChanged(QClipboard::Mode mode)
 {
   if(mode==QClipboard::Clipboard)
   {
-    if(!_holtCollection && !isClipboardEmpty() && !sameDataAgain())
+    if(!_holtCollection && !isClipboardEmpty())
       addClipboardContentToHistory();
     else return;
   }
@@ -45,9 +41,9 @@ void Controller::clipboardChanged(QClipboard::Mode mode)
 
 //--------------------------------------------------------history control SLOTS-----------------------------
 
-void Controller::history_itemAdded(ClipboardItem *item, int index)
+void Controller::history_itemAdded(ClipboardEntity *entity, int index)
 {
-  addItem(item,index);
+  addItem(entity,index);
 }
 
 void Controller::history_removed(int reference, int index)
@@ -65,10 +61,10 @@ void Controller::history_cleared()
   _trayIcon->clearHistoryList();
 }
 
-void Controller::history_itemUpdated(ClipboardItem *item)
-{
-  updateItem(item);
-}
+//void Controller::history_itemUpdated(ClipboardEntity *entity)
+//{
+//  updateItem(entity);
+//}
 
 //----------------------------------------------------view control SLOTS--------------------------------------
 
@@ -98,14 +94,17 @@ void Controller::showHideManagerRequest()
 
 void Controller::selectorClosed(int currentIndex)
 {
+
   _selectorOpen=false;
-  ClipboardItem *item=_history->at(currentIndex);
-  if(item)
+  ClipboardEntity *entity=_history->at(currentIndex);
+  if(entity)
   {
-    int reference=item->ref();
+    int reference=entity->ref();
     itemSelected(reference);
     if(GSettings::pasteAutomaticlay)
+    {
       FakeKey::simulatePaste();
+    }
   }
 }
 
@@ -161,10 +160,10 @@ void Controller::pasteLasteHKTrigered()
   int length=_history->length();
   if(length>1)
   {
-    ClipboardItem *item=_history->at(1);
-    if(item)
+    ClipboardEntity *entity=_history->at(1);
+    if(entity)
     {
-      itemSelected(item->ref());
+      itemSelected(entity->ref());
       FakeKey::simulatePaste();
     }
   }
@@ -214,11 +213,18 @@ void Controller::start()
 
 void Controller::addClipboardContentToHistory()
 {
-  const QMimeData *MD=_clipboard->mimeData();
-  foreach (QString str, MD->formats())
+//  const QMimeData *MD=_clipboard->mimeData();
+//  foreach (QString str, MD->formats())
+//  {
+//      qDebug()<<str;
+//  }
+  ClipboardEntity *entity=new ClipboardEntity(_clipboard);
+  if(sameAsLast(entity))
   {
-      qDebug()<<str;
+    delete entity;
+    return;
   }
+  _history->pushFront(entity);
 //  DataFile *dataFile=new DataFile(MD,Resources::tempFolder.path()+"/SRL.txt");
 //  QByteArray *BR=dataFile->data("text/plain");
 //  qDebug()<<"PRINTING PLAIN TEXT_______________________________";
@@ -244,20 +250,20 @@ void Controller::addClipboardContentToHistory()
 //  }
 //  qDebug()<<file.size();
 //  file.close();
-  ClipboardItem *item=NULL;
-  if(MD->hasImage())
-    item=new ClipboardImageItem(_clipboard->image());
-  else if(MD->hasText())
-    item=new ClipboardTextItem(_clipboard->text());
-  else if(MD->hasHtml())
-    item=new ClipboardTextItem(MD->html());
-  else if(MD->hasUrls())
-    item=new ClipboardURLItem(MD->urls());
-  else return;
-  if(item && item->constructed())
-    _history->pushFront(item);
-  else
-    return;
+
+//  if(MD->hasImage())
+//    item=new ClipboardImageItem(_clipboard->image());
+//  else if(MD->hasText())
+//    item=new ClipboardTextItem(_clipboard->text());
+//  else if(MD->hasHtml())
+//    item=new ClipboardTextItem(MD->html());
+//  else if(MD->hasUrls())
+//    item=new ClipboardURLItem(MD->urls());
+//  else return;
+//  if(item && item->constructed())
+//    _history->pushFront(item);
+//  else
+//    return;
 }
 
 /**
@@ -265,7 +271,7 @@ void Controller::addClipboardContentToHistory()
  */
 void Controller::createViews()
 {
-  _manager=new Manager(_history,_clipboard);
+  _manager=new Manager(_history);
   _manager->initialize();
   _trayIcon=new TrayIcon(_history);
   _selector=new Selector(_history);
@@ -275,9 +281,7 @@ void Controller::createViews()
 void Controller::showViews()
 {
   if(!_managerOpened && !GSettings::openMinimized)
-  {
     _manager->show();
-  }
   _trayIcon->show();
 }
 
@@ -286,45 +290,23 @@ void Controller::showViews()
  * @param itemto add
  * @param index of the new item
  */
-void Controller::addItem(ClipboardItem *item, int index)
+void Controller::addItem(ClipboardEntity *entity, int index)
 {
 
-  if(!item)return;
-  int reference=item->ref();
-  ClipboardItem::ClipboardMimeType type=item->type();
-  if(type==ClipboardItem::Text)
-  {
-   ClipboardTextItem *te=dynamic_cast<ClipboardTextItem*>(item);
-   QString *text=new QString(*te->preview());
-   if(GSettings::showInSingleLine)
-     ToolKit::removeNewLines(text);
-   if(GSettings::limitcharLength)
-   {
-     if(text->length()>GSettings::limitedCharLength)
-       *text=text->left(GSettings::limitedCharLength)+"...";
-   }
-   QString tooltipText="type : text"+QString("\ncontent length : %1").arg(te->length())+QString("\nadded time : %1 ").arg(te->addedTime()->toString("hh.mm.ss.zzz AP"));
-   _manager->addTextItem(text,&tooltipText,reference,index);
-   _trayIcon->addTextAction(text,&tooltipText,reference,index);
-   delete text;
-  }
-  else if(type==ClipboardItem::Image)
-  {
-    ClipboardImageItem *ii=dynamic_cast<ClipboardImageItem*>(item);
+  if(!entity) return;
 
-    QImage *image=ii->preview();
+  int reference=entity->ref();
+  if(entity->hasImage())
+  {
+    const QImage *image=entity->image();
     QIcon icon(QPixmap::fromImage(*image));
-    QString text(QString("width : %1").arg(ii->width()));
-    text+=QString("  height : %1").arg(ii->hight());
-    text+="  added time : "+ii->addedTime()->toString("hh.mm.ss.zzz AP");
-
+    QString text("  added time : "+entity->addedTime()->toString("hh.mm.ss.zzz AP"));
     _manager->addImageItem(&text,&icon,reference,index);
     _trayIcon->addImageAction(&text,&icon,reference,index);
   }
-  else if(type==ClipboardItem::URLs)
+  else if(entity->hasHTML())
   {
-    ClipboardURLItem *ui=dynamic_cast<ClipboardURLItem*>(item);
-    QString *text=new QString(ui->toString("|"));
+    QString *text=new QString(*entity->HTMLText());
     if(GSettings::showInSingleLine)
       ToolKit::removeNewLines(text);
     if(GSettings::limitcharLength)
@@ -333,11 +315,73 @@ void Controller::addItem(ClipboardItem *item, int index)
         *text=text->left(GSettings::limitedCharLength)+"...";
     }
 
-    QString tooltipText="type : urls"+QString("\nurls : %1").arg(ui->urls()->length())+QString("\nadded time : %1 ").arg(ui->addedTime()->toString("hh.mm.ss.zzz AP"));
+    QString tooltipText=QString("added time : %1 ").arg(entity->addedTime()->toString("hh.mm.ss.zzz AP"));
     _manager->addTextItem(text,&tooltipText,reference,index);
     _trayIcon->addTextAction(text,&tooltipText,reference,index);
     delete text;
   }
+  else if(entity->hasPlainText())
+  {
+
+    QString text=entity->plainText(false,(GSettings::limitcharLength ? GSettings::limitedCharLength : -1));
+    if(GSettings::showInSingleLine)
+      ToolKit::removeNewLines(&text);/*
+    if(GSettings::limitcharLength)
+    {
+      if(text->length()>GSettings::limitedCharLength)
+        *text=text->left(GSettings::limitedCharLength)+"...";
+    }*/
+    QString tooltipText=QString("added time : %1 ").arg(entity->addedTime()->toString("hh.mm.ss.zzz AP"));
+    _manager->addTextItem(&text,&tooltipText,reference,index);
+    _trayIcon->addTextAction(&text,&tooltipText,reference,index);
+  }
+//  ClipboardItem::ClipboardMimeType type=item->type();
+//  if(type==ClipboardItem::Text)
+//  {
+//   ClipboardTextItem *te=dynamic_cast<ClipboardTextItem*>(item);
+//   QString *text=new QString(*te->preview());
+//   if(GSettings::showInSingleLine)
+//     ToolKit::removeNewLines(text);
+//   if(GSettings::limitcharLength)
+//   {
+//     if(text->length()>GSettings::limitedCharLength)
+//       *text=text->left(GSettings::limitedCharLength)+"...";
+//   }
+//   QString tooltipText="type : text"+QString("\ncontent length : %1").arg(te->length())+QString("\nadded time : %1 ").arg(te->addedTime()->toString("hh.mm.ss.zzz AP"));
+//   _manager->addTextItem(text,&tooltipText,reference,index);
+//   _trayIcon->addTextAction(text,&tooltipText,reference,index);
+//   delete text;
+//  }
+//  else if(type==ClipboardItem::Image)
+//  {
+//    ClipboardImageItem *ii=dynamic_cast<ClipboardImageItem*>(item);
+
+//    QImage *image=ii->preview();
+//    QIcon icon(QPixmap::fromImage(*image));
+//    QString text(QString("width : %1").arg(ii->width()));
+//    text+=QString("  height : %1").arg(ii->hight());
+//    text+="  added time : "+ii->addedTime()->toString("hh.mm.ss.zzz AP");
+
+//    _manager->addImageItem(&text,&icon,reference,index);
+//    _trayIcon->addImageAction(&text,&icon,reference,index);
+//  }
+//  else if(type==ClipboardItem::URLs)
+//  {
+//    ClipboardURLItem *ui=dynamic_cast<ClipboardURLItem*>(item);
+//    QString *text=new QString(ui->toString("|"));
+//    if(GSettings::showInSingleLine)
+//      ToolKit::removeNewLines(text);
+//    if(GSettings::limitcharLength)
+//    {
+//      if(text->length()>GSettings::limitedCharLength)
+//        *text=text->left(GSettings::limitedCharLength)+"...";
+//    }
+
+//    QString tooltipText="type : urls"+QString("\nurls : %1").arg(ui->urls()->length())+QString("\nadded time : %1 ").arg(ui->addedTime()->toString("hh.mm.ss.zzz AP"));
+//    _manager->addTextItem(text,&tooltipText,reference,index);
+//    _trayIcon->addTextAction(text,&tooltipText,reference,index);
+//    delete text;
+//  }
 }
 
 /**
@@ -376,10 +420,10 @@ void Controller::createConnections()
   connect(_clipboard,SIGNAL(changed(QClipboard::Mode)),this,SLOT(clipboardChanged(QClipboard::Mode)));
 
   //-----------------------------------connection with clipboardHistory
-  connect(_history,SIGNAL(added(ClipboardItem*,int)),this,SLOT(history_itemAdded(ClipboardItem*,int)));
+  connect(_history,SIGNAL(added(ClipboardEntity*,int)),this,SLOT(history_itemAdded(ClipboardEntity*,int)));
   connect(_history,SIGNAL(removed(int,int)),this,SLOT(history_removed(int,int)));
   connect(_history,SIGNAL(cleared()),this,SLOT(history_cleared()));
-  connect(_history,SIGNAL(updated(ClipboardItem*)),this,SLOT(history_itemUpdated(ClipboardItem*)));
+ // connect(_history,SIGNAL(updated(ClipboardItem*)),this,SLOT(history_itemUpdated(ClipboardItem*)));
 
   //------------------------------------connection with clipboard Manager
   connect(_manager,SIGNAL(shown()),this,SLOT(manager_shown()));
@@ -388,7 +432,7 @@ void Controller::createConnections()
   connect(_manager,SIGNAL(shown()),_trayIcon,SLOT(managerShown()));
   connect(_manager,SIGNAL(settingsDialogRequested()),this,SLOT(settingsWindowRequested()));
   connect(_manager,SIGNAL(itemSelected(int)),this,SLOT(itemSelected(int)));
-  connect(_manager,SIGNAL(editRequested(ClipboardItem*)),this,SLOT(editRequested(ClipboardItem*)));
+  //connect(_manager,SIGNAL(editRequested(ClipboardItem*)),this,SLOT(editRequested(ClipboardItem*)));
 
   //------------------------------------connection with TrayIcon
   connect(_trayIcon,SIGNAL(showHideManagerTriggerd()),this,SLOT(showHideManagerRequest()));
@@ -427,180 +471,36 @@ void Controller::createConnections()
     connect(_historyMenuHotKey,SIGNAL(activated()),this,SLOT(historyMenuHotkeyActivated()));
 }
 
-/**
- * @brief select an item from history and bring it to top
- * @param reference reference of selecte Item
- */
+
 void Controller::selectItem(int reference)
 {
   if(reference>-1)
   {
     if(!_history->isEmpty())
     {
-      ClipboardItem *item=_history->get(reference);
-      if(item)
+      ClipboardEntity *entity=_history->get(reference);
+      if(entity)
       {
-        ClipboardItem::ClipboardMimeType type=item->type();
-        if(type==ClipboardItem::Text)
+        QMimeData *MD=entity->data();
+        if(MD)
         {
-          QString str=*dynamic_cast<ClipboardTextItem*>(item)->text();
-          _history->remove(reference);
-          _clipboard->setText(str);
+          int index=_history->indexOf(reference);
+          _history->removeAt(index);
+          _clipboard->setMimeData(MD);
         }
-        else if(type==ClipboardItem::Image)
-        {
-          QImage img=*dynamic_cast<ClipboardImageItem*>(item)->image();
-          _history->remove(reference);
-          _clipboard->setImage(img);
-        }
-        else if(type==ClipboardItem::URLs)
-        {
-          QMimeData *mimedata=new QMimeData();
-          mimedata->setUrls(*dynamic_cast<ClipboardURLItem*>(item)->urls());
-          _history->remove(reference);
-          _clipboard->setMimeData(mimedata);
-        }
-        else{}
       }
     }
   }
 }
 
-/**
- * @brief let the user to edit selected item
- * @param item for edit
- */
-void Controller::letToEditItem(ClipboardItem *item)
-{
-  if(item)
-  {
-    ClipboardItem::ClipboardMimeType type=item->type();
-    if(type==ClipboardItem::Text)
-    {
-      ClipboardTextItem *TI=dynamic_cast<ClipboardTextItem*>(item);
-      QString temp(*TI->text());
-      QString *text=new QString(temp);
-      TextEditor textEditor(text);
-      bool accept=textEditor.exec();
-      if(accept)
-      {
-        if(text)
-        {
-          if(*text!=temp)
-          {
-            TI->text(*text);
-            _history->itemUpdated(TI);
-          }
-        }
-      }
-      delete text;
-    }
-    else if(type==ClipboardItem::Image)
-    {
-
-      ImageEditor IE(dynamic_cast<ClipboardImageItem*>(item));
-      bool accept=IE.exec();
-      if(accept)
-      {
-         _history->itemUpdated(item);
-      }
-    }
-  }
-}
-
-/**
- * @brief update given item , update views
- * @param item to update
- */
-void Controller::updateItem(ClipboardItem *item)
-{
-  if(item)
-  {
-    ClipboardItem::ClipboardMimeType type=item->type();
-    if(type==ClipboardItem::Text)
-    {
-      ClipboardTextItem *te=dynamic_cast<ClipboardTextItem*>(item);
-      QString *text=new QString(*te->preview());
-      if(GSettings::showInSingleLine)
-        ToolKit::removeNewLines(text);
-      if(GSettings::limitcharLength)
-      {
-        if(text->length()>GSettings::limitedCharLength)
-          *text=text->left(GSettings::limitedCharLength)+"...";
-      }
-      QString tooltipText="type : text"+QString("\ncontent length : %1").arg(te->length())+QString("\nadded time : %1 ").arg(te->addedTime()->toString("hh.mm.ss.zzz AP"));
-      int ref=te->ref();
-      _manager->updateTextItem(text,&tooltipText,ref);
-      _trayIcon->updateTextItem(text,&tooltipText,ref);
-      delete text;
-    }
-    else if(type==ClipboardItem::Image)
-    {
-      ClipboardImageItem *ii=dynamic_cast<ClipboardImageItem*>(item);
-      QImage *image=ii->preview();
-      QIcon icon(QPixmap::fromImage(*image));
-      QString text(QString("width : %1").arg(ii->width()));
-      text+=QString("  height : %1").arg(ii->hight());
-      text+="  added time : "+ii->addedTime()->toString("hh.mm.ss.zzz AP");
-      int ref=ii->ref();
-      _manager->updateImageItem(&text,&icon,ref);
-      _trayIcon->updateImageItem(&text,&icon,ref);
-    }
-    else if(type==ClipboardItem::URLs)
-    {
-      ClipboardURLItem *ui=dynamic_cast<ClipboardURLItem*>(item);
-      QString *text=new QString(ToolKit::URlsToString(ui->urls()));
-      if(GSettings::showInSingleLine)
-        ToolKit::removeNewLines(text);
-      if(GSettings::limitcharLength)
-      {
-        if(text->length()>GSettings::limitedCharLength)
-          *text=text->left(GSettings::limitedCharLength)+"...";
-      }
-
-      QString tooltipText="type : urls"+QString("\nurls : %1").arg(ui->urls()->length())+QString("\nadded time : %1 ").arg(ui->addedTime()->toString("hh.mm.ss.zzz AP"));
-      int ref=ui->ref();
-      _manager->updateTextItem(text,&tooltipText,ref);
-      _trayIcon->updateTextItem(text,&tooltipText,ref);
-      delete text;
-    }
-  }
-}
-
-/**
- * @brief check clipboard for empty
- * @return
- */
 bool Controller::isClipboardEmpty()
 {
   const QMimeData *mimeData=_clipboard->mimeData(QClipboard::Clipboard);
   if(!mimeData)
     return true;
-  if(mimeData->hasText() || mimeData->hasImage() || mimeData->hasUrls())
-    return false;
-  else return true;
-}
-
-
-bool Controller::sameDataAgain()
-{
-  if(!_history||_history->isEmpty())return false;
-  ClipboardItem *item=_history->first();
-  ClipboardItem::ClipboardMimeType type=item->type();
-  if(_clipboard->mimeData()->hasText() && type==ClipboardItem::Text)
-      return  *dynamic_cast<ClipboardTextItem*>(item)->text()==_clipboard->text();
-  else if(_clipboard->mimeData()->hasHtml() && type==ClipboardItem::Text)
-      return *dynamic_cast<ClipboardTextItem*>(item)->text()==_clipboard->mimeData()->text();
-  else if(_clipboard->mimeData()->hasImage() && type==ClipboardItem::Image)
-      return *dynamic_cast<ClipboardImageItem*>(item)->image()==_clipboard->image();
-  else if(_clipboard->mimeData()->hasUrls() && type==ClipboardItem::URLs)
-      return *dynamic_cast<ClipboardURLItem*>(item)->urls()==_clipboard->mimeData()->urls();
   else return false;
 }
 
-/**
- * @brief unregister and delete all the Hotkeys
- */
 void Controller::deleteHotkeys()
 {
 
@@ -713,6 +613,29 @@ void Controller::enableHotkeys(bool enable)
 }
 
 
+bool Controller::sameAsLast(ClipboardEntity *entity)
+{
+  if(entity)
+  {
+    if(_history && _history->isEmpty()==false)
+    {
+      ClipboardEntity *first=_history->first();
+      if(first)
+        return first->identical(entity);
+      else
+        return false;
+    }
+    else
+      return false;
+  }
+  else
+    return false;
+}
 
+void Controller::showContent(ClipboardEntity *entity)
+{
+  if(entity)
+  {
 
-
+  }
+}

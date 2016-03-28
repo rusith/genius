@@ -80,7 +80,7 @@ void Selector::initializeVarbs()
 
 }
 
-QLabel *Selector::createLabel(QRect &geometry, ClipboardItem *content)
+QLabel *Selector::createLabel(QRect &geometry, ClipboardEntity *content)
 {
   QLabel *newLabel=new QLabel(this);
   newLabel->setGeometry(geometry);
@@ -98,23 +98,38 @@ QLabel *Selector::createLabel(QRect &geometry, ClipboardItem *content)
   return newLabel;
 }
 
-void Selector::constructLabel(QLabel *label, ClipboardItem *item)
+void Selector::constructLabel(QLabel *label, ClipboardEntity *entity)
 {
-  if(label && item)
+  if(label && entity)
   {
-    ClipboardItem::ClipboardMimeType type=item->type();
-    if(type==ClipboardItem::Text)
-      label->setText(*dynamic_cast<ClipboardTextItem*>(item)->preview());
-    else if(type==ClipboardItem::Image)
+    if(entity->hasImage())
+      label->setPixmap(QPixmap::fromImage(*entity->image()));
+    else if(entity->hasHTML())
     {
-      QImage *image=dynamic_cast<ClipboardImageItem*>(item)->preview();
-      if(image)
-      {
-        label->setPixmap(QPixmap::fromImage(*image));
-      }
+      label->setText(*entity->HTMLText());
     }
-    else if(type==ClipboardItem::URLs)
-      label->setText(dynamic_cast<ClipboardURLItem*>(item)->toString("|"));
+    else if(entity->hasPlainText())
+    {
+      label->setText(*entity->plainText());
+    }
+    else
+    {
+
+      label->setText("content cannot display");
+    }
+//    ClipboardItem::ClipboardMimeType type=item->type();
+//    if(type==ClipboardItem::Text)
+//      label->setText(*dynamic_cast<ClipboardTextItem*>(item)->preview());
+//    else if(type==ClipboardItem::Image)
+//    {
+//      QImage *image=dynamic_cast<ClipboardImageItem*>(item)->preview();
+//      if(image)
+//      {
+//        label->setPixmap(QPixmap::fromImage(*image));
+//      }
+//    }
+//    else if(type==ClipboardItem::URLs)
+//      label->setText(dynamic_cast<ClipboardURLItem*>(item)->toString("|"));
 
 
   }

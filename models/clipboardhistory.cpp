@@ -2,45 +2,98 @@
 
 ClipboardHistory::ClipboardHistory(QObject *parent) : QObject(parent)
 {
-  _list=new QList<ClipboardItem*>();
+  _list=new QList<ClipboardEntity*>();
 }
 
 ClipboardHistory::~ClipboardHistory()
 {
-  if(!_list->isEmpty())
+  if(_list)
   {
-    int length=_list->length();
-    ClipboardItem *item;
-    for(int i=0;i<length;i++)
+    if(_list->isEmpty())
+      delete _list;
+    else
     {
-      item=_list->at(i);
-      if(item)
+      foreach (ClipboardEntity *entity, *_list)
       {
-        delete item;
+        if(entity)
+        {
+          delete entity;
+        }
       }
+      _list->clear();
+      delete _list;
     }
   }
-  delete _list;
 }
 
-
-
-void ClipboardHistory::append(ClipboardItem *item)
+void ClipboardHistory::append(ClipboardEntity *entity)
 {
-  if(item && _list->length()<=GSettings::maximumItemsInHistory)
+  if(entity && _list->length()<=GSettings::maximumItemsInHistory)
   {
-    _list->append(item);
-    emit added(item,_list->length()-1);
+    _list->append(entity);
+    emit added(entity,_list->length()-1);
   }
 }
 
-void ClipboardHistory::pushFront(ClipboardItem *item)
+void ClipboardHistory::pushFront(ClipboardEntity *entity)
 {
-  if(item)
+  if(entity)
   {
-    _list->push_front(item);
+    _list->push_front(entity);
     manageLength();
-    emit added(item,0);
+    emit added(entity,0);
+  }
+}
+
+void ClipboardHistory::remove(const int &reference)
+{
+  int length=this->length();
+  if(length<1)
+    return;
+  ClipboardEntity *entity;
+  int refer;
+  for(int i=0;i<length;i++)
+  {
+   entity=_list->at(i);
+   if(entity)
+   {
+     refer=entity->ref();
+     if(refer==reference)
+     {
+       delete _list->takeAt(i);
+       emit removed(reference,i);
+       return;
+     }
+   }
+  }
+}
+
+void ClipboardHistory::removeAt(int index)
+{
+  int length=this->length();
+  if(length<1)
+    return;
+  ClipboardEntity *entity=_list->takeAt(index);
+  if(entity)
+  {
+    delete entity;
+    emit removed(entity->ref(),index);
+  }
+}
+
+void ClipboardHistory::clear()
+{
+  if(!isEmpty())
+  {
+    foreach (ClipboardEntity *entity, *_list)
+    {
+      if(entity)
+      {
+        delete entity;
+      }
+    }
+    _list->clear();
+    emit cleared();
   }
 }
 
@@ -54,26 +107,26 @@ int ClipboardHistory::length()
   return _list->length();
 }
 
-ClipboardItem *ClipboardHistory::get(int &reference)
+ClipboardEntity *ClipboardHistory::get(const int &reference)
 {
    if(!isEmpty())
    {
-     int length=this->length();
-     ClipboardItem *item;
-     for(int i=0;i<length;i++)
+     foreach (ClipboardEntity *entity, *_list)
      {
-       item=_list->at(i);
-       if(item && item->ref()==reference)
-       {
-         return item;
-       }
+      if(entity)
+      {
+        if(entity->ref()==reference)
+        {
+          return entity;
+        }
+      }
      }
      return NULL;
    }
    return NULL;
 }
 
-ClipboardItem *ClipboardHistory::at(int index)
+ClipboardEntity *ClipboardHistory::at(const int &index)
 {
   int length=this->length();
   if(length<1||index<0||index>(length-1))
@@ -81,86 +134,48 @@ ClipboardItem *ClipboardHistory::at(int index)
   return _list->at(index);
 }
 
-void ClipboardHistory::remove(int reference)
-{
-  int length=this->length();
-  if(length<1)
-    return;
-  ClipboardItem *item;
-  int refer;
-  for(int i=0;i<length;i++)
-  {
-
-    item=_list->at(i);
-    if(item)
-    {
-      refer=item->ref();
-      if(refer==reference)
-      {
-        delete _list->takeAt(i);
-        emit removed(reference,i);
-        return;
-      }
-    }
-  }
-}
-
-ClipboardItem *ClipboardHistory::first()
+ClipboardEntity *ClipboardHistory::first()
 {
   if(!isEmpty())
-  {
     return _list->first();
+  else
+    return NULL;
+}
+
+void ClipboardHistory::itemUpdated(ClipboardEntity *entity)
+{
+  if(entity)
+    emit updated(entity);
+}
+
+int ClipboardHistory::indexOf(const int &reference)
+{
+  if(_list)
+  {
+    if(_list->length()>0)
+    {
+      int len=length();
+      ClipboardEntity *entity;
+      for(int i=0;i<len;i++)
+      {
+        entity=_list->at(i);
+        if(entity)
+        {
+          if(entity->ref()==reference)
+            return i;
+        }
+      }
+      return -1;
+    }
+    else return -1;
   }
   else
-  {
-    return NULL;
-  }
-}
-
-void ClipboardHistory::removeAt(int index)
-{
-  int length=this->length();
-  if(length<1)
-    return;
-  ClipboardItem *item=_list->takeAt(index);
-  if(item)
-  {
-    emit removed(item->ref(),index);
-    delete item;
-  }
-
-}
-
-void ClipboardHistory::itemUpdated(ClipboardItem *item)
-{
-  if(item)
-    emit updated(item);
+    return -1;
 }
 
 void ClipboardHistory::manageLength()
 {
   int max=GSettings::maximumItemsInHistory;
   while (_list->length()>max)
-  {
     removeAt(_list->length()-1);
-  }
-}
-
-void ClipboardHistory::clear()
-{
-  if(!isEmpty())
-  {
-    int length=this->length();
-    ClipboardItem *item;
-    for(int i=0;i<length;i++)
-    {
-      item=_list->at(i);
-      if(item)
-      {
-        delete item;
-      }
-    }
-    _list->clear();
-    emit cleared();
-  }
 }

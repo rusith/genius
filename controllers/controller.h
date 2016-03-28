@@ -41,13 +41,13 @@ private slots:
    */
   void clipboardChanged(QClipboard::Mode mode);
   void itemSelected(int reference);
-  void editRequested(ClipboardItem *item);
+  //void editRequested(ClipboardItem *item);
 
   //---------------------------history slots
-  void history_itemAdded(ClipboardItem *item,int index);
+  void history_itemAdded(ClipboardEntity *entity,int index);
   void history_removed(int reference,int index);
   void history_cleared();
-  void history_itemUpdated(ClipboardItem *item);
+  //void history_itemUpdated(ClipboardEntity *entity);
 
   //----------------------------views related slots
   void settingsWindowRequested();
@@ -118,21 +118,24 @@ private:
   void addClipboardContentToHistory();
   void createViews();
   void showViews();
-  void addItem(ClipboardItem *item, int index);
+  void addItem(ClipboardEntity *entity, int index);
   void createHotkeys();
   void createConnections();
+  /**
+   * @brief calls when user selected an item selected item's data wii set to the device's clipboard
+   * @param reference of the item
+   */
   void selectItem(int reference);
-  void letToEditItem(ClipboardItem *item);
-  void updateItem(ClipboardItem *item);
+  //void letToEditItem(ClipboardItem *item);
+  //void updateItem(ClipboardItem *item);
   //--------------------------------view function
   void toggleManager();
   void makeConnections();
 
   /**
-   * @brief check last item and new item is same
-   * @return true if same thing again otherwise false
+   * @brief check the system's clipboard is empty
+   * @return true or false
    */
-  bool sameDataAgain();
   bool isClipboardEmpty();
   void deleteHotkeys();
   void deleteVariables();
@@ -143,6 +146,18 @@ private:
    */
   void enableHotkeys(bool enable);
 
+  /**
+   * @brief check the first item of the history is same as given item
+   * @param entity for check
+   * @return true or false
+   */
+  bool sameAsLast(ClipboardEntity *entity);
+
+  /**
+   * @brief open content viewer and show content to the user
+   * @param entity for show
+   */
+  void showContent(ClipboardEntity *entity);
 
 };
 

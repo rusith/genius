@@ -14,7 +14,6 @@ DataFile::DataFile(const QMimeData *mimeData, const QString &filename)
         FragmentFrame frame;
         frame.start=_file->pos();
         qint64 wrtn=_file->write(mimeData->data(format));
-        frame.end=_file->pos();
         frame.size=wrtn;
         _fragments->insert(format,frame);
       }
@@ -26,9 +25,11 @@ DataFile::DataFile(const QMimeData *mimeData, const QString &filename)
 DataFile::~DataFile()
 {
   if(_file)
+  {
     if(_file->exists())
-      _file->remove();
+        _file->remove();
     delete _file;
+  }
   if(_fragments)
     delete _fragments;
 }
@@ -38,15 +39,11 @@ QByteArray *DataFile::data(const QString &format)
   if(!_file || !_fragments || _fragments->isEmpty())
     return NULL;
   FragmentFrame frame=_fragments->value(format);
-  if(frame.end==0 && frame.start==0 && frame.size==0)
+  if(frame.start==0 && frame.size==0)
     return new QByteArray(0);
   if(frame.size==0)
     return new QByteArray(0);
-  char *cha=new char[frame.size];
-  readFragment(frame,cha);
-  QByteArray *BA=new QByteArray(cha,frame.size);
-  delete [] cha;
-  return BA;
+  return readFragment(frame);
 }
 
 QByteArray *DataFile::at(const int &index)
@@ -58,11 +55,7 @@ QByteArray *DataFile::at(const int &index)
   {
     if(in==index)
     {
-      char *cha=new char[frame.size];
-      readFragment(frame,cha);
-      QByteArray *BA=new QByteArray(cha,frame.size);
-      delete [] cha;
-      return BA;
+      return readFragment(frame);
     }
     in++;
   }
@@ -98,13 +91,10 @@ QMimeData *DataFile::toMimeData()
     foreach (QString key, _fragments->keys())
     {
       FragmentFrame frame=_fragments->value(key);
-      if(frame.end==0 && frame.start==0 && frame.size==0)
+      if(frame.start==0 && frame.size==0)
         continue;
       _file->seek(frame.start);
-      char *cha=new char[frame.size];
-      _file->read(cha,frame.size);
-      MD->setData(key,QByteArray(cha,frame.size));
-      delete [] cha;
+      MD->setData(key,_file->read(frame.size));
     }
     _file->close();
     return MD;
@@ -117,12 +107,7 @@ bool DataFile::hasPlainText()
 {
   if(_fragments && count()>0 && _file && _file->exists())
   {
-    foreach (QString str, _fragments->keys())
-    {
-       if(str=="text/plain"||str=="text/plain;charset=utf-8")
-         return true;
-    }
-    return false;
+    return (_fragments->keys().contains("text/plain") ||  _fragments->keys().contains("text/plain;charset=utf-8"));
   }
   else
     return false;
@@ -168,7 +153,30 @@ bool DataFile::hasFormat(const QStringList &strlst)
 }
 
 
-QString DataFile::plainText(bool check)
+//QString DataFile::plainText(bool check)
+//{
+//  if(check)
+//    if(!hasPlainText())
+//      return "";
+//  if(_fragments && count()>0 && _file && _file->exists())
+//  {
+//    FragmentFrame frame=_fragments->value("text/plain");
+//    if(frame.size<1)
+//    {
+//      frame=_fragments->value("text/plain;charset=utf-8");
+//      if(frame.size<1)
+//        return "";
+//    }
+//    QByteArray *BA=readFragment(frame);
+//    QString str=QString::fromUtf8(*BA);
+//    delete BA;
+//     return str;
+//  }
+//  else
+//    return "";
+//}
+
+QString DataFile::plainText(bool check, int length)
 {
   if(check)
     if(!hasPlainText())
@@ -182,10 +190,13 @@ QString DataFile::plainText(bool check)
       if(frame.size<1)
         return "";
     }
-    char *cha=new char[frame.size];
-    readFragment(frame,cha);
-     QString str(cha);
-     delete [] cha;
+    if(length==0)
+      return "";
+    if(length!=-1 && (quint64)length<=frame.size)
+      frame.size=length;
+    QByteArray *BA=readFragment(frame);
+    QString str=QString::fromUtf8(*BA);
+    delete BA;
      return str;
   }
   else
@@ -203,11 +214,10 @@ QString DataFile::HTMLText(bool check)
     FragmentFrame frame=_fragments->value("text/html");
     if(frame.size<1)
       return "";
-    char *cha=new char[frame.size];
-    readFragment(frame,cha);
-     QString str(cha);
-     delete [] cha;
-     return str;
+    QByteArray *BA=readFragment(frame);
+    QString str=QString::fromUtf8(*BA);
+    delete BA;
+    return str;
   }
   else
     return "";
@@ -241,11 +251,8 @@ QImage *DataFile::image(bool check)
           continue;
         else
         {
-          char *cha=new char[frame.size];
-          readFragment(frame,cha);
-           QImage *img= new QImage(QImage::fromData((uchar*)cha,frame.size));
-           delete [] cha;
-           return img;
+          QImage *img=new QImage(QImage::fromData(*readFragment(frame)));
+          return img;
         }
       }
     }
@@ -253,6 +260,55 @@ QImage *DataFile::image(bool check)
   }
   else
     return NULL;
+}
+
+bool DataFile::identicalData(DataFile *file)
+{
+  if(file)
+  {
+    if(file->_fragments->count()==this->_fragments->count())
+    {
+      if(file->_fragments->keys()==this->_fragments->keys())
+      {
+        foreach (QString key,this->_fragments->keys() )
+        {
+          if(!(file->_fragments->value(key)==this->_fragments->value(key)))
+           return false;
+        }
+
+        QByteArray *baFile;
+        QByteArray *baThis;
+        foreach (QString key,this->_fragments->keys() )
+        {
+          if(key!="TIMESTAMP")
+          {
+            baFile=file->readFragment(file->_fragments->value(key));
+            baThis=readFragment(_fragments->value(key));
+            if(baFile && baThis)
+            {
+              if(*baFile!=*baThis)
+              {
+                delete baFile;
+                delete baThis;
+                return false;
+              }
+            }
+            if(baFile)
+              delete baFile;
+            if(baThis)
+              delete baThis;
+          }
+        }
+        return true;
+      }
+      else
+        return false;
+    }
+    else
+      return false;
+  }
+  else
+    return false;
 }
 
 qint64 DataFile::readFragment(const FragmentFrame &frame,char *cha)
@@ -263,4 +319,20 @@ qint64 DataFile::readFragment(const FragmentFrame &frame,char *cha)
   _file->close();
   return in;
 }
+
+QByteArray *DataFile::readFragment(const FragmentFrame &frame)
+{
+  _file->open(QFile::ReadOnly);
+  _file->seek(frame.start);
+  QByteArray *BA=new QByteArray( _file->read(frame.size));
+  _file->close();
+  if(BA->isEmpty())
+  {
+    delete BA;
+    return NULL;
+  }
+  return BA;
+}
+
+
 

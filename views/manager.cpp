@@ -1,38 +1,20 @@
 #include "manager.h"
 #include "ui_manager.h"
 
-Manager::Manager(ClipboardHistory *history, QClipboard *clipboard, QWidget *parent, bool hidden) :
+Manager::Manager(ClipboardHistory *history, QWidget *parent, bool hidden) :
   QMainWindow(parent),
   ui(new Ui::Manager)
 {
   ui->setupUi(this);
   _starthidden=hidden;
   if(history)
-  {
     _history=history;
-  }
-  if(clipboard)
-  {
-    _clipboard=clipboard;
-  }
-}
 
+}
 
 Manager::~Manager()
 {
   delete ui;
-}
-
-//initialization
-void Manager::initialize()
-{
-  initializeUI();
-}
-
-void Manager::initializeUI()
-{
-  ui->centralwidget->setLayout(ui->rootLayout);
-  setCentralWidget(ui->centralwidget);
 }
 
 void Manager::addTextItem(QString *text, QString *tooltipText, int reference, int index)
@@ -52,6 +34,45 @@ void Manager::addImageItem(QString *text, QIcon *icon,int reference,int index)
   qlwi->setData(50,reference);
   ui->list->insertItem(index,qlwi);
 }
+
+void Manager::removeItem(int reference)
+{
+  int count=ui->list->count();
+  if(count>0)
+  {
+    QListWidgetItem *item;
+    for(int i=0;i<count;i++)
+    {
+      item=ui->list->item(i);
+      if(item)
+      {
+        int ref=item->data(50).toInt();
+        if(ref==reference)
+        {
+          delete item;
+          return;
+        }
+      }
+    }
+  }
+}
+
+void Manager::clearList()
+{
+  int length=ui->list->count();
+  QListWidgetItem *item;
+  for(int i=0;i<length;i++)
+  {
+    item=ui->list->item(i);
+    if(item)
+    {
+      delete item;
+    }
+  }
+  ui->list->clear();
+}
+
+
 
 void Manager::updateTextItem(QString *text, QString *tooltipText, int reference)
 {
@@ -101,69 +122,17 @@ void Manager::updateImageItem(QString *text, QIcon *icon, int reference)
   }
 }
 
-void Manager::removeItem(int reference)
+void Manager::initialize()
 {
-  int count=ui->list->count();
-  if(count>0)
-  {
-    QListWidgetItem *item;
-    for(int i=0;i<count;i++)
-    {
-      item=ui->list->item(i);
-      if(item)
-      {
-        int ref=item->data(50).toInt();
-        if(ref==reference)
-        {
-          delete item;
-          return;
-        }
-      }
-    }
-  }
+  initializeUI();
 }
 
-void Manager::clearList()
+void Manager::initializeUI()
 {
-  int length=ui->list->count();
-  QListWidgetItem *item;
-  for(int i=0;i<length;i++)
-  {
-    item=ui->list->item(i);
-    if(item)
-    {
-      delete item;
-    }
-  }
-  ui->list->clear();
+  ui->centralwidget->setLayout(ui->rootLayout);
+  setCentralWidget(ui->centralwidget);
 }
 
-//events
-void Manager::showEvent(QShowEvent *event)
-{
-  if(event)
-  {
-    if(_starthidden)
-    {
-      hide();
-    }
-    emit shown();
-  }
-}
-
-void Manager::hideEvent(QHideEvent *event)
-{
-  if(event)
-  {
-    emit hidden();
-  }
-}
-
-void Manager::closeEvent(QCloseEvent *event)
-{
-  event->ignore();
-  hide();
-}
 
 void Manager::on_deleteButton_clicked()
 {
@@ -200,32 +169,33 @@ void Manager::on_list_itemDoubleClicked(QListWidgetItem *item)
   }
 }
 
-void Manager::on_editButton_clicked()
-{
-  if(_history->isEmpty()==false)
-  {
-    int length=ui->list->count();
-    if(length>0)
-    {
-      int currentIndex=ui->list->currentRow();
-      if(currentIndex>-1)
-      {
-        QListWidgetItem *item=ui->list->item(currentIndex);
-        if(item)
-        {
-          int ref=item->data(50).toInt();
-          ClipboardItem *ClItem=_history->get(ref);
-          if(ClItem)
-          {
-            emit editRequested(ClItem);
-            return;
-          }
-        }
-      }
-    }
+//void Manager::on_editButton_clicked()
+//{
+//  if(_history->isEmpty()==false)
+//  {
+//    int length=ui->list->count();
+//    if(length>0)
+//    {
+//      int currentIndex=ui->list->currentRow();
+//      if(currentIndex>-1)
+//      {
+//        QListWidgetItem *item=ui->list->item(currentIndex);
+//        if(item)
+//        {
+//          int ref=item->data(50).toInt();
+//          ClipboardEntity *Clenty=_history->get(ref);
+//          if(Clenty)
+//          {
+//            emit editRequested(Clenty);
+//            return;
+//          }
+//        }
+//      }
+//    }
 
-  }
-}
+//  }
+//}
+
 
 void Manager::on_list_customContextMenuRequested(const QPoint &pos)
 {
@@ -235,16 +205,16 @@ void Manager::on_list_customContextMenuRequested(const QPoint &pos)
   if(!item)
      return;
    int reference=item->data(50).toInt();
-   ClipboardItem* clipItem=_history->get(reference);
-   if(clipItem)
+   ClipboardEntity* cpEnt=_history->get(reference);
+   if(cpEnt)
    {
      QMenu contextMenu(this);
 
      QAction edit(&contextMenu);
 
-     edit.setIcon(QIcon(Resources::edit16));
-     edit.setData("E");
-     edit.setIconText("edit");
+     edit.setIcon(QIcon(Resources::show16));
+     edit.setData("S");
+     edit.setIconText("show content");
 
      QAction del(&contextMenu);
      del.setIcon(QIcon(Resources::dustBin16));
@@ -271,13 +241,13 @@ void Manager::itemContextMenuTriggered(QAction *action)
       if(qlwi)
       {
         int reference=qlwi->data(50).toInt();
-        ClipboardItem *item=_history->get(reference);
-        if(item)
+        ClipboardEntity *entity=_history->get(reference);
+        if(entity)
         {
           QString com=action->data().toString();
-          if(com=="E")
+          if(com=="S")
           {
-            emit editRequested(item);
+            emit showContentRequested(entity);
           }
           else if(com=="D")
           {
@@ -290,3 +260,54 @@ void Manager::itemContextMenuTriggered(QAction *action)
   }
 
 }
+
+void Manager::on_showContentButton_clicked()
+{
+  int length=ui->list->count();
+  if(length>0)
+  {
+    int currentIndex=ui->list->currentRow();
+    if(currentIndex>-1)
+    {
+      QListWidgetItem *item=ui->list->item(currentIndex);
+      if(item)
+      {
+        int ref=item->data(50).toInt();
+        ClipboardEntity *Clenty=_history->get(ref);
+        if(Clenty)
+        {
+          emit showContentRequested(Clenty);
+          return;
+        }
+      }
+    }
+  }
+}
+
+
+void Manager::showEvent(QShowEvent *event)
+{
+  if(event)
+  {
+    if(_starthidden)
+    {
+      hide();
+    }
+    emit shown();
+  }
+}
+
+void Manager::hideEvent(QHideEvent *event)
+{
+  if(event)
+  {
+    emit hidden();
+  }
+}
+
+void Manager::closeEvent(QCloseEvent *event)
+{
+  event->ignore();
+  hide();
+}
+

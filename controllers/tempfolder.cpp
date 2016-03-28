@@ -4,6 +4,7 @@ TempFolder::TempFolder(QObject *parent) : QObject(parent)
 {
   _path=QDir::temp().path()+"/Genius";
   _folder=QDir(_path);
+  remove();
   createIfNotExists();
 }
 

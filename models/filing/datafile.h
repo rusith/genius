@@ -6,26 +6,29 @@
 #include <QByteArray>
 #include <QMimeData>
 #include <QFile>
+#include <QTime>
 #include <QScopedPointer>
 #include <QImage>
 
 /**
  * @brief use to manage files deferent fragments. this struct contains the size of the dragment,end,start byts
  */
-struct FragmentFrame
+class FragmentFrame
 {
+public:
   /**
    * @brief starting byte of the file fragment
    */
   quint64 start=0;
   /**
-   * @brief ending byte og the file fragment
-   */
-  quint64 end=0;
-  /**
    * @brief size of the file fragment
    */
   quint64 size=0;
+
+  bool operator==(const FragmentFrame &other) const
+  {
+    return (other.size==size && other.start==start);
+  }
 };
 
 /**
@@ -106,12 +109,14 @@ public:
    */
   bool hasImage();
 
+
   /**
-   * @brief check plaintext of the object if no plaintext present an empty string will return
-   * @param check format is available (not need check is already know becouse this not changing)
-   * @return QString plaintext if avilabel . therwise empty QString
+   * @brief get plaintext of the object . if no plaintext present in the object an empty string will return
+   * @param check plainstring present
+   * @param length of needed text (-1 if full content)
+   * @return QSTring plaintext
    */
-  QString plainText(bool check);
+  QString plainText(bool check, int length);
 
   /**
    * @brief check HTML text of the object if no HTML text present an empty string will return
@@ -126,6 +131,14 @@ public:
    * @return
    */
   QImage *image(bool check);
+
+  /**
+   * @brief this function checks the given dataFile object's _fragment and this object's fragmen's are same
+   * if so return true else false <b>this function not consider aboud actual data . only fragments</b>
+   * @param file to check are the same
+   * @return true if same otherwise false
+   */
+  bool identicalData(DataFile *file);
 private:
   /**
    * @brief _fragments (Hash for manage formats)
@@ -151,6 +164,13 @@ private:
    * @return bytes readed
    */
   qint64 readFragment(const FragmentFrame &frame, char *cha);
+
+  /**
+   * @brief read given fragment and return bytearray (byteArray must delete manualy)
+   * @param frame to read
+   * @return QByteArray
+   */
+  QByteArray *readFragment(const FragmentFrame &frame);
 };
 
 #endif // DATAFILE_H

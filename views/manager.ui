@@ -98,13 +98,13 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="editButton">
+        <widget class="QPushButton" name="showContentButton">
          <property name="text">
-          <string>Edit</string>
+          <string>Show Content</string>
          </property>
          <property name="icon">
           <iconset resource="../resources/resources.qrc">
-           <normaloff>:/images/images/edit16.png</normaloff>:/images/images/edit16.png</iconset>
+           <normaloff>:/images/images/show16.png</normaloff>:/images/images/show16.png</iconset>
          </property>
         </widget>
        </item>

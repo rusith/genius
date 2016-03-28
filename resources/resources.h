@@ -24,6 +24,7 @@ public:
   const static QString colorpicker16;
   const static QString off16;
   const static QString on16;
+  const static QString show16;
 
 
   /**

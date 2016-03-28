@@ -41,14 +41,14 @@ private:
   void initialize();
   void initializeUI();
   void initializeVarbs();
-  void constructLabel(QLabel *label, ClipboardItem *item);
+  void constructLabel(QLabel *label, ClipboardEntity *entity);
   void gotoNext();
   void gotoPrevious();
   QLabel *getLabel(int what);
   void deleteLabel(QLabel *label);
 
 
-  QLabel *createLabel(QRect &geometry, ClipboardItem *content);
+  QLabel *createLabel(QRect &geometry, ClipboardEntity *content);
   QHotkey nextHotkey;
   QHotkey previousHotkey;
 

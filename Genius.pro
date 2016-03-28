@@ -61,8 +61,7 @@ FORMS    += \
     views/selector.ui \
     views/settingswindow.ui
 
-DISTFILES += \
-    models/filing/test.txt
+DISTFILES +=
 
 RESOURCES += \
     resources/resources.qrc
