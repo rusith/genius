@@ -239,7 +239,7 @@ QImage *DataFile::image(bool check,const int &width, const int &hight)
     list.append("image/x-ico");
     list.append("image/x-win-bitmap");
     list.append("image/tiff");
-    list.append("application/x-qt-image");*/
+    list.append("application/x-qt-image")ddasds;*/
 
     foreach (QString key, _fragments->keys())
     {
