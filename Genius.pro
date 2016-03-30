@@ -19,8 +19,6 @@ SOURCES += main.cpp \
     views/trayicon.cpp \
     tools/toolkit.cpp \
     resources/resources.cpp \
-    views/texteditor.cpp \
-    views/imageeditor.cpp \
     controllers/gsettings.cpp \
     views/selector.cpp \
     controllers/fakekey.cpp \
@@ -37,8 +35,6 @@ HEADERS  += \
     views/trayicon.h \
     tools/toolkit.h \
     resources/resources.h \
-    views/texteditor.h \
-    views/imageeditor.h \
     controllers/gsettings.h \
     views/selector.h \
     controllers/fakekey.h \
@@ -50,8 +46,6 @@ HEADERS  += \
 
 FORMS    += \
     views/manager.ui \
-    views/texteditor.ui \
-    views/imageeditor.ui \
     views/selector.ui \
     views/settingswindow.ui \
     views/contentviewer.ui
