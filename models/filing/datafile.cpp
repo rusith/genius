@@ -245,9 +245,9 @@ QImage *DataFile::image(bool check,const int &width, const int &hight)
     {
       if(key.startsWith("image"))
       {
-        FragmentFrame frame=_fragments->value(str);
+        FragmentFrame frame=_fragments->value(key);
         if(frame.size<1) continue;
-        QImage img;
+        QImage *img;
         if(width>0 && hight>0)
           img=new QImage(QImage::fromData(*readFragment(frame)).scaled(width,hight,Qt::KeepAspectRatio));
         else
