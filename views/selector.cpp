@@ -103,14 +103,21 @@ void Selector::constructLabel(QLabel *label, ClipboardEntity *entity)
   if(label && entity)
   {
     if(entity->hasImage())
-      label->setPixmap(QPixmap::fromImage(*entity->image()));
+    {
+      QImage *img=entity->image(false,GSettings::maximumImageWidth,GSettings::maximumImageWidth);
+      if(img)
+      {
+        label->setPixmap(QPixmap::fromImage(*img));
+        delete img;
+      }
+    }
     else if(entity->hasHTML())
     {
-      label->setText(*entity->HTMLText());
+      label->setText(entity->HTMLText(false,-1));
     }
     else if(entity->hasPlainText())
     {
-      label->setText(*entity->plainText());
+      label->setText(entity->plainText(false,50));
     }
     else
     {

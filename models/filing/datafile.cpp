@@ -5,6 +5,8 @@ DataFile::DataFile(const QMimeData *mimeData, const QString &filename)
   _fragments=new QHash<QString,FragmentFrame>();
   if(mimeData)
   {
+    QElapsedTimer timer;
+    timer.start();
     if(mimeData->formats().count()>0)
     {
       _file=new QFile(filename);
@@ -13,11 +15,30 @@ DataFile::DataFile(const QMimeData *mimeData, const QString &filename)
       {
         FragmentFrame frame;
         frame.start=_file->pos();
+        if(format=="text/html")
+        {
+          qint64 wrtn=_file->write(mimeData->html().toUtf8());
+          frame.size=wrtn;
+          _fragments->insert(format,frame);
+          continue;
+        }
         qint64 wrtn=_file->write(mimeData->data(format));
         frame.size=wrtn;
         _fragments->insert(format,frame);
       }
       _file->close();
+      qDebug()<<"got "<<timer.elapsed()<<" to write file";
+//      foreach (QString format, mimeData->formats())
+//      {
+//        qDebug()<<format;
+//        qDebug()<<mimeData->data(format).data();
+////        FragmentFrame frame;
+////        frame.start=_file->pos();
+////        qint64 wrtn=_file->write(mimeData->data(format));
+////        frame.size=wrtn;
+////        _fragments->insert(format,frame);
+
+//      }
     }
   }
 }
@@ -84,7 +105,7 @@ QString DataFile::fileName()
 
 QMimeData *DataFile::toMimeData()
 {
-  if(_fragments && count()>0 && _file && _file->exists())
+  if(_fragments && count()>0 && _file)
   {
     QMimeData *MD=new QMimeData();
     _file->open(QFile::ReadOnly);
@@ -105,35 +126,41 @@ QMimeData *DataFile::toMimeData()
 
 bool DataFile::hasPlainText()
 {
-  if(_fragments && count()>0 && _file && _file->exists())
-  {
-    return (_fragments->keys().contains("text/plain") ||  _fragments->keys().contains("text/plain;charset=utf-8"));
-  }
-  else
-    return false;
+  return _fragments->keys().contains("text/plain");
+//  if(_fragments && count()>0 && _file && _file->exists())
+//  {
+//    return (_fragments->keys().contains("text/plain") ||  _fragments->keys().contains("text/plain;charset=utf-8"));
+//  }
+//  else
+//    return false;
 }
 
 bool DataFile::hasHtmlText()
 {
-  QStringList list;
-  list.append("text/html");
-  return hasFormat(list);
+  return _fragments->keys().contains("text/html");
 }
 
 bool DataFile::hasImage()
 {
-  QStringList list;
-  list.append("image/png");
-  list.append("image/bmp");
-  list.append("image/x-bmp");
-  list.append("image/x-MS-bmp");
-  list.append("image/jpeg");
-  list.append("image/x-icon");
-  list.append("image/x-ico");
-  list.append("image/x-win-bitmap");
-  list.append("image/tiff");
-  list.append("application/x-qt-image");
-  return hasFormat(list);
+  foreach (QString key, _fragments->keys())
+  {
+      if (key.startsWith("image"))
+        return true;
+  }
+  return false;
+
+//  QStringList list;
+//  list.append("image/*");
+//  list.append("image/bmp");
+//  list.append("image/x-bmp");
+//  list.append("image/x-MS-bmp");
+//  list.append("image/jpeg");
+//  list.append("image/x-icon");
+//  list.append("image/x-ico");
+//  list.append("image/x-win-bitmap");
+//  list.append("image/tiff");
+//  list.append("application/x-qt-image");
+//  return hasFormat(list);
 }
 
 
@@ -152,68 +179,18 @@ bool DataFile::hasFormat(const QStringList &strlst)
     return false;
 }
 
-
-//QString DataFile::plainText(bool check)
-//{
-//  if(check)
-//    if(!hasPlainText())
-//      return "";
-//  if(_fragments && count()>0 && _file && _file->exists())
-//  {
-//    FragmentFrame frame=_fragments->value("text/plain");
-//    if(frame.size<1)
-//    {
-//      frame=_fragments->value("text/plain;charset=utf-8");
-//      if(frame.size<1)
-//        return "";
-//    }
-//    QByteArray *BA=readFragment(frame);
-//    QString str=QString::fromUtf8(*BA);
-//    delete BA;
-//     return str;
-//  }
-//  else
-//    return "";
-//}
-
 QString DataFile::plainText(bool check, int length)
 {
   if(check)
     if(!hasPlainText())
       return "";
-  if(_fragments && count()>0 && _file && _file->exists())
+  if(count()>0 && _file && _file->exists())
   {
     FragmentFrame frame=_fragments->value("text/plain");
-    if(frame.size<1)
-    {
-      frame=_fragments->value("text/plain;charset=utf-8");
-      if(frame.size<1)
+    if(frame.size<1 || length==0)
         return "";
-    }
-    if(length==0)
-      return "";
     if(length!=-1 && (quint64)length<=frame.size)
       frame.size=length;
-    QByteArray *BA=readFragment(frame);
-    QString str=QString::fromUtf8(*BA);
-    delete BA;
-     return str;
-  }
-  else
-    return "";
-}
-
-
-QString DataFile::HTMLText(bool check)
-{
-  if(check)
-    if(!hasHtmlText())
-      return "";
-  if(_fragments && count()>0 && _file && _file->exists())
-  {
-    FragmentFrame frame=_fragments->value("text/html");
-    if(frame.size<1)
-      return "";
     QByteArray *BA=readFragment(frame);
     QString str=QString::fromUtf8(*BA);
     delete BA;
@@ -223,13 +200,35 @@ QString DataFile::HTMLText(bool check)
     return "";
 }
 
-QImage *DataFile::image(bool check)
+
+QString DataFile::HTMLText(bool check,int length)
+{
+  if(check)
+    if(!hasHtmlText())
+      return "";
+  if(_fragments && count()>0 && _file && _file->exists())
+  {
+    FragmentFrame frame=_fragments->value("text/html");
+    if(frame.size<1 || length==0)
+      return "";
+    if(length!=-1 && (quint64)length<=frame.size)
+      frame.size=length;
+    QByteArray *BA=readFragment(frame);
+    QString str=QString::fromUtf8(*BA);
+    delete BA;
+    return str;
+  }
+  else
+    return "";
+}
+
+QImage *DataFile::image(bool check,const int &width, const int &hight)
 {
   if(check)
     if(!hasImage())
       return NULL;
   if(_fragments && count()>0 && _file && _file->exists())
-  {
+  {/*
     QStringList list;
     list.append("image/png");
     list.append("image/bmp");
@@ -240,23 +239,40 @@ QImage *DataFile::image(bool check)
     list.append("image/x-ico");
     list.append("image/x-win-bitmap");
     list.append("image/tiff");
-    list.append("application/x-qt-image");
+    list.append("application/x-qt-image");*/
 
-    foreach (QString str, list)
+    foreach (QString key, _fragments->keys())
     {
-      if(_fragments->contains(str))
+      if(key.startsWith("image"))
       {
         FragmentFrame frame=_fragments->value(str);
-        if(frame.size<1)
-          continue;
+        if(frame.size<1) continue;
+        QImage img;
+        if(width>0 && hight>0)
+          img=new QImage(QImage::fromData(*readFragment(frame)).scaled(width,hight,Qt::KeepAspectRatio));
         else
-        {
-          QImage *img=new QImage(QImage::fromData(*readFragment(frame)));
-          return img;
-        }
+          img=new QImage(QImage::fromData(*readFragment(frame)));
+        return img;
       }
+      else continue;
     }
     return NULL;
+//    foreach (QString str, list)
+//    {
+//      if(_fragments->contains(str))
+//      {
+//        else
+//        {
+//          QImage *img;
+//          if(width>0 && hight>0)
+//            img=new QImage(QImage::fromData(*readFragment(frame)).scaled(width,hight,Qt::KeepAspectRatio));
+//          else
+//            img=new QImage(QImage::fromData(*readFragment(frame)));
+//          return img;
+//        }
+//      }
+//    }
+//    return NULL;
   }
   else
     return NULL;
@@ -334,5 +350,58 @@ QByteArray *DataFile::readFragment(const FragmentFrame &frame)
   return BA;
 }
 
+QStringList DataFile::formats()
+{
+  if(_fragments)
+    return QStringList(_fragments->keys());
+  return QStringList();
+}
+
+quint64 DataFile::formatSize(const QString &format)
+{
+  if(_fragments)
+  {
+    if(_fragments->keys().contains(format))
+    {
+      return _fragments->value(format).size;
+    }
+    else
+      return 0;
+  }
+  else
+    return 0;
+}
+
+QStringList DataFile::imageFormats()
+{
+  if(_fragments)
+  {
+    QStringList res;
+    QStringList list;
+    list.append("image/png");
+    list.append("image/bmp");
+    list.append("image/x-bmp");
+    list.append("image/x-MS-bmp");
+    list.append("image/jpeg");
+    list.append("image/x-icon");
+    list.append("image/x-ico");
+    list.append("image/x-win-bitmap");
+    list.append("image/tiff");
+    list.append("application/x-qt-image");
+
+    foreach (QString format, list)
+    {
+      if(_fragments->keys().contains(format))
+      {
+        if(_fragments->value(format).size>0)
+          res.append(format);
+      }
+    }
+    return res;
+  }
+  else
+    return QStringList();
+
+}
 
 

@@ -20,6 +20,7 @@
 #include <views/imageeditor.h>
 #include <views/settingswindow.h>
 #include <views/selector.h>
+#include <views/contentviewer.h>
 #include <controllers/gsettings.h>
 #include <controllers/tempfolder.h>
 #include <models/filing/datafile.h>
@@ -77,7 +78,11 @@ private slots:
 
 
 
-
+  /**
+   * @brief open content viewer and show content to the user
+   * @param entity for show
+   */
+  void showContent(ClipboardEntity *entity);
 
 private:
   //------------------------basic elements
@@ -153,11 +158,7 @@ private:
    */
   bool sameAsLast(ClipboardEntity *entity);
 
-  /**
-   * @brief open content viewer and show content to the user
-   * @param entity for show
-   */
-  void showContent(ClipboardEntity *entity);
+
 
 };
 

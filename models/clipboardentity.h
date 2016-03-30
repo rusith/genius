@@ -9,8 +9,8 @@
 #include <controllers/gsettings.h>
 
 /**
- * @brief The ClipboardEntity class represent an clipboar history entyty. it holds a mimeData object as a file
- * file delees with object
+ * @brief The ClipboardEntity class represent an clipboard history entity. it holds a mimeData object as a file
+ * file deletes with object
  */
 class ClipboardEntity
 {
@@ -21,8 +21,8 @@ public:
    */
   ClipboardEntity(QClipboard *clipboard);
   /**
-   * @brief this constructor generetes the object using QMimeData
-   * @param mimedata to use
+   * @brief this constructor generates the object using QMimeData
+   * @param mime data to use
    */
   ClipboardEntity(const QMimeData *mimeData);
 
@@ -34,7 +34,7 @@ public:
    */
   int ref();
   /**
-   * @brief auto incrementing reference ID . this ID is automaticaly incrementing by one when creating new Enity
+   * @brief auto incrementing reference ID . this ID is automatically incrementing by one when creating new Entity
    */
   static int refID;
 
@@ -51,7 +51,13 @@ public:
    */
   QMimeData *data();
   /**
-   * @brief check the object has HTML inmemory
+   * @brief used to get data for given format (returned object must delete manually)
+   * @param format needed
+   * @return new ByteArray
+   */
+  QByteArray *data(const QString &format);
+  /**
+   * @brief check the object has HTML in memory
    * @return
    */
   bool hasHTML();
@@ -61,25 +67,29 @@ public:
    */
   bool hasImage();
   /**
-   * @brief check the obejc has plainText content
+   * @brief check the object has plainText content
    * @return true or false
    */
   bool hasPlainText();
   /**
    * @brief get plain text of the object
-   * @return pointer to object's plaintext object
+   * @return pointer to object's plain text object
    */
   const QString *plainText();
   /**
    * @brief get object's HTML text
    * @return pointer to object's HTML text
    */
-  const QString *HTMLText();
+  const QString HTMLText(bool check, const int &length);
+
   /**
-   * @brief get pointer's scaled image
-   * @return pointer to the object's Image
+   * @brief get image from the object
+   * @param check an image is available
+   * @param specify 0> for get scaled image
+   * @param specify 0> for get scaled image
+   * @return QImage object reference (delete after using)
    */
-  const QImage *image();
+  QImage *image(bool check, const int &width, const int &hight);
   /**
    * @brief get created time of the object
    * @return QTime ptr
@@ -87,12 +97,32 @@ public:
   const QTime *addedTime();
 
   /**
-   * @brief get plaintext of the object . if no plaintext present in the object an empty string will return
-   * @param check plainstring present
+   * @brief get plain text of the object . if no plain text present in the object an empty string will return
+   * @param check plain string present
    * @param length of needed text (-1 if full content)
-   * @return QSTring plaintext
+   * @return QSTring plain text
    */
   QString plainText(bool check,int length);
+
+  /**
+   * @brief used to get formats supported by this objetc as QStringList
+   * @return list of mime formats if something wrong . returns empty list
+   */
+  QStringList contentFormats();
+
+  /**
+   * @brief used to get byte count of specific format from the data
+   * @param format for get size
+   * @return size of givent format if format not availabel -->0;
+   */
+  quint64 formatSize(const QString &format);
+
+
+  /**
+   * @brief used to get only present image formats
+   * @return
+   */
+  QStringList imageFormats();
 private:
   /**
    * @brief refId of the object
@@ -102,28 +132,11 @@ private:
    * @brief data of the object
    */
   DataFile *_dataFile=NULL;
-  /**
-   * @brief object's plainText
-   */
-  QString *_plainText=NULL;
-  /**
-   * @brief object's HTML Text
-   */
-  QString *_HTMLText=NULL;
-  /**
-   * @brief object's Image
-   */
-  QImage *_image=NULL;
 
   /**
    * @brief created time
    */
   QTime *_addedTime=NULL;
-  /**
-   * @brief set object's content(_plainText,_image etc) using given DataFile
-   * @param DataFile to use
-   */
-  void setContent(DataFile *file);
 };
 
 #endif // CLIPBOARDENTITY_H

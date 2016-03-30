@@ -31,7 +31,8 @@ SOURCES += main.cpp \
     models/clipboardtextitem.cpp \
     models/clipboardurlitem.cpp \
     models/filing/datafile.cpp \
-    models/clipboardentity.cpp
+    models/clipboardentity.cpp \
+    views/contentviewer.cpp
 
 HEADERS  += \
     views/manager.h \
@@ -52,14 +53,16 @@ HEADERS  += \
     models/clipboardtextitem.h \
     models/clipboardurlitem.h \
     models/filing/datafile.h \
-    models/clipboardentity.h
+    models/clipboardentity.h \
+    views/contentviewer.h
 
 FORMS    += \
     views/manager.ui \
     views/texteditor.ui \
     views/imageeditor.ui \
     views/selector.ui \
-    views/settingswindow.ui
+    views/settingswindow.ui \
+    views/contentviewer.ui
 
 DISTFILES +=
 

@@ -8,6 +8,8 @@
 #include <QCloseEvent>
 #include <QListWidgetItem>
 #include <QMenu>
+#include <QFileSystemModel>
+#include <QDir>
 #include <models/clipboardhistory.h>
 #include <tools/toolkit.h>
 #include <resources/resources.h>
@@ -116,10 +118,7 @@ private slots:
    * @param selected item
    */
   void on_list_itemDoubleClicked(QListWidgetItem *item);
-//  /**
-//   * @brief calls when user clicked edit button
-//   */
-//  void on_editButton_clicked();
+
   /**
    * @brief calls when user request context menu of the list (rightclick)
    * @param mouse possition

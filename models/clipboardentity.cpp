@@ -34,12 +34,12 @@ ClipboardEntity::~ClipboardEntity()
     delete _dataFile;
   if(_addedTime)
     delete _addedTime;
-  if(_image)
-    delete _image;
-  if(_plainText)
-    delete _plainText;
-  if(_HTMLText)
-    delete _HTMLText;
+//  if(_image)
+//    delete _image;
+//  if(_plainText)
+//    delete _plainText;
+//  if(_HTMLText)
+//    delete _HTMLText;
 }
 
 int ClipboardEntity::ref()
@@ -63,17 +63,24 @@ QMimeData *ClipboardEntity::data()
     return NULL;
 }
 
+QByteArray *ClipboardEntity::data(const QString &format)
+{
+  if(_dataFile)
+    return _dataFile->data(format);
+  else return NULL;
+}
+
 bool ClipboardEntity::hasHTML()
 {
-  if(_HTMLText)
-    return true;
+  if(_dataFile)
+    return _dataFile->hasHtmlText();
   else return false;
 }
 
 bool ClipboardEntity::hasImage()
 {
-  if(_image)
-    return true;
+  if(_dataFile)
+    return _dataFile->hasImage();
   else return false;
 }
 
@@ -84,10 +91,6 @@ bool ClipboardEntity::hasPlainText()
   else return false;
 }
 
-const QString *ClipboardEntity::plainText()
-{
-  return _plainText;
-}
 
 QString ClipboardEntity::plainText(bool check, int length)
 {
@@ -97,13 +100,20 @@ QString ClipboardEntity::plainText(bool check, int length)
     return "";
 }
 
-const QString *ClipboardEntity::HTMLText()
+const QString ClipboardEntity::HTMLText(bool check, const int &length)
 {
-  return _HTMLText;
+  if(_dataFile)
+    return _dataFile->HTMLText(check,length);
+  else
+    return "";
 }
-const QImage *ClipboardEntity::image()
+
+QImage *ClipboardEntity::image(bool check,const int &width,const int &hight)
 {
-  return _image;
+  if(_dataFile)
+    return _dataFile->image(check,width,hight);
+  else
+    return NULL;
 }
 
 const QTime *ClipboardEntity::addedTime()
@@ -111,27 +121,25 @@ const QTime *ClipboardEntity::addedTime()
   return _addedTime;
 }
 
-void ClipboardEntity::setContent(DataFile *file)
+QStringList ClipboardEntity::contentFormats()
 {
-  if(file->hasImage())
-  {
-    if(_image) delete _image;
-    QImage *imgTmp=file->image(false);
-    if(imgTmp)
-    {
-      _image=new QImage(imgTmp->scaled(GSettings::maximumImageWidth,GSettings::maximumImageWidth,Qt::KeepAspectRatio));
-      delete imgTmp;
-    }
-  }
-  if(file->hasHtmlText())
-  {
-    if(_HTMLText)delete _HTMLText;
-    _HTMLText=new QString(file->HTMLText(false).left(GSettings::inMemoryTextLength));
-  }
-//  if(file->hasPlainText())
-//  {
-//    if(_plainText) delete _plainText;
-//    _plainText=new QString(file->plainText(false).left(GSettings::inMemoryTextLength));
-//  }
+  if(_dataFile)
+    return _dataFile->formats();
+  else
+    return QStringList();
 }
 
+quint64 ClipboardEntity::formatSize(const QString &format)
+{
+  if(_dataFile)
+    return _dataFile->formatSize(format);
+  else
+    return 0;
+}
+
+QStringList ClipboardEntity::imageFormats()
+{
+  if(_dataFile)
+    return _dataFile->imageFormats();
+  return QStringList();
+}

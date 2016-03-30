@@ -103,6 +103,7 @@ void Controller::selectorClosed(int currentIndex)
     itemSelected(reference);
     if(GSettings::pasteAutomaticlay)
     {
+      QThread::msleep(50);
       FakeKey::simulatePaste();
     }
   }
@@ -118,11 +119,13 @@ void Controller::settingsWindow_hidden()
 void Controller::turnOffRequest()
 {
   _holtCollection=true;
+  enableHotkeys(false);
 }
 
 void Controller::turnOnRequest()
 {
   _holtCollection=false;
+  enableHotkeys(true);
 }
 
 void Controller::exitRequested()
@@ -151,7 +154,7 @@ void Controller::clearHistoryHKTrigered()
   {
     int length=_history->length();
     _history->clear();
-    _trayIcon->showMessage("history cleard",QString("clipboard history is cleard. \n%1 items was deleted").arg(length),QSystemTrayIcon::Information,1000);
+    _trayIcon->showMessage("history cleared",QString("clipboard history is cleared. \n%1 items was deleted").arg(length),QSystemTrayIcon::Information,1000);
   }
 }
 
@@ -298,32 +301,34 @@ void Controller::addItem(ClipboardEntity *entity, int index)
   int reference=entity->ref();
   if(entity->hasImage())
   {
-    const QImage *image=entity->image();
-    QIcon icon(QPixmap::fromImage(*image));
-    QString text("  added time : "+entity->addedTime()->toString("hh.mm.ss.zzz AP"));
-    _manager->addImageItem(&text,&icon,reference,index);
-    _trayIcon->addImageAction(&text,&icon,reference,index);
-  }
-  else if(entity->hasHTML())
-  {
-    QString *text=new QString(*entity->HTMLText());
-    if(GSettings::showInSingleLine)
-      ToolKit::removeNewLines(text);
-    if(GSettings::limitcharLength)
+    const QImage *image=entity->image(false,GSettings::maximumImageWidth,GSettings::maximumImageHight);
+    if(image)
     {
-      if(text->length()>GSettings::limitedCharLength)
-        *text=text->left(GSettings::limitedCharLength)+"...";
+      QIcon icon(QPixmap::fromImage(*image));
+      delete image;
+      QString text("  added time : "+entity->addedTime()->toString("hh.mm.ss.zzz AP"));
+      _manager->addImageItem(&text,&icon,reference,index);
+      _trayIcon->addImageAction(&text,&icon,reference,index);
     }
-
-    QString tooltipText=QString("added time : %1 ").arg(entity->addedTime()->toString("hh.mm.ss.zzz AP"));
-    _manager->addTextItem(text,&tooltipText,reference,index);
-    _trayIcon->addTextAction(text,&tooltipText,reference,index);
-    delete text;
   }
   else if(entity->hasPlainText())
   {
 
     QString text=entity->plainText(false,(GSettings::limitcharLength ? GSettings::limitedCharLength : -1));
+    if(GSettings::showInSingleLine)
+      ToolKit::removeNewLines(&text);/*
+    if(GSettings::limitcharLength)
+    {
+      if(text->length()>GSettings::limitedCharLength)
+        *text=text->left(GSettings::limitedCharLength)+"...";
+    }*/
+    QString tooltipText=QString("added time : %1 ").arg(entity->addedTime()->toString("hh.mm.ss.zzz AP"));
+    _manager->addTextItem(&text,&tooltipText,reference,index);
+    _trayIcon->addTextAction(&text,&tooltipText,reference,index);
+  }
+  else if(entity->hasHTML())
+  {
+    QString text=entity->HTMLText(false,(GSettings::limitcharLength ? GSettings::limitedCharLength : -1));
     if(GSettings::showInSingleLine)
       ToolKit::removeNewLines(&text);/*
     if(GSettings::limitcharLength)
@@ -412,7 +417,7 @@ void Controller::createHotkeys()
 }
 
 /**
- * @brief create connections betweeen application elements
+ * @brief create connections between application elements
  */
 void Controller::createConnections()
 {
@@ -432,6 +437,7 @@ void Controller::createConnections()
   connect(_manager,SIGNAL(shown()),_trayIcon,SLOT(managerShown()));
   connect(_manager,SIGNAL(settingsDialogRequested()),this,SLOT(settingsWindowRequested()));
   connect(_manager,SIGNAL(itemSelected(int)),this,SLOT(itemSelected(int)));
+  connect(_manager,SIGNAL(showContentRequested(ClipboardEntity*)),this,SLOT(showContent(ClipboardEntity*)));
   //connect(_manager,SIGNAL(editRequested(ClipboardItem*)),this,SLOT(editRequested(ClipboardItem*)));
 
   //------------------------------------connection with TrayIcon
@@ -445,10 +451,10 @@ void Controller::createConnections()
   //----------------------------------------connection with selector
   connect(_selector,SIGNAL(closing(int)),this,SLOT(selectorClosed(int)));
 
-  //----------------------------------------connecction with settingsWindow
+  //----------------------------------------connection with settingsWindow
   connect(_settingsWindow,SIGNAL(hiding()),this,SLOT(settingsWindow_hidden()));
 
-  //-----------------------------------------connection with globel hotkeys(all are conditional)
+  //-----------------------------------------connection with global hot-keys(all are conditional)
   if(_openSelectorHotkey)
     connect(_openSelectorHotkey,SIGNAL(activated()),this,SLOT(openSelectorHKtriggered()));
 
@@ -482,11 +488,15 @@ void Controller::selectItem(int reference)
       if(entity)
       {
         QMimeData *MD=entity->data();
+
         if(MD)
         {
           int index=_history->indexOf(reference);
-          _history->removeAt(index);
-          _clipboard->setMimeData(MD);
+          if(index!=0)
+          {
+            _clipboard->setMimeData(MD);
+            _history->remove(reference);
+          }
         }
       }
     }
@@ -609,7 +619,6 @@ void Controller::enableHotkeys(bool enable)
 
   if(_historyMenuHotKey)
     _historyMenuHotKey->setRegistered(enable);
-
 }
 
 
@@ -636,6 +645,7 @@ void Controller::showContent(ClipboardEntity *entity)
 {
   if(entity)
   {
-
+    ContentViewer CV(entity);
+    CV.exec();
   }
 }

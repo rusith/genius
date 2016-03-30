@@ -9,9 +9,11 @@
 #include <QTime>
 #include <QScopedPointer>
 #include <QImage>
+#include <QStringList>
+#include <QElapsedTimer>
 
 /**
- * @brief use to manage files deferent fragments. this struct contains the size of the dragment,end,start byts
+ * @brief use to manage files deferent fragments. this class contains the size of the fragment,end,start bytes
  */
 class FragmentFrame
 {
@@ -47,10 +49,10 @@ public:
 
   ~DataFile();
   /**
-   * @brief get data relavent to given format the returned reference must delete after using it
+   * @brief get data relevant to given format the returned reference must delete after using it
    * @param format for get data
    * @return new QByteArray object --> its reference (this must be delete after using)
-   * return NULL if not availabel
+   * return NULL if not available
    * return empty ByteArray if data is empty
    */
   QByteArray *data(const QString &format);
@@ -96,7 +98,7 @@ public:
   bool hasPlainText();
 
   /**
-   * @brief check the object has html text
+   * @brief check the object has HTML text
    * @return true--> has HTML text
    *         false--> no HTML text
    */
@@ -111,34 +113,56 @@ public:
 
 
   /**
-   * @brief get plaintext of the object . if no plaintext present in the object an empty string will return
-   * @param check plainstring present
+   * @brief get plain text of the object . if no plain text present in the object an empty string will return
+   * @param check plain string present
    * @param length of needed text (-1 if full content)
-   * @return QSTring plaintext
+   * @return QSTring plain text
    */
   QString plainText(bool check, int length);
 
   /**
    * @brief check HTML text of the object if no HTML text present an empty string will return
-   * @param check format is available (not need check is already know becouse this not changing)
-   * @return QString HTML Text if avilabel . therwise empty QString
+   * @param check format is available (not need check is already know because this not changing)
+   * @param length of needed text (-1 if full content)
+   * @return QString HTML Text if available . otherwise empty QString
    */
-  QString HTMLText(bool check);
+  QString HTMLText(bool check, int length);
 
   /**
-   * @brief get image of the object
-   * @param check
-   * @return
+   * @brief get image data from the file
+   * @param check an image is available
+   * @param specify 0> for get scaled image
+   * @param specify 0> for get scaled image
+   * @return QImage object (must delete after using)
    */
-  QImage *image(bool check);
+  QImage *image(bool check,const int &width, const int &hight);
 
   /**
-   * @brief this function checks the given dataFile object's _fragment and this object's fragmen's are same
-   * if so return true else false <b>this function not consider aboud actual data . only fragments</b>
+   * @brief this function checks the given dataFile object's _fragment and this object's fragment's are same
+   * if so return true else false <b>this function not consider about actual data . only fragments</b>
    * @param file to check are the same
    * @return true if same otherwise false
    */
   bool identicalData(DataFile *file);
+
+  /**
+   * @brief returns formats supported by this content
+   * @return list of mime formats
+   */
+  QStringList formats();
+
+  /**
+   * @brief used to get byte count of specific format
+   * @param format for get size
+   * @return size of givent format if format not availabel -->0;
+   */
+  quint64 formatSize(const QString &format);
+
+  /**
+   * @brief used to get only present image formats
+   * @return
+   */
+  QStringList imageFormats();
 private:
   /**
    * @brief _fragments (Hash for manage formats)
@@ -146,14 +170,14 @@ private:
   QHash<QString,FragmentFrame> *_fragments;
 
   /**
-   * @brief file relevent to this object
+   * @brief file relevant to this object
    */
   QFile *_file;
 
   /**
-   * @brief check one or more formats availabel in the object
+   * @brief check one or more formats available in the object
    * @param format
-   * @return true if availabe otherwise false
+   * @return true if available otherwise false
    */
   bool hasFormat(const QStringList &strlst);
 
@@ -161,12 +185,12 @@ private:
    * @brief read given FragmentFrame into given char sequence from the file
    * @param frame to read
    * @param sequence to store
-   * @return bytes readed
+   * @return bytes read
    */
   qint64 readFragment(const FragmentFrame &frame, char *cha);
 
   /**
-   * @brief read given fragment and return bytearray (byteArray must delete manualy)
+   * @brief read given fragment and return byte array (byteArray must delete manually)
    * @param frame to read
    * @return QByteArray
    */
