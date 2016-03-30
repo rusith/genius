@@ -15,7 +15,6 @@ TEMPLATE = app
 SOURCES += main.cpp \
     views/manager.cpp \
     controllers/controller.cpp \
-    models/clipboarditem.cpp \
     models/clipboardhistory.cpp \
     views/trayicon.cpp \
     tools/toolkit.cpp \
@@ -27,9 +26,6 @@ SOURCES += main.cpp \
     controllers/fakekey.cpp \
     views/settingswindow.cpp \
     controllers/tempfolder.cpp \
-    models/clipboardimageitem.cpp \
-    models/clipboardtextitem.cpp \
-    models/clipboardurlitem.cpp \
     models/filing/datafile.cpp \
     models/clipboardentity.cpp \
     views/contentviewer.cpp
@@ -37,7 +33,6 @@ SOURCES += main.cpp \
 HEADERS  += \
     views/manager.h \
     controllers/controller.h \
-    models/clipboarditem.h \
     models/clipboardhistory.h \
     views/trayicon.h \
     tools/toolkit.h \
@@ -49,9 +44,6 @@ HEADERS  += \
     controllers/fakekey.h \
     views/settingswindow.h \
     controllers/tempfolder.h \
-    models/clipboardimageitem.h \
-    models/clipboardtextitem.h \
-    models/clipboardurlitem.h \
     models/filing/datafile.h \
     models/clipboardentity.h \
     views/contentviewer.h
