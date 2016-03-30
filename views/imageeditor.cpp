@@ -9,6 +9,7 @@ ImageEditor::ImageEditor(ClipboardImageItem *item,QWidget *parent) :
   if(item && item->type()==ClipboardItem::Image)
   {
     _item=item;
+
     QImage *image=item->image();
     if(image)
     {
