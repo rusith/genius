@@ -104,7 +104,7 @@ void TrayIcon::addTextAction(QString *text, QString *tooltipText, int reference,
 {
 
   QAction *action=new QAction(_historyMenu);
-  action->setText(*text);
+  action->setIconText(*text);
   action->setToolTip(*tooltipText);
   action->setData(QVariant(reference));
   if(_historyMenu->actions().isEmpty())
@@ -257,6 +257,7 @@ void TrayIcon::exchangeLocation(int ref1, int ref2)
 {
   QAction *action1=NULL;
   QAction *action2=NULL;
+
   foreach (QAction* action, _historyMenu->actions())
   {
     if(action1 && action2) break;
@@ -271,23 +272,24 @@ void TrayIcon::exchangeLocation(int ref1, int ref2)
   }
   if(action1 && action2)
   {
-    //QAction *action=action1;
-//    QAction a1(*action1);
-//    delete action1;
-//    delete action2;
-    //_historyMenu->actions().removeOne(action1);
-    //_historyMenu->actions().removeOne(action2);
-//    QList<QAction*> actions=_historyMenu->actions();
-//    _historyMenu->removeAction();
-//    _historyMenu->actions().swap(_historyMenu->actions().indexOf(action1),_historyMenu->actions().indexOf(action2));
-//   _historyMenu->update();
-//   _historyMenu->repaint();
-    // _historyMenu->repaint();
-    //    action1=action2;
-//    action2=action;
-//    QAction *temp=new QAction(*action1);
-//    *action1=*action2;
-//    *action2=*temp;
-//    delete temp;
+    QIcon ico=action2->icon();
+    action2->setIcon(action1->icon());
+    action1->setIcon(ico);
+
+    QVariant data=action2->data();
+    action2->setData(action1->data());
+    action1->setData(data);
+
+    QString txt=action2->text();
+    action2->setText(action1->text());
+    action1->setText(txt);
+
+    QString iText=action2->iconText();
+    action2->setIconText(action1->iconText());
+    action1->setIconText(iText);
+
+    QString TT=action2->toolTip();
+    action2->setToolTip(action1->toolTip());
+    action1->setToolTip(TT);
   }
 }
