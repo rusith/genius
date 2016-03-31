@@ -50,7 +50,7 @@ int ClipboardEntity::ref()
 bool ClipboardEntity::identical(ClipboardEntity *entity)
 {
   if(entity)
-    return _dataFile->identicalData(entity->_dataFile);
+    return _dataFile->operator ==(entity->_dataFile);
   else
     return false;
 }

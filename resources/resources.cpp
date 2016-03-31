@@ -21,5 +21,6 @@ const QString Resources::colorpicker16=":/images/images/colorPicker16.png";
 const QString Resources::off16=":/images/images/off16.png";
 const QString Resources::on16=":/images/images/on16.png";
 const QString Resources::show16=":/images/images/show16.png";
-
+const QString Resources::up16=":/images/images/up16.png";
+const QString Resources::downn16=":/images/images/down16.png";
 TempFolder Resources::tempFolder;

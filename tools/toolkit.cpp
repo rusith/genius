@@ -34,3 +34,16 @@ QString ToolKit::URlsToString(QList<QUrl> *urls)
   }
 }
 
+const FragmentFrame ToolKit::maxValue(const QList<FragmentFrame> &frames)
+{
+  if (frames.isEmpty()) return FragmentFrame();
+  if(frames.count()<2) return frames.first();
+  FragmentFrame max=frames.first();
+  foreach (FragmentFrame frame, frames)
+  {
+    if(frame>max)
+      max=frame;
+  }
+  return max;
+}
+

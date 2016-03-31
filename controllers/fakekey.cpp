@@ -11,9 +11,7 @@ void FakeKey::simulatePaste()
 #ifdef __linux__
   Display *display=XOpenDisplay(NULL);
   if(display==NULL)
-  {
     return;
-  }
   Window winRoot=XDefaultRootWindow(display);
   Window winFocus;
   int revert;
@@ -32,9 +30,7 @@ void FakeKey::simulateCopy()
 #ifdef __linux__
   Display *display=XOpenDisplay(NULL);
   if(display==NULL)
-  {
-    return;
-  }
+    return; 
   Window winRoot=XDefaultRootWindow(display);
   Window winFocus;
   int revert;

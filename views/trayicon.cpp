@@ -53,7 +53,6 @@ void TrayIcon::constructIcon()
   _icon->setToolTip("system tray icon of genius ");
 }
 
-//slots
 void TrayIcon::managerHidden()
 {
    _showHideAction->setIconText("show clipboard manager");
@@ -70,7 +69,6 @@ void TrayIcon::show()
 }
 
 
-//functions
 void TrayIcon::addImageAction(QString *text, QIcon *icon, int reference, int index)
 {
 
@@ -131,49 +129,6 @@ void TrayIcon::addTextAction(QString *text, QString *tooltipText, int reference,
   }
 
   checkLimit();
-}
-
-void TrayIcon::updateTextItem(QString *text, QString *tooltipText, int reference)
-{
-
-  if(_historyMenu->actions().length()>0)
-  {
-    int ref=0;
-    foreach (QAction *action, _historyMenu->actions())
-    {
-      if(action)
-      {
-        ref=action->data().toInt();
-        if(ref==reference)
-        {
-          action->setText(*text);
-          action->setToolTip(*tooltipText);
-          return;
-        }
-      }
-    }
-  }
-}
-
-void TrayIcon::updateImageItem(QString *text, QIcon *icon, int reference)
-{
-  if(_historyMenu->actions().length()>0)
-  {
-    int ref=0;
-    foreach (QAction *action, _historyMenu->actions())
-    {
-      if(action)
-      {
-        ref=action->data().toInt();
-        if(ref==reference)
-        {
-          action->setIcon(*icon);
-          action->setIconText(*text);
-          return;
-        }
-      }
-    }
-  }
 }
 
 void TrayIcon::removeItem(int reference)
@@ -295,5 +250,44 @@ void TrayIcon::showHistoryMenu()
     QPoint point=_historyMenu->mapFromGlobal(QCursor::pos());
     _historyMenu->exec(point);
     _pasteWhenSelected=false;
+  }
+}
+
+void TrayIcon::exchangeLocation(int ref1, int ref2)
+{
+  QAction *action1=NULL;
+  QAction *action2=NULL;
+  foreach (QAction* action, _historyMenu->actions())
+  {
+    if(action1 && action2) break;
+    if(action )
+    {
+      int data=action->data().toInt();
+      if(data==ref1)
+        action1=action;
+      else if(data==ref2)
+        action2=action;
+    }
+  }
+  if(action1 && action2)
+  {
+    //QAction *action=action1;
+//    QAction a1(*action1);
+//    delete action1;
+//    delete action2;
+    //_historyMenu->actions().removeOne(action1);
+    //_historyMenu->actions().removeOne(action2);
+//    QList<QAction*> actions=_historyMenu->actions();
+//    _historyMenu->removeAction();
+//    _historyMenu->actions().swap(_historyMenu->actions().indexOf(action1),_historyMenu->actions().indexOf(action2));
+//   _historyMenu->update();
+//   _historyMenu->repaint();
+    // _historyMenu->repaint();
+    //    action1=action2;
+//    action2=action;
+//    QAction *temp=new QAction(*action1);
+//    *action1=*action2;
+//    *action2=*temp;
+//    delete temp;
   }
 }

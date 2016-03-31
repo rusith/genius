@@ -173,9 +173,72 @@ int ClipboardHistory::indexOf(const int &reference)
     return -1;
 }
 
+int ClipboardHistory::indexOf(ClipboardEntity *entity)
+{
+
+  if(entity && _list->isEmpty()==false)
+  {
+    int index=0;
+
+    foreach (ClipboardEntity *ent, *_list)
+    {
+      if(ent->ref()==entity->ref())
+        return index;
+      index++;
+    }
+    return -1;
+  }
+  else
+    return -1;
+}
+
 void ClipboardHistory::manageLength()
 {
   int max=GSettings::maximumItemsInHistory;
   while (_list->length()>max)
     removeAt(_list->length()-1);
+}
+
+void ClipboardHistory::moveEntityDown(ClipboardEntity *entity)
+{
+  if(!entity || _list->length()<2 )
+    return;
+  int itmidx=indexOf(entity);
+  if(itmidx!=0 && itmidx!=_list->size()-1)
+  {
+    ClipboardEntity *next=at(itmidx-1);
+    if(next)
+    {
+      _list->swap(itmidx,itmidx-1);
+      emit entityMovedDown(entity);
+    }
+  }
+}
+
+void ClipboardHistory::moveEntityUp(ClipboardEntity *entity)
+{
+
+  if(!entity || _list->length()<3 )
+    return;
+  int itmidx=indexOf(entity);
+  if(itmidx>1)
+  {
+    ClipboardEntity *next=at(itmidx+1);
+    if(next)
+    {
+      _list->swap(itmidx,itmidx+1);
+      emit entityMovedUp(entity);
+    }
+  }
+}
+
+void ClipboardHistory::exchangeLocation(int ref1, int ref2)
+{
+  int index1=indexOf(ref1);
+  int index2=indexOf(ref2);
+  if(index1!=-1 && index2!=-1)
+  {
+    _list->swap(index1,index2);
+    emit locationExchanged(ref1,ref2);
+  }
 }

@@ -26,7 +26,9 @@ SOURCES += main.cpp \
     controllers/tempfolder.cpp \
     models/filing/datafile.cpp \
     models/clipboardentity.cpp \
-    views/contentviewer.cpp
+    views/contentviewer.cpp \
+    tools/rtimer.cpp \
+    models/filing/fragmentframe.cpp
 
 HEADERS  += \
     views/manager.h \
@@ -42,7 +44,9 @@ HEADERS  += \
     controllers/tempfolder.h \
     models/filing/datafile.h \
     models/clipboardentity.h \
-    views/contentviewer.h
+    views/contentviewer.h \
+    tools/rtimer.h \
+    models/filing/fragmentframe.h
 
 FORMS    += \
     views/manager.ui \

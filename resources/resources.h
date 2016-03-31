@@ -25,6 +25,8 @@ public:
   const static QString off16;
   const static QString on16;
   const static QString show16;
+  const static QString up16;
+  const static QString downn16;
 
 
   /**

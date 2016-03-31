@@ -11,27 +11,9 @@
 #include <QImage>
 #include <QStringList>
 #include <QElapsedTimer>
-
-/**
- * @brief use to manage files deferent fragments. this class contains the size of the fragment,end,start bytes
- */
-class FragmentFrame
-{
-public:
-  /**
-   * @brief starting byte of the file fragment
-   */
-  quint64 start=0;
-  /**
-   * @brief size of the file fragment
-   */
-  quint64 size=0;
-
-  bool operator==(const FragmentFrame &other) const
-  {
-    return (other.size==size && other.start==start);
-  }
-};
+#include <tools/rtimer.h>
+#include <tools/toolkit.h>
+#include <models/filing/fragmentframe.h>
 
 /**
  * @brief The DataFile class provides interface for manage QMimeData object as a file
@@ -55,7 +37,7 @@ public:
    * return NULL if not available
    * return empty ByteArray if data is empty
    */
-  QByteArray *data(const QString &format);
+  QByteArray *data(const QString &format) const;
 
   /**
    * @brief use to get format data of given object
@@ -163,6 +145,10 @@ public:
    * @return
    */
   QStringList imageFormats();
+
+  bool operator ==(const DataFile &rhs) const ;
+
+  bool operator ==(DataFile *rhs) const;
 private:
   /**
    * @brief _fragments (Hash for manage formats)
@@ -194,7 +180,7 @@ private:
    * @param frame to read
    * @return QByteArray
    */
-  QByteArray *readFragment(const FragmentFrame &frame);
+  QByteArray *readFragment(const FragmentFrame &frame) const;
 };
 
 #endif // DATAFILE_H

@@ -30,7 +30,12 @@ public:
    * @brief show the HistoryMenu then user can select an item . then it will call simulatePaste()
    */
   void showHistoryMenu();
-
+  /**
+   * @brief exchange locations of two actions in the historyMenu
+   * @param entity 1 ref
+   * @param entity 2 ref
+   */
+  void exchangeLocation(int ref1,int ref2);
 
 signals:
   void showHideManagerTriggerd();
@@ -45,7 +50,7 @@ public slots:
  void menuActionTrigered(QAction *action);
  void historyMenuActionTriggered(QAction *action);
 
-  private:
+private:
   QSystemTrayIcon *_icon=NULL;
   QMenu *_menu=NULL;
   ClipboardHistory *_history=NULL;
@@ -65,6 +70,8 @@ public slots:
   bool _pasteWhenSelected;
   void constructIcon();
   void checkLimit();
+
+
 };
 
 #endif // TRAYICON_H

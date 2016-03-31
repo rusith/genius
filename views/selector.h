@@ -13,9 +13,6 @@
 #include <QKeyEvent>
 #include <QHideEvent>
 #include <QDebug>
-#include <models/clipboardtextitem.h>
-#include <models/clipboardimageitem.h>
-#include <models/clipboardurlitem.h>
 #include <models/clipboardhistory.h>
 
 

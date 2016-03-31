@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QList>
-#include <models/clipboarditem.h>
 #include <models/clipboardentity.h>
 #include <controllers/gsettings.h>
 
@@ -88,6 +87,26 @@ public:
    */
   int indexOf(const int &reference);
 
+  /**
+   * @brief used to get index of an entity. is entity is not availabel return -1
+   * @param etity for check index
+   * @return index of the entity in the list . -1 if entity is not in the history
+   */
+  int indexOf(ClipboardEntity *entity);
+  /**
+   * @brief move an entity down by one . entityMovedDown signal will emit if this operation is successfull
+   * @param entity to move
+   */
+  void moveEntityDown(ClipboardEntity *entity);
+
+  /**
+   * @brief move entity up by one . entityMovedUp signal will emit if the operation successfull
+   * @param entity to move up
+   */
+  void moveEntityUp(ClipboardEntity *entity);
+
+  void exchangeLocation(int ref1,int ref2);
+
 
 signals:
   /**
@@ -111,6 +130,20 @@ signals:
    * @brief wmited wen list is cleared
    */
   void cleared();
+
+  /**
+   * @brief emited when an item is moved down by one
+   * @param entity tha moved
+   */
+  void entityMovedDown(ClipboardEntity *entity);
+
+  /**
+   * @brief emited when an entity moved up by one index
+   * @param entity
+   */
+  void entityMovedUp(ClipboardEntity *entity);
+
+  void locationExchanged(int ref1,int ref2);
 
 private:
   /**

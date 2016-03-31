@@ -31,7 +31,7 @@ public:
    * @param parent of the object
    * @param open UI as hidden
    */
-  explicit Manager( ClipboardHistory *history, QWidget *parent=0,bool hidden=false);
+  explicit Manager(ClipboardHistory *history, QWidget *parent=0);
   ~Manager();
 
   /**
@@ -59,24 +59,18 @@ public:
    * @brief clear the list of items
    */
   void clearList();
-  /**
-   * @brief update an existing text item
-   * @param new text
-   * @param new tooltip
-   * @param referenceID of the item
-   */
-  void updateTextItem(QString *text,QString *tooltipText,int reference);
-  /**
-   * @brief  update an existing image item
-   * @param new text
-   * @param new image
-   * @param reference of the item
-   */
-  void updateImageItem(QString *text,QIcon *icon,int reference );
+
   /**
    * @brief initialize the window this will initialize  the UI
    */
   void initialize();
+
+  /**
+   * @brief echange locations of two entities
+   * @param ref1
+   * @param ref2
+   */
+  void exchangeLocations(int ref1,int ref2);
 signals:
   /**
    * @brief emitted when the window is reopend
@@ -100,6 +94,14 @@ signals:
    * @param entity
    */
   void showContentRequested(ClipboardEntity *entity);
+
+  /**
+   * @brief emited when user exchange location of two items
+   * @param item 1 ref
+   * @param item2 ref
+   */
+  void locationExchangeRequested(int ref1,int ref2);
+
 private slots:
   /**
    * @brief calls when edit buton clicked
@@ -148,16 +150,11 @@ private:
   /**
    * @brief start the window hidden
    */
-  bool _starthidden;
+  //bool _starthidden;
   /**
    * @brief initialize the UI with its commponents
    */
   void initializeUI();
-  /**
-   * @brief overridded showEvent
-   * @param event
-   */
-  void showEvent(QShowEvent *event);
   /**
    * @brief overridden hideEvent
    * @param event
@@ -168,6 +165,8 @@ private:
    * @param event
    */
   void closeEvent(QCloseEvent *event);
+
+
 
 };
 

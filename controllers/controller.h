@@ -10,14 +10,8 @@
 #include <QBuffer>
 #include <views/manager.h>
 #include <models/clipboardhistory.h>
-#include <models/clipboardimageitem.h>
-#include <models/clipboarditem.h>
-#include <models/clipboardtextitem.h>
-#include <models/clipboardurlitem.h>
 #include <tools/toolkit.h>
 #include <views/trayicon.h>
-#include <views/texteditor.h>
-#include <views/imageeditor.h>
 #include <views/settingswindow.h>
 #include <views/selector.h>
 #include <views/contentviewer.h>
@@ -76,13 +70,15 @@ private slots:
    */
   void historyMenuHotkeyActivated();
 
-
-
   /**
    * @brief open content viewer and show content to the user
    * @param entity for show
    */
   void showContent(ClipboardEntity *entity);
+
+  void locationExchangeRequested(int ref1,int ref2);
+  void locationExchanged(int ref1,int ref2);
+
 
 private:
   //------------------------basic elements
@@ -157,6 +153,7 @@ private:
    * @return true or false
    */
   bool sameAsLast(ClipboardEntity *entity);
+
 
 
 

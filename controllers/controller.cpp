@@ -22,11 +22,6 @@ void Controller::itemSelected(int reference)
  selectItem(reference);
 }
 
-//void Controller::editRequested(ClipboardItem *item)
-//{
-//  letToEditItem(item);
-//}
-
 
 void Controller::clipboardChanged(QClipboard::Mode mode)
 {
@@ -39,7 +34,6 @@ void Controller::clipboardChanged(QClipboard::Mode mode)
   else return;
 }
 
-//--------------------------------------------------------history control SLOTS-----------------------------
 
 void Controller::history_itemAdded(ClipboardEntity *entity, int index)
 {
@@ -60,13 +54,6 @@ void Controller::history_cleared()
   _manager->clearList();
   _trayIcon->clearHistoryList();
 }
-
-//void Controller::history_itemUpdated(ClipboardEntity *entity)
-//{
-//  updateItem(entity);
-//}
-
-//----------------------------------------------------view control SLOTS--------------------------------------
 
 void Controller::manager_hidden()
 {
@@ -136,8 +123,6 @@ void Controller::exitRequested()
   exit(0);
 }
 
-//-------------------------------------------Hotkey activation controls (Slots)---------------------------------
-
 void Controller::openSelectorHKtriggered()
 {
 
@@ -196,14 +181,6 @@ void Controller::directCopyHKTriggered()
   _clipboard->clear(QClipboard::Clipboard);
 }
 
-//-------------------------------------------END OF Hotkey activation controls (Slots)---------------------------------
-
-
-//-------------------------------------------basic functions------------------------------------------------------------
-
-/**
- * @brief this is the function that calls first
- */
 void Controller::start()
 {
   GSettings::initialize();
@@ -216,11 +193,6 @@ void Controller::start()
 
 void Controller::addClipboardContentToHistory()
 {
-//  const QMimeData *MD=_clipboard->mimeData();
-//  foreach (QString str, MD->formats())
-//  {
-//      qDebug()<<str;
-//  }
   ClipboardEntity *entity=new ClipboardEntity(_clipboard);
   if(sameAsLast(entity))
   {
@@ -228,50 +200,9 @@ void Controller::addClipboardContentToHistory()
     return;
   }
   _history->pushFront(entity);
-//  DataFile *dataFile=new DataFile(MD,Resources::tempFolder.path()+"/SRL.txt");
-//  QByteArray *BR=dataFile->data("text/plain");
-//  qDebug()<<"PRINTING PLAIN TEXT_______________________________";
-//  qDebug()<<QString(*BR);
-//  delete BR;
-//  BR=dataFile->at(1);
-//  qDebug()<<"PRINTING HTML_______________________________";
-//  qDebug()<<QString(*BR);
-//  delete BR;
-//  QFile file(Resources::tempFolder.path()+"/TEST.genius");
-//  file.open(QFile::ReadWrite);
-//  QDataStream stream(&file);
-//  int i=0;
-//  foreach (QString str, MD->formats())
-//  {
-
-//    QFile file_(Resources::tempFolder.path()+QString("/TEST_%1.genius").arg(i));
-//    file_.open(QFile::ReadWrite);
-//    qDebug()<<"Writing "<<str;
-//    qDebug()<<"Wrote "<<file_.write(MD->data(str))<<" bytes";
-//    file_.close();
-//    i++;
-//  }
-//  qDebug()<<file.size();
-//  file.close();
-
-//  if(MD->hasImage())
-//    item=new ClipboardImageItem(_clipboard->image());
-//  else if(MD->hasText())
-//    item=new ClipboardTextItem(_clipboard->text());
-//  else if(MD->hasHtml())
-//    item=new ClipboardTextItem(MD->html());
-//  else if(MD->hasUrls())
-//    item=new ClipboardURLItem(MD->urls());
-//  else return;
-//  if(item && item->constructed())
-//    _history->pushFront(item);
-//  else
-//    return;
 }
 
-/**
- * @brief define views
- */
+
 void Controller::createViews()
 {
   _manager=new Manager(_history);
@@ -288,11 +219,6 @@ void Controller::showViews()
   _trayIcon->show();
 }
 
-/**
- * @brief add item to the view and history
- * @param itemto add
- * @param index of the new item
- */
 void Controller::addItem(ClipboardEntity *entity, int index)
 {
 
@@ -316,12 +242,7 @@ void Controller::addItem(ClipboardEntity *entity, int index)
 
     QString text=entity->plainText(false,(GSettings::limitcharLength ? GSettings::limitedCharLength : -1));
     if(GSettings::showInSingleLine)
-      ToolKit::removeNewLines(&text);/*
-    if(GSettings::limitcharLength)
-    {
-      if(text->length()>GSettings::limitedCharLength)
-        *text=text->left(GSettings::limitedCharLength)+"...";
-    }*/
+      ToolKit::removeNewLines(&text);
     QString tooltipText=QString("added time : %1 ").arg(entity->addedTime()->toString("hh.mm.ss.zzz AP"));
     _manager->addTextItem(&text,&tooltipText,reference,index);
     _trayIcon->addTextAction(&text,&tooltipText,reference,index);
@@ -330,68 +251,10 @@ void Controller::addItem(ClipboardEntity *entity, int index)
   {
     QString text=entity->HTMLText(false,(GSettings::limitcharLength ? GSettings::limitedCharLength : -1));
     if(GSettings::showInSingleLine)
-      ToolKit::removeNewLines(&text);/*
-    if(GSettings::limitcharLength)
-    {
-      if(text->length()>GSettings::limitedCharLength)
-        *text=text->left(GSettings::limitedCharLength)+"...";
-    }*/
-    QString tooltipText=QString("added time : %1 ").arg(entity->addedTime()->toString("hh.mm.ss.zzz AP"));
-    _manager->addTextItem(&text,&tooltipText,reference,index);
-    _trayIcon->addTextAction(&text,&tooltipText,reference,index);
+      ToolKit::removeNewLines(&text);
   }
-//  ClipboardItem::ClipboardMimeType type=item->type();
-//  if(type==ClipboardItem::Text)
-//  {
-//   ClipboardTextItem *te=dynamic_cast<ClipboardTextItem*>(item);
-//   QString *text=new QString(*te->preview());
-//   if(GSettings::showInSingleLine)
-//     ToolKit::removeNewLines(text);
-//   if(GSettings::limitcharLength)
-//   {
-//     if(text->length()>GSettings::limitedCharLength)
-//       *text=text->left(GSettings::limitedCharLength)+"...";
-//   }
-//   QString tooltipText="type : text"+QString("\ncontent length : %1").arg(te->length())+QString("\nadded time : %1 ").arg(te->addedTime()->toString("hh.mm.ss.zzz AP"));
-//   _manager->addTextItem(text,&tooltipText,reference,index);
-//   _trayIcon->addTextAction(text,&tooltipText,reference,index);
-//   delete text;
-//  }
-//  else if(type==ClipboardItem::Image)
-//  {
-//    ClipboardImageItem *ii=dynamic_cast<ClipboardImageItem*>(item);
-
-//    QImage *image=ii->preview();
-//    QIcon icon(QPixmap::fromImage(*image));
-//    QString text(QString("width : %1").arg(ii->width()));
-//    text+=QString("  height : %1").arg(ii->hight());
-//    text+="  added time : "+ii->addedTime()->toString("hh.mm.ss.zzz AP");
-
-//    _manager->addImageItem(&text,&icon,reference,index);
-//    _trayIcon->addImageAction(&text,&icon,reference,index);
-//  }
-//  else if(type==ClipboardItem::URLs)
-//  {
-//    ClipboardURLItem *ui=dynamic_cast<ClipboardURLItem*>(item);
-//    QString *text=new QString(ui->toString("|"));
-//    if(GSettings::showInSingleLine)
-//      ToolKit::removeNewLines(text);
-//    if(GSettings::limitcharLength)
-//    {
-//      if(text->length()>GSettings::limitedCharLength)
-//        *text=text->left(GSettings::limitedCharLength)+"...";
-//    }
-
-//    QString tooltipText="type : urls"+QString("\nurls : %1").arg(ui->urls()->length())+QString("\nadded time : %1 ").arg(ui->addedTime()->toString("hh.mm.ss.zzz AP"));
-//    _manager->addTextItem(text,&tooltipText,reference,index);
-//    _trayIcon->addTextAction(text,&tooltipText,reference,index);
-//    delete text;
-//  }
 }
 
-/**
- * @brief create Global hotkeys acofing to the settings
- */
 void Controller::createHotkeys()
 {
   _openSelectorHotkey=new QHotkey(QKeySequence("Ctrl+Shift+V"),true);
@@ -428,7 +291,8 @@ void Controller::createConnections()
   connect(_history,SIGNAL(added(ClipboardEntity*,int)),this,SLOT(history_itemAdded(ClipboardEntity*,int)));
   connect(_history,SIGNAL(removed(int,int)),this,SLOT(history_removed(int,int)));
   connect(_history,SIGNAL(cleared()),this,SLOT(history_cleared()));
- // connect(_history,SIGNAL(updated(ClipboardItem*)),this,SLOT(history_itemUpdated(ClipboardItem*)));
+  connect(_history,SIGNAL(locationExchanged(int,int)),this,SLOT(locationExchanged(int,int)));
+  // connect(_history,SIGNAL(updated(ClipboardItem*)),this,SLOT(history_itemUpdated(ClipboardItem*)));
 
   //------------------------------------connection with clipboard Manager
   connect(_manager,SIGNAL(shown()),this,SLOT(manager_shown()));
@@ -438,9 +302,8 @@ void Controller::createConnections()
   connect(_manager,SIGNAL(settingsDialogRequested()),this,SLOT(settingsWindowRequested()));
   connect(_manager,SIGNAL(itemSelected(int)),this,SLOT(itemSelected(int)));
   connect(_manager,SIGNAL(showContentRequested(ClipboardEntity*)),this,SLOT(showContent(ClipboardEntity*)));
-  //connect(_manager,SIGNAL(editRequested(ClipboardItem*)),this,SLOT(editRequested(ClipboardItem*)));
+  connect(_manager,SIGNAL(locationExchangeRequested(int,int)),this,SLOT(locationExchangeRequested(int,int)));
 
-  //------------------------------------connection with TrayIcon
   connect(_trayIcon,SIGNAL(showHideManagerTriggerd()),this,SLOT(showHideManagerRequest()));
   connect(_trayIcon,SIGNAL(itemSelected(int)),this,SLOT(itemSelected(int)));
   connect(_trayIcon,SIGNAL(settingsDialogRequested()),this,SLOT(settingsWindowRequested()));
@@ -448,13 +311,9 @@ void Controller::createConnections()
   connect(_trayIcon,SIGNAL(turnOnGenius()),this,SLOT(turnOnRequest()));
   connect(_trayIcon,SIGNAL(exitRequested()),this,SLOT(exitRequested()));
 
-  //----------------------------------------connection with selector
+
   connect(_selector,SIGNAL(closing(int)),this,SLOT(selectorClosed(int)));
-
-  //----------------------------------------connection with settingsWindow
   connect(_settingsWindow,SIGNAL(hiding()),this,SLOT(settingsWindow_hidden()));
-
-  //-----------------------------------------connection with global hot-keys(all are conditional)
   if(_openSelectorHotkey)
     connect(_openSelectorHotkey,SIGNAL(activated()),this,SLOT(openSelectorHKtriggered()));
 
@@ -557,9 +416,6 @@ void Controller::deleteHotkeys()
   }
 }
 
-/**
- * @brief delete views and variables
- */
 void Controller::deleteVariables()
 {
   if(_manager)
@@ -574,11 +430,7 @@ void Controller::deleteVariables()
   if(_selector)
     delete _selector;
 }
-//----------------------------------------------view functions-------------------------------------------------------------
 
-/**
- * @brief toggle the visible status of the Manager window.
- */
 void Controller::toggleManager()
 {
   if(_managerOpened)
@@ -626,7 +478,7 @@ bool Controller::sameAsLast(ClipboardEntity *entity)
 {
   if(entity)
   {
-    if(_history && _history->isEmpty()==false)
+    if(_history && !_history->isEmpty())
     {
       ClipboardEntity *first=_history->first();
       if(first)
@@ -648,4 +500,15 @@ void Controller::showContent(ClipboardEntity *entity)
     ContentViewer CV(entity);
     CV.exec();
   }
+}
+
+void Controller::locationExchangeRequested(int ref1, int ref2)
+{
+  _history->exchangeLocation(ref1,ref2);
+}
+
+void Controller::locationExchanged(int ref1, int ref2)
+{
+  _manager->exchangeLocations(ref1,ref2);
+  _trayIcon->exchangeLocation(ref1,ref2);
 }
