@@ -137,6 +137,8 @@ private slots:
    */
   void on_showContentButton_clicked();
 
+  void on_list_currentRowChanged(int currentRow);
+
 private:
 
   /**
@@ -165,6 +167,11 @@ private:
    * @param event
    */
   void closeEvent(QCloseEvent *event);
+
+  /**
+   * @brief update item inforamtion label
+   */
+  void updateInfoLabel(const int &currentRow);
 
 
 

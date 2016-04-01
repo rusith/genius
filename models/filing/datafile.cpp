@@ -23,8 +23,10 @@ DataFile::DataFile(const QMimeData *mimeData, const QString &filename)
         qint64 wrtn=_file->write(mimeData->data(format));
         frame.size=wrtn;
         _fragments->insert(format,frame);
+
       }
       _file->close();
+       qDebug()<<"File closed";
     }
   }
 }
@@ -120,25 +122,15 @@ bool DataFile::hasHtmlText()
 
 bool DataFile::hasImage()
 {
+ // qDebug()<<_fragments;
+  if(_fragments==nullptr)
+      return false;
   foreach (QString key, _fragments->keys())
   {
       if (key.startsWith("image"))
         return true;
   }
   return false;
-
-//  QStringList list;
-//  list.append("image/*");
-//  list.append("image/bmp");
-//  list.append("image/x-bmp");
-//  list.append("image/x-MS-bmp");
-//  list.append("image/jpeg");
-//  list.append("image/x-icon");
-//  list.append("image/x-ico");
-//  list.append("image/x-win-bitmap");
-//  list.append("image/tiff");
-//  list.append("application/x-qt-image");
-//  return hasFormat(list);
 }
 
 
@@ -214,19 +206,11 @@ QImage *DataFile::image(bool check,const int &width, const int &hight)
       {
         FragmentFrame frame=_fragments->value(key);
         imgs.append(frame);
-//        if(frame.size<1) continue;
-//        QImage *img;
-//        if(width>0 && hight>0)
-//          img=new QImage(QImage::fromData(*readFragment(frame)).scaled(width,hight,Qt::KeepAspectRatio));
-//        else
-//          img=new QImage(QImage::fromData(*readFragment(frame)));
-//        return img;
       }
       else continue;
     }
     FragmentFrame max=ToolKit::maxValue(imgs);
     if(max.size==0) return NULL;
-
     QImage *img;
     if(width>0 && hight>0)
     {
@@ -252,76 +236,10 @@ QImage *DataFile::image(bool check,const int &width, const int &hight)
 
       else
         return NULL;
-      //img=new QImage(QImage::fromData(*readFragment(frame)));
     }
-//    foreach (QString str, list)
-//    {
-//      if(_fragments->contains(str))
-//      {
-//        else
-//        {
-//          QImage *img;
-//          if(width>0 && hight>0)
-//            img=new QImage(QImage::fromData(*readFragment(frame)).scaled(width,hight,Qt::KeepAspectRatio));
-//          else
-//            img=new QImage(QImage::fromData(*readFragment(frame)));
-//          return img;
-//        }
-//      }
-//    }
-//    return NULL;
   }
   else
     return NULL;
-}
-
-bool DataFile::identicalData(DataFile *file)
-{
-  if(file)
-  {
-    if(file->_fragments->count()==this->_fragments->count())
-    {
-      if(file->_fragments->keys()==this->_fragments->keys())
-      {
-        foreach (QString key,this->_fragments->keys() )
-        {
-          if(!(file->_fragments->value(key)==this->_fragments->value(key)))
-           return false;
-        }
-
-        QByteArray *baFile;
-        QByteArray *baThis;
-        foreach (QString key,this->_fragments->keys() )
-        {
-          if(key!="TIMESTAMP")
-          {
-            baFile=file->readFragment(file->_fragments->value(key));
-            baThis=readFragment(_fragments->value(key));
-            if(baFile && baThis)
-            {
-              if(*baFile!=*baThis)
-              {
-                delete baFile;
-                delete baThis;
-                return false;
-              }
-            }
-            if(baFile)
-              delete baFile;
-            if(baThis)
-              delete baThis;
-          }
-        }
-        return true;
-      }
-      else
-        return false;
-    }
-    else
-      return false;
-  }
-  else
-    return false;
 }
 
 qint64 DataFile::readFragment(const FragmentFrame &frame,char *cha)
@@ -374,8 +292,12 @@ QStringList DataFile::imageFormats()
     QStringList res;
     foreach (QString key, _fragments->keys())
     {
-      if(key.startsWith("image"))
-        res.append(key);
+      FragmentFrame frame=_fragments->value(key);
+      if(frame.size>2)
+      {
+        if(key.startsWith("image"))
+          res.append(key);
+      }
     }
     return res;
   }
@@ -386,9 +308,6 @@ QStringList DataFile::imageFormats()
 
 bool DataFile::operator ==(const DataFile &rhs)const
 {
-  //check has _fragments
-  //RTimer t("DataFile::operator ==(const DataFile &rhs)","compairing two DataFiles with data");
-    //check has _fragments
   if(_fragments && rhs._fragments)
   {
     if(_fragments->keys()==rhs._fragments->keys())
@@ -474,4 +393,14 @@ bool DataFile::operator ==(DataFile *rhs) const
   }
   else
     return false;
+}
+
+quint64 DataFile::size()
+{
+  quint64 sz=0;
+  foreach (FragmentFrame frame, _fragments->values())
+  {
+    sz=sz+frame.size;
+  }
+  return sz;
 }

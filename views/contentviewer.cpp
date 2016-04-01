@@ -268,7 +268,9 @@ void ContentViewer::addImageTab()
 
         QHBoxLayout *innerOptionsLayout=new QHBoxLayout();
         QLabel *innerDetailsLabel=new QLabel(innerTab);
-        innerDetailsLabel->setText(QString("<b>size : </b> %1 KB").arg((double)_entity->formatSize(format)/1024));
+        innerDetailsLabel->setText(QString("<b>size : </b> %1 KB      <b>width : </b>%2 px    <b>height : </b>%3px ").arg((double)_entity->formatSize(format)/1024)
+                                   .arg(gpixmap->pixmap().width())
+                                   .arg(gpixmap->pixmap().height()));
         innerOptionsLayout->addWidget(innerDetailsLabel);
 
         QPushButton *innerExportButton=new QPushButton(innerTab);
@@ -347,6 +349,7 @@ QString ContentViewer::imageMimeTypeToText(const QString &MT)
   else
     return "";
 }
-
-
-
+void ContentViewer::on_pushButton_clicked()
+{
+  reject();
+}

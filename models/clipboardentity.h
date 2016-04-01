@@ -123,6 +123,18 @@ public:
    * @return
    */
   QStringList imageFormats();
+
+  /**
+   * @brief returns formats availabel in this object
+   * @return
+   */
+  QStringList formats();
+
+  /**
+   * @brief returns the size of the objects all data
+   * @return size
+   */
+  quint64 size();
 private:
   /**
    * @brief refId of the object

@@ -34,7 +34,7 @@ QString ToolKit::URlsToString(QList<QUrl> *urls)
   }
 }
 
-const FragmentFrame ToolKit::maxValue(const QList<FragmentFrame> &frames)
+FragmentFrame ToolKit::maxValue(const QList<FragmentFrame> &frames)
 {
   if (frames.isEmpty()) return FragmentFrame();
   if(frames.count()<2) return frames.first();
@@ -45,5 +45,27 @@ const FragmentFrame ToolKit::maxValue(const QList<FragmentFrame> &frames)
       max=frame;
   }
   return max;
+}
+
+void ToolKit::Sort(QList<FragmentFrame> *frames)
+{
+ // RTimer timer("ToolKit::Sort(QList<FragmentFrame> *frames)","sort list of fragment frames by size");
+  quint64 size =frames->first().size;
+  int times=0;
+  int length=frames->length();
+  while (true)
+  {
+    times=0;
+    for(int i=0;i<length;i++)
+    {
+      if(frames->at(i).size>size)
+      {
+        frames->swap(i,i-1);
+        times++;
+        size=frames->at(i).size;
+      }
+    }
+    if(times==0) break;
+  }
 }
 

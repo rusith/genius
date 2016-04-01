@@ -34,12 +34,6 @@ ClipboardEntity::~ClipboardEntity()
     delete _dataFile;
   if(_addedTime)
     delete _addedTime;
-//  if(_image)
-//    delete _image;
-//  if(_plainText)
-//    delete _plainText;
-//  if(_HTMLText)
-//    delete _HTMLText;
 }
 
 int ClipboardEntity::ref()
@@ -142,4 +136,14 @@ QStringList ClipboardEntity::imageFormats()
   if(_dataFile)
     return _dataFile->imageFormats();
   return QStringList();
+}
+
+QStringList ClipboardEntity::formats()
+{
+  return _dataFile->formats();
+}
+
+quint64 ClipboardEntity::size()
+{
+  return _dataFile->size();
 }

@@ -38,9 +38,7 @@ void Selector::initializeUI()
     labels.append(createLabel(currentG,_history->at(1)));
     _currentIndex=1;
     if(length>2)
-    {
       labels.append(createLabel(nextG,_history->at(2)));
-    }
   }
   else if(length==1)
   {
@@ -51,6 +49,8 @@ void Selector::initializeUI()
   {
     return;
   }
+
+  ui->lblPosition->setStyleSheet(QString("color: %1;").arg(GSettings::selectorBorderColor));
 }
 
 void Selector::initializeVarbs()
@@ -364,10 +364,13 @@ void Selector::keyPressEvent(QKeyEvent *event)
   if(key==Qt::Key_Left)
   {
     gotoNext();
+    updatePositionLabel();
+
   }
   else if(key==Qt::Key_Right)
   {
     gotoPrevious();
+    updatePositionLabel();
   }
   else if(key==Qt::Key_Escape)
   {
@@ -395,5 +398,10 @@ void Selector::showEvent(QShowEvent *event)
    initialize();
    event->accept();
   }
+}
+
+void Selector::updatePositionLabel()
+{
+  ui->lblPosition->setText(QString("<b>%1/%2</b>").arg(_currentIndex).arg(_history->length()));
 }
 

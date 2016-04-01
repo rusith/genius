@@ -221,9 +221,7 @@ void Controller::showViews()
 
 void Controller::addItem(ClipboardEntity *entity, int index)
 {
-
   if(!entity) return;
-
   int reference=entity->ref();
   if(entity->hasImage())
   {
@@ -252,6 +250,18 @@ void Controller::addItem(ClipboardEntity *entity, int index)
     QString text=entity->HTMLText(false,(GSettings::limitcharLength ? GSettings::limitedCharLength : -1));
     if(GSettings::showInSingleLine)
       ToolKit::removeNewLines(&text);
+    QString tooltipText=QString("added time : %1 ").arg(entity->addedTime()->toString("hh.mm.ss.zzz AP"));
+    _manager->addTextItem(&text,&tooltipText,reference,index);
+    _trayIcon->addTextAction(&text,&tooltipText,reference,index);
+  }
+  else
+  {
+    QString text=QString("formats : %1 size : %2 KB")
+                 .arg(entity->formats().size())
+                 .arg((double)entity->size()/1024);
+    QString tooltipText=QString("added time : %1 ").arg(entity->addedTime()->toString("hh.mm.ss.zzz AP"));
+    _manager->addTextItem(&text,&tooltipText,reference,index);
+    _trayIcon->addTextAction(&text,&tooltipText,reference,index);
   }
 }
 
@@ -279,22 +289,15 @@ void Controller::createHotkeys()
 
 }
 
-/**
- * @brief create connections between application elements
- */
 void Controller::createConnections()
 {
-  //-----------------------------------clipboardConnection
   connect(_clipboard,SIGNAL(changed(QClipboard::Mode)),this,SLOT(clipboardChanged(QClipboard::Mode)));
 
-  //-----------------------------------connection with clipboardHistory
   connect(_history,SIGNAL(added(ClipboardEntity*,int)),this,SLOT(history_itemAdded(ClipboardEntity*,int)));
   connect(_history,SIGNAL(removed(int,int)),this,SLOT(history_removed(int,int)));
   connect(_history,SIGNAL(cleared()),this,SLOT(history_cleared()));
   connect(_history,SIGNAL(locationExchanged(int,int)),this,SLOT(locationExchanged(int,int)));
-  // connect(_history,SIGNAL(updated(ClipboardItem*)),this,SLOT(history_itemUpdated(ClipboardItem*)));
 
-  //------------------------------------connection with clipboard Manager
   connect(_manager,SIGNAL(shown()),this,SLOT(manager_shown()));
   connect(_manager,SIGNAL(hidden()),this,SLOT(manager_hidden()));
   connect(_manager,SIGNAL(hidden()),_trayIcon,SLOT(managerHidden()));
@@ -311,9 +314,9 @@ void Controller::createConnections()
   connect(_trayIcon,SIGNAL(turnOnGenius()),this,SLOT(turnOnRequest()));
   connect(_trayIcon,SIGNAL(exitRequested()),this,SLOT(exitRequested()));
 
-
   connect(_selector,SIGNAL(closing(int)),this,SLOT(selectorClosed(int)));
   connect(_settingsWindow,SIGNAL(hiding()),this,SLOT(settingsWindow_hidden()));
+
   if(_openSelectorHotkey)
     connect(_openSelectorHotkey,SIGNAL(activated()),this,SLOT(openSelectorHKtriggered()));
 
@@ -335,7 +338,6 @@ void Controller::createConnections()
   if(_historyMenuHotKey)
     connect(_historyMenuHotKey,SIGNAL(activated()),this,SLOT(historyMenuHotkeyActivated()));
 }
-
 
 void Controller::selectItem(int reference)
 {

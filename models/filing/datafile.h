@@ -146,19 +146,35 @@ public:
    */
   QStringList imageFormats();
 
+  /**
+   * @brief overrided operator for check equelity
+   * @param right hand side object
+   * @return true if equal
+   */
   bool operator ==(const DataFile &rhs) const ;
 
+  /**
+   * @brief overrided operator for check equelity
+   * @param right hand side object
+   * @return true if equal
+   */
   bool operator ==(DataFile *rhs) const;
+
+  /**
+   * @brief used to get size of the object's data
+   * @return size
+   */
+  quint64 size();
 private:
   /**
    * @brief _fragments (Hash for manage formats)
    */
-  QHash<QString,FragmentFrame> *_fragments;
+  QHash<QString,FragmentFrame> *_fragments=NULL;
 
   /**
    * @brief file relevant to this object
    */
-  QFile *_file;
+  QFile *_file=NULL;
 
   /**
    * @brief check one or more formats available in the object

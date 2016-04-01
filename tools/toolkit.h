@@ -3,8 +3,9 @@
 #include <QString>
 #include <QList>
 #include <QUrl>
-#include <models/filing/fragmentframe.h>
 #include <QList>
+#include <tools/rtimer.h>
+#include <models/filing/fragmentframe.h>
 
 class ToolKit
 {
@@ -12,7 +13,8 @@ public:
   ToolKit();
   static void removeNewLines(QString *text);
   static QString URlsToString(QList<QUrl> *urls);
-  const static FragmentFrame maxValue(const QList<FragmentFrame> &frames);
+  static FragmentFrame maxValue(const QList<FragmentFrame> &frames);
+  static void Sort(QList<FragmentFrame> *frames);
 };
 
 #endif // TOOLKIT_H

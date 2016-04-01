@@ -63,6 +63,8 @@ private:
   void keyReleaseEvent(QKeyEvent *event);
   void showEvent(QShowEvent *event);
   void hideEvent(QHideEvent *event);
+
+  void updatePositionLabel();
 };
 
 #endif // SELECTOR_H
