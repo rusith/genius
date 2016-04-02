@@ -35,6 +35,13 @@ public:
    * @param reference to delete
    */
   void remove(const int &reference);
+
+  /**
+   * @brief remove given entity from the list. the give entity will deleted if its availabel or not avaiabel in the list
+   * @param entity to removes
+   */
+  void remove(ClipboardEntity *entity);
+
   /**
    * @brief remove item at specific index (starting from 0)
    * @param index to remove
@@ -94,17 +101,10 @@ public:
    */
   int indexOf(ClipboardEntity *entity);
   /**
-   * @brief move an entity down by one . entityMovedDown signal will emit if this operation is successfull
-   * @param entity to move
+   * @brief exchange locations of two item
+   * @param ref1
+   * @param ref2
    */
-  void moveEntityDown(ClipboardEntity *entity);
-
-  /**
-   * @brief move entity up by one . entityMovedUp signal will emit if the operation successfull
-   * @param entity to move up
-   */
-  void moveEntityUp(ClipboardEntity *entity);
-
   void exchangeLocation(int ref1,int ref2);
 
 
@@ -143,6 +143,11 @@ signals:
    */
   void entityMovedUp(ClipboardEntity *entity);
 
+  /**
+   * @brief triggered when a location  is changed of an item
+   * @param ref1
+   * @param ref2
+   */
   void locationExchanged(int ref1,int ref2);
 
 private:

@@ -1,6 +1,7 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
+
 #include <QObject>
 #include <QDebug>
 #include <QApplication>
@@ -19,6 +20,7 @@
 #include <controllers/tempfolder.h>
 #include <models/filing/datafile.h>
 #include <controllers/fakekey.h>
+
 class Controller : public QObject
 {
   Q_OBJECT
@@ -26,6 +28,8 @@ public:
   explicit Controller(QObject *parent = 0);
   ~Controller();
   void start();
+
+  static const int WAIT_BEFORE_PASTE=100;
 
 signals:
 private slots:
@@ -36,15 +40,12 @@ private slots:
    */
   void clipboardChanged(QClipboard::Mode mode);
   void itemSelected(int reference);
-  //void editRequested(ClipboardItem *item);
 
-  //---------------------------history slots
+
   void history_itemAdded(ClipboardEntity *entity,int index);
   void history_removed(int reference,int index);
   void history_cleared();
-  //void history_itemUpdated(ClipboardEntity *entity);
 
-  //----------------------------views related slots
   void settingsWindowRequested();
   void showHideManagerRequest();
   void selectorClosed(int currentIndex);
@@ -57,13 +58,11 @@ private slots:
   void turnOnRequest();
   void exitRequested();
 
-  //---------------------------------hotKey slots
   void openSelectorHKtriggered();
   void clearHistoryHKTrigered();
   void pasteLasteHKTrigered();
   void openManagerHKTriggered();
   void openSettingsHKTriggered();
-  void directCopyHKTriggered();
 
   /**
    * @brief calls when _historyMenuHotKey activated. (connected using signal and slots)
@@ -104,7 +103,6 @@ private:
   QHotkey *_pasteLastHotKey=NULL;
   QHotkey *_openManagerHotKey=NULL;
   QHotkey *_openSettingsHotKey=NULL;
-  QHotkey *_directCopyHotkey=NULL;
 
   /**
    * @brief hotkey for show history menu (inside the trayIcon). then user can select item from the menu

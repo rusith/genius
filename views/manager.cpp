@@ -35,7 +35,7 @@ void Manager::addImageItem(QString *text, QIcon *icon,int reference,int index)
 
 void Manager::removeItem(int reference)
 {
-  int count=ui->list->count();
+   int count=ui->list->count();
   if(count>0)
   {
     QListWidgetItem *item;

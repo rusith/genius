@@ -15,6 +15,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
+#include <QDesktopServices>
 #include <models/clipboardentity.h>
 #include <resources/resources.h>
 
@@ -70,6 +71,10 @@ private:
    */
   void addImageTab();
 
+  /**
+   * @brief add urls tab to the window
+   */
+  void addURLsTab();
   /**
    * @brief get user friendly text of an mimeType text
    * @param MimeType text

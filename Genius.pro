@@ -28,7 +28,9 @@ SOURCES += main.cpp \
     models/clipboardentity.cpp \
     views/contentviewer.cpp \
     tools/rtimer.cpp \
-    models/filing/fragmentframe.cpp
+    models/filing/fragmentframe.cpp \
+    views/about.cpp \
+    views/license.cpp
 
 HEADERS  += \
     views/manager.h \
@@ -46,13 +48,17 @@ HEADERS  += \
     models/clipboardentity.h \
     views/contentviewer.h \
     tools/rtimer.h \
-    models/filing/fragmentframe.h
+    models/filing/fragmentframe.h \
+    views/about.h \
+    views/license.h
 
 FORMS    += \
     views/manager.ui \
     views/selector.ui \
     views/settingswindow.ui \
-    views/contentviewer.ui
+    views/contentviewer.ui \
+    views/about.ui \
+    views/license.ui
 
 DISTFILES +=
 

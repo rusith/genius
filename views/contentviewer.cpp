@@ -24,6 +24,7 @@ void ContentViewer::initializeBasicUI()
     ui->lbAddedTime->setText("<b>Added Time :</b> "+_entity->addedTime()->toString("hh.mm.ss.zzz AP"));
     addImageTab();
     addHTMLTab();
+    addURLsTab();
     addPlainTextTab();
   }
 }
@@ -237,7 +238,7 @@ void ContentViewer::addImageTab()
     if(formats.isEmpty()==false)
     {
       QWidget *imageTab=new QWidget(ui->tvFormats);
-      imageTab->setObjectName("image");
+      imageTab->setObjectName("imaaddURLsTabge");
       imageTab->setWindowTitle("image");
 
       QVBoxLayout *imageTabLayout=new QVBoxLayout(imageTab);
@@ -323,6 +324,45 @@ void ContentViewer::addImageTab()
   }
 }
 
+void ContentViewer::addURLsTab()
+{
+  if(_entity->hasURLs())
+  {
+    QWidget *tab=new QWidget(ui->tvFormats);
+    tab->setObjectName("URLS");
+    tab->setWindowTitle("URLS");
+
+    QVBoxLayout *tabLayout=new QVBoxLayout(tab);
+    tabLayout->setMargin(5);
+
+    QTextBrowser *textBrowser=new QTextBrowser(tab);
+    textBrowser->setOpenLinks(false);
+    textBrowser->setWordWrapMode(QTextOption::NoWrap);
+    QList<QUrl> urls=_entity->urls();
+    QString text;
+    foreach (QUrl url, urls)
+    {
+      qDebug()<<url.toString();
+      if(url.scheme()=="file")
+      {
+        QString filename=url.fileName();
+        text.append(QString("<p><a href=\""+url.toString()+"\"><span style=\" font-weight:600; text-decoration: none; color:#0000ff;\">(file) "+filename+"</span></a></p>"));
+      }
+      else
+      {
+        QString path=url.toString();
+        text.append(QString("<p><a href=\""+path+"\"><span style=\" font-weight:600; text-decoration: none; color:#0000ff;\">"+path+"</span></a></p>"));
+      }
+    }
+    textBrowser->setHtml(text);
+    connect(textBrowser,&QTextBrowser::anchorClicked,this,[textBrowser](const QUrl &link){
+      QDesktopServices::openUrl(link);
+    });
+    tabLayout->addWidget(textBrowser);
+    tab->setLayout(tabLayout);
+    ui->tvFormats->addTab(tab,"URLS");
+  }
+}
 
 
 QString ContentViewer::imageMimeTypeToText(const QString &MT)

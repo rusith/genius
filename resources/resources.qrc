@@ -19,5 +19,7 @@
         <file>images/show16.png</file>
         <file>images/up16.png</file>
         <file>images/down16.png</file>
+        <file>images/LOGO64.png</file>
+        <file>images/info16.png</file>
     </qresource>
 </RCC>

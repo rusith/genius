@@ -39,8 +39,8 @@ void ClipboardHistory::pushFront(ClipboardEntity *entity)
 {
   if(entity)
   {
-    _list->push_front(entity);
     manageLength();
+    _list->push_front(entity);
     emit added(entity,0);
   }
 }
@@ -65,6 +65,23 @@ void ClipboardHistory::remove(const int &reference)
        return;
      }
    }
+  }
+}
+
+void ClipboardHistory::remove(ClipboardEntity *entity)
+{
+  if(entity)
+  {
+    if(_list->contains(entity))
+    {
+      int index=_list->indexOf(entity);
+      _list->removeAt(index);
+      int ref=entity->ref();
+      delete entity;
+      removed(ref,index);
+      return;
+    }
+    delete entity;
   }
 }
 
@@ -194,41 +211,12 @@ int ClipboardHistory::indexOf(ClipboardEntity *entity)
 
 void ClipboardHistory::manageLength()
 {
-  int max=GSettings::maximumItemsInHistory;
-  while (_list->length()>max)
-    removeAt(_list->length()-1);
-}
-
-void ClipboardHistory::moveEntityDown(ClipboardEntity *entity)
-{
-  if(!entity || _list->length()<2 )
-    return;
-  int itmidx=indexOf(entity);
-  if(itmidx!=0 && itmidx!=_list->size()-1)
+  if(_list->length()>0)
   {
-    ClipboardEntity *next=at(itmidx-1);
-    if(next)
-    {
-      _list->swap(itmidx,itmidx-1);
-      emit entityMovedDown(entity);
-    }
-  }
-}
+     int max=GSettings::maximumItemsInHistory;
+     while (_list->length()>=max)
+       remove(_list->last());
 
-void ClipboardHistory::moveEntityUp(ClipboardEntity *entity)
-{
-
-  if(!entity || _list->length()<3 )
-    return;
-  int itmidx=indexOf(entity);
-  if(itmidx>1)
-  {
-    ClipboardEntity *next=at(itmidx+1);
-    if(next)
-    {
-      _list->swap(itmidx,itmidx+1);
-      emit entityMovedUp(entity);
-    }
   }
 }
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>440</width>
-    <height>337</height>
+    <width>367</width>
+    <height>327</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,8 +23,8 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>421</width>
-      <height>321</height>
+      <width>351</width>
+      <height>311</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -43,7 +43,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>2</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="General_Tab">
         <attribute name="title">
@@ -54,8 +54,8 @@
           <rect>
            <x>10</x>
            <y>10</y>
-           <width>391</width>
-           <height>220</height>
+           <width>299</width>
+           <height>123</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="VL2">
@@ -72,26 +72,32 @@
            <number>5</number>
           </property>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_14">
+           <layout class="QHBoxLayout" name="HL3">
             <item>
-             <widget class="QLabel" name="label_15">
+             <widget class="QLabel" name="label_2">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;the maximum number of items store in the history. maximum is 100&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
               <property name="text">
-               <string>InMemory Text Limit</string>
+               <string>Maximum Items In History</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="inMemoryTextLimit_sb">
+             <widget class="QSpinBox" name="maximumItemsInHistory">
               <property name="minimum">
                <number>1</number>
               </property>
               <property name="maximum">
-               <number>1000</number>
+               <number>100</number>
+              </property>
+              <property name="value">
+               <number>40</number>
               </property>
              </widget>
             </item>
             <item>
-             <spacer name="horizontalSpacer_5">
+             <spacer name="horizontalSpacer">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -141,109 +147,6 @@
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QGroupBox" name="groupBox">
-            <property name="title">
-             <string/>
-            </property>
-            <widget class="QWidget" name="layoutWidget">
-             <property name="geometry">
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>343</width>
-               <height>29</height>
-              </rect>
-             </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_13">
-              <item>
-               <widget class="QLabel" name="label_13">
-                <property name="text">
-                 <string>              Maximum Image Size</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QSpinBox" name="maximumImageWidth_sb">
-                <property name="minimum">
-                 <number>1</number>
-                </property>
-                <property name="maximum">
-                 <number>500</number>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_14">
-                <property name="text">
-                 <string>X</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QSpinBox" name="maximumImageHight_sb">
-                <property name="minimum">
-                 <number>1</number>
-                </property>
-                <property name="maximum">
-                 <number>500</number>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="saveURLs">
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;check if you want to save URLs to the history&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="text">
-             <string>Save URLs</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="HL3">
-            <item>
-             <widget class="QLabel" name="label_2">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;the maximum number of items store in the history. maximum is 100&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>Maximum Items In History</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="maximumItemsInHistory">
-              <property name="minimum">
-               <number>1</number>
-              </property>
-              <property name="maximum">
-               <number>100</number>
-              </property>
-              <property name="value">
-               <number>40</number>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
          </layout>
         </widget>
        </widget>
@@ -256,8 +159,8 @@
           <rect>
            <x>10</x>
            <y>10</y>
-           <width>391</width>
-           <height>111</height>
+           <width>321</width>
+           <height>137</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="VL3">
@@ -282,6 +185,43 @@
              <string>Show In Single Line</string>
             </property>
            </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QLabel" name="label_13">
+              <property name="text">
+               <string>Image Size</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="sbImageWidth"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_14">
+              <property name="text">
+               <string>X</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="sbImageHieght"/>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </item>
           <item>
            <layout class="QHBoxLayout" name="HL2">
@@ -360,8 +300,8 @@
           <rect>
            <x>10</x>
            <y>10</y>
-           <width>394</width>
-           <height>235</height>
+           <width>321</width>
+           <height>200</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
@@ -482,27 +422,6 @@
             </item>
            </layout>
           </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_5">
-            <item>
-             <widget class="QCheckBox" name="directCopyCB">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;check if you want to enable &lt;span style=&quot; font-weight:600;&quot;&gt;DirectCopy Global Hotkey&lt;/span&gt;&lt;/p&gt;&lt;p&gt;if you press this hotkey, the copy command executes and send data directly to the genius.(without saving in clipboard)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>Direct Copy     </string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QKeySequenceEdit" name="directCopy">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;hotkey for Direct copy&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
          </layout>
         </widget>
        </widget>
@@ -515,7 +434,7 @@
           <rect>
            <x>10</x>
            <y>10</y>
-           <width>391</width>
+           <width>324</width>
            <height>214</height>
           </rect>
          </property>
@@ -876,38 +795,6 @@ background-color:red;
     <hint type="destinationlabel">
      <x>344</x>
      <y>215</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>directCopyCB</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>directCopy</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>138</x>
-     <y>247</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>411</x>
-     <y>250</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>saveImages</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>groupBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>84</x>
-     <y>127</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>28</x>
-     <y>161</y>
     </hint>
    </hints>
   </connection>

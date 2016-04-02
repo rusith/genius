@@ -2,19 +2,19 @@
 #define GSETTINGS_H
 #include <QSettings>
 #include <QKeySequence>
-
+#include <QFile>
 class GSettings
 {
 public:
   GSettings();
   static void initialize();
   static void commit();
+  static void resetToDefault();
   static bool showInSingleLine;
   static bool limitcharLength;
   static int limitedCharLength;
   static int maximumItemsInHistory;
   static bool saveImages;
-  static bool saveUrls;
   static bool openMinimized;
   static bool pasteAutomaticlay;
   static int historyItemLimit;
@@ -24,13 +24,11 @@ public:
   static QKeySequence pasteLastHotKey;
   static QKeySequence openManagerHotkey;
   static QKeySequence openSettingsHotKey;
-  static QKeySequence directCopyHotKey;
 
   static bool clearHistoryHotKeyEnabled;
   static bool pasteLastHotKeyEnabled;
   static bool openManagerHotkeyEnabled;
   static bool openSettingsHotKeyEnabled;
-  static bool directCopyHotKeyEnabled;
 
   static QString selectorItemBackgroundColor;
   static QString selectorTextColor;
@@ -48,11 +46,6 @@ public:
    * @brief maximum image width.images larger than this are saved in a file
    */
   static int maximumImageHight;
-
-  /**
-   * @brief  maximum text length an item can save in memory
-   */
-  static int inMemoryTextLength;
 
   /**
    * @brief is the historyMenu hotkey enabled ?

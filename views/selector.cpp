@@ -381,7 +381,7 @@ void Selector::keyPressEvent(QKeyEvent *event)
 void Selector::keyReleaseEvent(QKeyEvent *event)
 {
   int key=event->key();
-  if(key==Qt::Key_Shift||key==Qt::Key_Shift)
+  if(key==Qt::Key_Control||key==Qt::Key_Alt)
     hide();
 }
 

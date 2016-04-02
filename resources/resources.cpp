@@ -23,4 +23,5 @@ const QString Resources::on16=":/images/images/on16.png";
 const QString Resources::show16=":/images/images/show16.png";
 const QString Resources::up16=":/images/images/up16.png";
 const QString Resources::downn16=":/images/images/down16.png";
+const QString Resources::info16=":/images/images/info16.png";
 TempFolder Resources::tempFolder;

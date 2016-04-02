@@ -10,6 +10,7 @@
 #include <QPoint>
 #include <models/clipboardhistory.h>
 #include <resources/resources.h>
+#include <views/about.h>
 #include <controllers/fakekey.h>
 
 class TrayIcon : public QWidget
@@ -62,6 +63,7 @@ private:
   QAction *_clearAction=NULL;
   QAction *_settingsAction=NULL;
   QAction *_onOffAction=NULL;
+  QAction *_aboutAction=NULL;
 
   /**
    * @brief paste when a item in historyMenu is selected

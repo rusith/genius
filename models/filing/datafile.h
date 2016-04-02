@@ -9,6 +9,7 @@
 #include <QTime>
 #include <QScopedPointer>
 #include <QImage>
+#include <QUrl>
 #include <QStringList>
 #include <QElapsedTimer>
 #include <tools/rtimer.h>
@@ -165,6 +166,18 @@ public:
    * @return size
    */
   quint64 size();
+
+  /**
+   * @brief used to check the data file contais list of URLS
+   * @return true or false
+   */
+  bool hasUrls();
+
+  /**
+   * @brief used to get list of urls from the data file
+   * @return returns empty list if no urls availabel
+   */
+  QList<QUrl> urls();
 private:
   /**
    * @brief _fragments (Hash for manage formats)

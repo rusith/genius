@@ -147,3 +147,13 @@ quint64 ClipboardEntity::size()
 {
   return _dataFile->size();
 }
+
+bool ClipboardEntity::hasURLs()
+{
+  return _dataFile->hasUrls();
+}
+
+QList<QUrl> ClipboardEntity::urls()
+{
+  return _dataFile->urls();
+}

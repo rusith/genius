@@ -1,4 +1,0 @@
-add setting to maximum image size -- PENDING
-modify image editor -- PENDING
-
-

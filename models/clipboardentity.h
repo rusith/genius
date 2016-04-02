@@ -135,6 +135,18 @@ public:
    * @return size
    */
   quint64 size();
+
+  /**
+   * @brief used to check the data file has list of urls
+   * @return true or false
+   */
+  bool hasURLs();
+
+  /**
+   * @brief used to get the list of urls of thed
+   * @return
+   */
+  QList<QUrl> urls();
 private:
   /**
    * @brief refId of the object

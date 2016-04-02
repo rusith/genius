@@ -13,25 +13,51 @@ void ToolKit::removeNewLines(QString *text)
   }
 }
 
-QString ToolKit::URlsToString(QList<QUrl> *urls)
+QString ToolKit::URlsToString(QList<QUrl> *urls, const QString &seperator, bool numbers, const QString &numFormat)
 {
   QString text;
+
   int length=urls->length();
   if(urls && length>0)
   {
-    QUrl url;
-    for(int i=0;i<length;i++)
+    QString format;
+    if(numbers)
     {
-      url=urls->at(i);
-      text.append((i!=0?" | ":"")+url.toString()+"\n");
+      if(numFormat.contains("%1"))
+        format.append(numFormat);
+      else
+        format.append("%1. ");
+      format.append("%2");
+    }
+    else
+      format.append("%1");
 
+    if(seperator.isEmpty()==false)
+      format.append(seperator);
+    else
+      format.append("|");
+    if(numbers)
+    {
+
+      for(int i=0;i<length;i++)
+      {
+        QUrl url=urls->at(i);
+        text.append(format.arg(i).arg(url.toString()));
+      }
+    }
+    else
+    {
+      for(int i=0;i<length;i++)
+      {
+        QUrl url=urls->at(i);
+        text.append(format.arg(url.toString()));
+      }
     }
     return text;
   }
   else
-  {
     return text;
-  }
+
 }
 
 FragmentFrame ToolKit::maxValue(const QList<FragmentFrame> &frames)

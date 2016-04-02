@@ -90,7 +90,7 @@ void Controller::selectorClosed(int currentIndex)
     itemSelected(reference);
     if(GSettings::pasteAutomaticlay)
     {
-      QThread::msleep(50);
+      QThread::msleep(WAIT_BEFORE_PASTE);
       FakeKey::simulatePaste();
     }
   }
@@ -175,11 +175,6 @@ void Controller::openSettingsHKTriggered()
   }
 }
 
-void Controller::directCopyHKTriggered()
-{
-  FakeKey::simulateCopy();
-  _clipboard->clear(QClipboard::Clipboard);
-}
 
 void Controller::start()
 {
@@ -221,7 +216,7 @@ void Controller::showViews()
 
 void Controller::addItem(ClipboardEntity *entity, int index)
 {
-  if(!entity) return;
+  if(!entity || _history->isEmpty()) return;
   int reference=entity->ref();
   if(entity->hasImage())
   {
@@ -234,6 +229,20 @@ void Controller::addItem(ClipboardEntity *entity, int index)
       _manager->addImageItem(&text,&icon,reference,index);
       _trayIcon->addImageAction(&text,&icon,reference,index);
     }
+  }
+  else if(entity->hasURLs())
+  {
+    QList<QUrl> urls=entity->urls();
+    QString text=ToolKit::URlsToString(&urls);
+    if(GSettings::showInSingleLine)
+      ToolKit::removeNewLines(&text);
+    if(GSettings::limitcharLength)
+      if(text.length()>GSettings::limitedCharLength)
+        text=text.left(GSettings::limitedCharLength);
+
+    QString tooltipText=QString("added time : %1 ").arg(entity->addedTime()->toString("hh.mm.ss.zzz AP"));
+    _manager->addTextItem(&text,&tooltipText,reference,index);
+    _trayIcon->addTextAction(&text,&tooltipText,reference,index);
   }
   else if(entity->hasPlainText())
   {
@@ -254,6 +263,7 @@ void Controller::addItem(ClipboardEntity *entity, int index)
     _manager->addTextItem(&text,&tooltipText,reference,index);
     _trayIcon->addTextAction(&text,&tooltipText,reference,index);
   }
+
   else
   {
     QString text=QString("formats : %1 size : %2 KB")
@@ -267,7 +277,7 @@ void Controller::addItem(ClipboardEntity *entity, int index)
 
 void Controller::createHotkeys()
 {
-  _openSelectorHotkey=new QHotkey(QKeySequence("Ctrl+Shift+V"),true);
+  _openSelectorHotkey=new QHotkey(QKeySequence("Ctrl+Alt+V"),true);
 
   if(GSettings::clearHistoryHotKeyEnabled)
      _clearHistoryHotKey=new QHotkey(GSettings::clearHistoryHotKey,true);
@@ -280,9 +290,6 @@ void Controller::createHotkeys()
 
   if(GSettings::openSettingsHotKeyEnabled)
      _openSettingsHotKey=new QHotkey(GSettings::openSettingsHotKey,true);
-
-  if(GSettings::directCopyHotKeyEnabled)
-     _directCopyHotkey=new QHotkey(GSettings::directCopyHotKey,true);
 
   if(GSettings::historyMenuHotkeyEnabled)
     _historyMenuHotKey=new QHotkey(GSettings::historyMenuHotkey,true);
@@ -331,9 +338,6 @@ void Controller::createConnections()
 
   if(_openSettingsHotKey)
     connect(_openSettingsHotKey,SIGNAL(activated()),this,SLOT(openSettingsHKTriggered()));
-
-  if(_directCopyHotkey)
-    connect(_directCopyHotkey,SIGNAL(activated()),this,SLOT(directCopyHKTriggered()));
 
   if(_historyMenuHotKey)
     connect(_historyMenuHotKey,SIGNAL(activated()),this,SLOT(historyMenuHotkeyActivated()));
@@ -405,11 +409,6 @@ void Controller::deleteHotkeys()
      delete _openSettingsHotKey;
   }
 
-  if(_directCopyHotkey)
-  {
-     _directCopyHotkey->setRegistered(false);
-     delete _directCopyHotkey;
-  }
 
   if(_historyMenuHotKey)
   {
@@ -463,13 +462,8 @@ void Controller::enableHotkeys(bool enable)
   if(_openManagerHotKey)
      _openManagerHotKey->setRegistered(enable);
 
-
   if(_openSettingsHotKey)
      _openSettingsHotKey->setRegistered(enable);
-
-  if(_directCopyHotkey)
-     _directCopyHotkey->setRegistered(enable);
-
 
   if(_historyMenuHotKey)
     _historyMenuHotKey->setRegistered(enable);

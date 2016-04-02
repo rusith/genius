@@ -23,11 +23,8 @@ void SettingsWindow::initializeUI()
 void SettingsWindow::initializeElements()
 {
 
-
-
   ui->openMinimizedCheckbox->setChecked(GSettings::openMinimized);
   ui->saveImages->setChecked(GSettings::saveImages);
-  ui->saveURLs->setChecked(GSettings::saveUrls);
   ui->ShowInSingleLineCheckBox->setChecked(GSettings::showInSingleLine);
   ui->maximumItemsInHistory->setValue(GSettings::maximumItemsInHistory);
   ui->HistoryMenuLimit->setValue(GSettings::historyItemLimit);
@@ -46,13 +43,11 @@ void SettingsWindow::initializeElements()
   ui->pasteLast->setKeySequence(GSettings::pasteLastHotKey);
   ui->openManager->setKeySequence(GSettings::openManagerHotkey);
   ui->openSettings->setKeySequence(GSettings::openSettingsHotKey);
-  ui->directCopy->setKeySequence(GSettings::directCopyHotKey);
 
   ui->clearHistoryCB->setChecked(GSettings::clearHistoryHotKeyEnabled);
   ui->pasteLastCB->setChecked(GSettings::pasteLastHotKeyEnabled);
   ui->openManagerCB->setChecked(GSettings::openManagerHotkeyEnabled);
   ui->openSettingsCB->setChecked(GSettings::openSettingsHotKeyEnabled);
-  ui->directCopyCB->setChecked(GSettings::directCopyHotKeyEnabled);
 
   ui->SBCPreview->setStyleSheet("QLabel{\n	background:"+GSettings::selectorItemBackgroundColor+";\n background-repeat: repeat-y;\n  background-position: left;\n}");
   ui->SBCPreview->setText(GSettings::selectorItemBackgroundColor);
@@ -65,10 +60,8 @@ void SettingsWindow::initializeElements()
   ui->animationDurationInput->setText(QString("%1").arg(GSettings::selectorAnimationDuration));
   ui->BorderRadiusSpinBox->setValue(GSettings::selectorBorderRadius);
 
-  ui->maximumImageWidth_sb->setValue(GSettings::maximumImageWidth);
-  ui->maximumImageHight_sb->setValue(GSettings::maximumImageHight);
-  ui->inMemoryTextLimit_sb->setValue(GSettings::inMemoryTextLength);
-
+  ui->sbImageWidth->setValue(GSettings::maximumImageWidth);
+  ui->sbImageHieght->setValue(GSettings::maximumImageHight);
 
   ui->historyMenuHotkey_kse->setKeySequence(GSettings::historyMenuHotkey);
   ui->historyMenu_cb->setChecked(GSettings::historyMenuHotkeyEnabled);
@@ -78,7 +71,6 @@ void SettingsWindow::saveData()
 {
   GSettings::openMinimized=ui->openMinimizedCheckbox->isChecked();
   GSettings::saveImages=ui->saveImages->isChecked();
-  GSettings::saveUrls=ui->saveURLs->isChecked();
   GSettings::showInSingleLine=ui->ShowInSingleLineCheckBox->isChecked();
   GSettings::maximumItemsInHistory=ui->maximumItemsInHistory->value();
   GSettings::historyItemLimit=ui->HistoryMenuLimit->value();
@@ -97,13 +89,11 @@ void SettingsWindow::saveData()
   GSettings::pasteLastHotKey=ui->pasteLast->keySequence();
   GSettings::openManagerHotkey=ui->openManager->keySequence();
   GSettings::openSettingsHotKey=ui->openSettings->keySequence();
-  GSettings::directCopyHotKey=ui->directCopy->keySequence();
 
   GSettings::clearHistoryHotKeyEnabled=ui->clearHistoryCB->isChecked();
   GSettings::pasteLastHotKeyEnabled=ui->pasteLastCB->isChecked();
   GSettings::openManagerHotkeyEnabled=ui->openManagerCB->isChecked();
   GSettings::openSettingsHotKeyEnabled=ui->openSettingsCB->isChecked();
-  GSettings::directCopyHotKeyEnabled=ui->directCopyCB->isChecked();
 
   GSettings::selectorItemBackgroundColor=ui->SBCPreview->text();
   GSettings::selectorTextColor=ui->textColorPreview->text();
@@ -112,9 +102,8 @@ void SettingsWindow::saveData()
   GSettings::selectorAnimationDuration=ui->animationDurationInput->text().toInt();
   GSettings::selectorBorderRadius=ui->BorderRadiusSpinBox->value();
 
-  GSettings::maximumImageWidth=ui->maximumImageWidth_sb->value();
-  GSettings::maximumImageHight=ui->maximumImageHight_sb->value();
-  GSettings::inMemoryTextLength=ui->inMemoryTextLimit_sb->value();
+  GSettings::maximumImageWidth=ui->sbImageWidth->value();
+  GSettings::maximumImageHight=ui->sbImageHieght->value();
 
   GSettings::historyMenuHotkeyEnabled=ui->historyMenu_cb->isChecked();
   GSettings::historyMenuHotkey=ui->historyMenuHotkey_kse->keySequence();
@@ -122,7 +111,6 @@ void SettingsWindow::saveData()
   GSettings::commit();
 }
 
-//----------------------------------------------------------events
 void SettingsWindow::showEvent(QShowEvent *event)
 {
   initializeUI();
@@ -142,7 +130,6 @@ void SettingsWindow::closeEvent(QCloseEvent *event)
   hide();
 }
 
-//--------------------------------------------slots
 void SettingsWindow::on_saveButton_clicked()
 {
   saveData();
@@ -153,7 +140,6 @@ void SettingsWindow::on_cancelButton_clicked()
 {
   hide();
 }
-
 
 void SettingsWindow::on_SBCSelectButton_clicked()
 {
@@ -218,41 +204,6 @@ void SettingsWindow::on_defaultButton_clicked()
 
 void SettingsWindow::setToDefault()
 {
-  ui->openMinimizedCheckbox->setChecked(true);
-  ui->saveImages->setChecked(true);
-  ui->saveURLs->setChecked(true);
-  ui->ShowInSingleLineCheckBox->setChecked(true);
-  ui->maximumItemsInHistory->setValue(40);
-  ui->HistoryMenuLimit->setValue(20);
-  ui->LimitTextLengthCheckbox->setChecked(true);
-  ui->TextLimitSpinBox->setValue(40);
-  ui->pasteAutomaticalyButoon->setChecked(true);
-  ui->clearHistory->setKeySequence(QKeySequence("Ctrl+Shift+Alt+C"));
-  ui->pasteLast->setKeySequence(QKeySequence("Ctrl+Shift+V"));
-  ui->openManager->setKeySequence(QKeySequence("Ctrl+Shift+Alt+M"));
-  ui->directCopy->setKeySequence(QKeySequence("Ctrl+Alt+C"));
-
-  ui->clearHistoryCB->setChecked(true);
-  ui->pasteLastCB->setChecked(true);
-  ui->openManagerCB->setChecked(true);
-  ui->openSettingsCB->setChecked(true);
-  ui->directCopyCB->setChecked(true);
-
-  ui->SBCPreview->setStyleSheet("QLabel{\n	background:lightblue;\n background-repeat: repeat-y;\n  background-position: left;\n}");
-  ui->SBCPreview->setText("lightblue");
-  ui->textColorPreview->setStyleSheet("QLabel{\n	background:black;\n background-repeat: repeat-y;\n  background-position: left;\n}");
-  ui->textColorPreview->setText("black");
-
-  ui->borderSizeSpinBox->setValue(4);
-  ui->BorederColorPreview->setStyleSheet("QLabel{\n	background:blue;\n background-repeat: repeat-y;\n  background-position: left;\n}");
-  ui->BorederColorPreview->setText("blue");
-  ui->animationDurationInput->setText(QString("%1").arg(100));
-  ui->BorderRadiusSpinBox->setValue(10);
-
-  ui->maximumImageWidth_sb->setValue(100);
-  ui->maximumImageHight_sb->setValue(100);
-  ui->inMemoryTextLimit_sb->setValue(500);
-
-  ui->historyMenu_cb->setChecked(true);
-  ui->historyMenuHotkey_kse->setKeySequence(QKeySequence("Ctrl+Alt+Shift+V"));
+  GSettings::resetToDefault();
+  initializeElements();
 }

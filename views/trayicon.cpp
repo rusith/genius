@@ -41,6 +41,12 @@ void TrayIcon::constructIcon()
   _onOffAction->setToolTip("turn off genius . new items will not added to the list until turn on");
   _menu->addAction(_onOffAction);
 
+  _aboutAction=new QAction(_menu);
+  _aboutAction->setIcon(QIcon(Resources::info16));
+  _aboutAction->setIconText("about");
+  _aboutAction->setToolTip("about genius ");
+  _menu->addAction(_aboutAction);
+
   _exitAction=new QAction(_menu);
   _exitAction->setIcon(QIcon(Resources::exit16));
   _exitAction->setIconText("exit");
@@ -209,6 +215,19 @@ void TrayIcon::menuActionTrigered(QAction *action)
       emit turnOnGenius();
     }
   }
+  else if(action==_aboutAction)
+  {
+    try
+    {
+      About ab(0);
+      ab.exec();
+
+    }
+    catch (int i)
+    {
+
+    }
+  }
 }
 
 void TrayIcon::historyMenuActionTriggered(QAction *action)
@@ -218,7 +237,10 @@ void TrayIcon::historyMenuActionTriggered(QAction *action)
     int reference=action->data().toInt();
     emit itemSelected(reference);
     if(_pasteWhenSelected)
+    {
+      QThread::msleep(100);
       FakeKey::simulatePaste();
+    }
   }
 }
 

@@ -23,10 +23,25 @@ DataFile::DataFile(const QMimeData *mimeData, const QString &filename)
         qint64 wrtn=_file->write(mimeData->data(format));
         frame.size=wrtn;
         _fragments->insert(format,frame);
-
+        qDebug()<<format <<"    "<<frame.size;
       }
       _file->close();
-       qDebug()<<"File closed";
+
+      QByteArray *BA;
+      foreach (QString key, _fragments->keys())
+      {
+        FragmentFrame frame=_fragments->value(key);
+        if(frame.size>0)
+        {
+          BA=readFragment(frame);
+          if(BA)
+          {
+            qDebug()<< "data for format "<<key;
+            qDebug()<<QString::fromUtf8(*BA);
+            delete BA;
+          }
+        }
+      }
     }
   }
 }
@@ -403,4 +418,39 @@ quint64 DataFile::size()
     sz=sz+frame.size;
   }
   return sz;
+}
+
+bool DataFile::hasUrls()
+{
+  return _fragments->keys().contains("text/uri-list");
+}
+
+
+QList<QUrl> DataFile::urls()
+{
+  if(hasUrls())
+  {
+    FragmentFrame urlf=_fragments->value("text/uri-list");
+    if(urlf.size>0)
+    {
+      QByteArray *BA=readFragment(urlf);
+      if(BA && BA->size()>0)
+      {
+        QString urlsstr=QString::fromUtf8(*BA);
+        delete BA;
+        QStringList ulist=urlsstr.split("\r\n",QString::SkipEmptyParts);
+        if(ulist.length()>0)
+        {
+          QList<QUrl> finalurls;
+          foreach (QString str, ulist)
+          {
+            QUrl url(str,QUrl::TolerantMode);
+            finalurls.append(url.adjusted(QUrl::PrettyDecoded));
+          }
+          return finalurls;
+        }
+      }
+    }
+  }
+  return QList<QUrl>();
 }

@@ -8,7 +8,7 @@ FakeKey::FakeKey()
 
 void FakeKey::simulatePaste()
 {
-#ifdef __linux__
+#ifdef Q_OS_LINUX
   Display *display=XOpenDisplay(NULL);
   if(display==NULL)
     return;
@@ -23,11 +23,17 @@ void FakeKey::simulatePaste()
   XSendEvent(ReleasEventV.display, ReleasEventV.window, True, KeyReleaseMask, (XEvent *)&ReleasEventV);
   XCloseDisplay(display);
 #endif
+#ifdef Q_OS_WIN
+  keybd_event(VK_CONTROL,0x9d,0 , 0);
+  keybd_event(0x56,0xaf,0 , 0);
+  keybd_event(VK_CONTROL,0x9d, KEYEVENTF_KEYUP,0);
+  keybd_event(0x56,0xaf,KEYEVENTF_KEYUP,0);
+#endif
 }
 
 void FakeKey::simulateCopy()
 {
-#ifdef __linux__
+#ifdef Q_OS_LINUX
   Display *display=XOpenDisplay(NULL);
   if(display==NULL)
     return; 
@@ -42,9 +48,15 @@ void FakeKey::simulateCopy()
   XSendEvent(ReleasEventV.display, ReleasEventV.window, True, KeyReleaseMask, (XEvent *)&ReleasEventV);
   XCloseDisplay(display);
 #endif
+#ifdef Q_OS_WIN
+  keybd_event(VK_CONTROL,0x9D,0 , 0);
+  keybd_event(0x43,0xAE,0 , 0);
+  keybd_event(VK_CONTROL,0x9d, KEYEVENTF_KEYUP,0);
+  keybd_event(0x43,0xAE,KEYEVENTF_KEYUP,0);
+#endif
 }
 
-#ifdef __linux__
+#ifdef Q_OS_LINUX
 XKeyEvent FakeKey::createKeyEventX11(Display *display, Window &win,Window &winRoot, bool press,int keycode, int modifiers)
 {
 
