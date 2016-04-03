@@ -73,6 +73,7 @@ private:
   bool _pasteWhenSelected;
   void constructIcon();
   void checkLimit();
+  void setIndexes();
 
 
 };

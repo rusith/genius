@@ -43,7 +43,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>2</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="General_Tab">
         <attribute name="title">
@@ -160,7 +160,7 @@
            <x>10</x>
            <y>10</y>
            <width>321</width>
-           <height>137</height>
+           <height>165</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="VL3">
@@ -287,6 +287,13 @@
              </spacer>
             </item>
            </layout>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="cbShowIndexes">
+            <property name="text">
+             <string>Show Item Indexes in the History Menu</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -768,12 +775,12 @@ background-color:red;
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>84</x>
-     <y>107</y>
+     <x>97</x>
+     <y>106</y>
     </hint>
     <hint type="destinationlabel">
-     <x>354</x>
-     <y>110</y>
+     <x>341</x>
+     <y>108</y>
     </hint>
    </hints>
   </connection>
@@ -784,12 +791,12 @@ background-color:red;
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>93</x>
-     <y>142</y>
+     <x>106</x>
+     <y>140</y>
     </hint>
     <hint type="destinationlabel">
-     <x>338</x>
-     <y>145</y>
+     <x>341</x>
+     <y>142</y>
     </hint>
    </hints>
   </connection>
@@ -800,12 +807,12 @@ background-color:red;
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>177</y>
+     <x>91</x>
+     <y>209</y>
     </hint>
     <hint type="destinationlabel">
-     <x>414</x>
-     <y>180</y>
+     <x>341</x>
+     <y>211</y>
     </hint>
    </hints>
   </connection>
@@ -816,12 +823,12 @@ background-color:red;
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>111</x>
-     <y>212</y>
+     <x>124</x>
+     <y>277</y>
     </hint>
     <hint type="destinationlabel">
-     <x>344</x>
-     <y>215</y>
+     <x>341</x>
+     <y>280</y>
     </hint>
    </hints>
   </connection>

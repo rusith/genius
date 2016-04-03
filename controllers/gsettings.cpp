@@ -44,6 +44,8 @@ void GSettings::initialize()
 
   historyMenuHotkeyEnabled=settings.value("historyMenuHotkeyEnabled").toBool();
   historyMenuHotkey=QKeySequence(settings.value("historyMenuHotkey").toString());
+
+  showIndexesInHistoryMenu=settings.value("showIndexesInHistoryMenu").toBool();
 }
 
 void GSettings::commit()
@@ -83,6 +85,8 @@ void GSettings::commit()
 
   settings.setValue("historyMenuHotkeyEnabled",historyMenuHotkeyEnabled);
   settings.setValue("historyMenuHotkey",historyMenuHotkey.toString(QKeySequence::NativeText));
+
+  settings.setValue("showIndexesInHistoryMenu",showIndexesInHistoryMenu);
 }
 
 void GSettings::resetToDefault()
@@ -120,6 +124,8 @@ void GSettings::resetToDefault()
   maximumImageWidth=50;
   maximumImageHight=50;
 
+  showIndexesInHistoryMenu=true;
+
   commit();
 }
 
@@ -151,4 +157,4 @@ int GSettings::selectorBorderRadius=1;
 int GSettings::maximumImageWidth=1;
 int GSettings::maximumImageHight=1;
 bool GSettings::selectorEnabled=true;
-
+bool GSettings::showIndexesInHistoryMenu=true;

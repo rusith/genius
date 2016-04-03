@@ -17,8 +17,9 @@ Manager::~Manager()
 
 void Manager::addTextItem(QString *text, QString *tooltipText, int reference, int index)
 {
+
   QListWidgetItem *qlwi=new QListWidgetItem();
-  qlwi->setText(*text);
+  qlwi->setText(*text);  
   qlwi->setToolTip(*tooltipText);
   qlwi->setData(50,reference);
   ui->list->insertItem(index,qlwi);

@@ -129,6 +129,11 @@ public:
    * @brief global hotkey for open history menu inside the trayIcon
    */
   static QKeySequence historyMenuHotkey;
+
+  /**
+   * @brief option for turn on or off index numbers in the history menu
+   */
+  static bool showIndexesInHistoryMenu;
 };
 
 #endif // GSETTINGS_H

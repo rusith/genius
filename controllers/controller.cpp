@@ -286,7 +286,6 @@ void Controller::createHotkeys()
 
   if(GSettings::historyMenuHotkeyEnabled)
     _historyMenuHotKey=new QHotkey(GSettings::historyMenuHotkey,true);
-
 }
 
 void Controller::createConnections()

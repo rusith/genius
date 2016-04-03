@@ -329,7 +329,7 @@ void TrayIcon::iconActivated(QSystemTrayIcon::ActivationReason reson)
 
 void TrayIcon::setIndexes()
 {
-  if(GSettings::showIndexesInHistoryMenu)
+  if(GSettings::showIndsetIndexes()
   {
     if(_historyMenu && _historyMenu->actions().isEmpty()==false && _history->isEmpty()==false)
     {
