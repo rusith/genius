@@ -83,6 +83,9 @@ public:
    * @brief openSettingsHotKeyEnabled ?
    */
   static bool openSettingsHotKeyEnabled;
+
+  static bool selectorEnabled;
+
   /**
    * @brief background color of items in the selector
    */

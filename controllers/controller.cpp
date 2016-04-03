@@ -175,7 +175,6 @@ void Controller::openSettingsHKTriggered()
   }
 }
 
-
 void Controller::start()
 {
   GSettings::initialize();
@@ -184,7 +183,6 @@ void Controller::start()
   createConnections();
   showViews();
 }
-
 
 void Controller::addClipboardContentToHistory()
 {
@@ -271,7 +269,8 @@ void Controller::addItem(ClipboardEntity *entity, int index)
 
 void Controller::createHotkeys()
 {
-  _openSelectorHotkey=new QHotkey(QKeySequence("Ctrl+Alt+V"),true);
+  if(GSettings::selectorEnabled)
+    _openSelectorHotkey=new QHotkey(QKeySequence("Ctrl+Shift+X"),true);
 
   if(GSettings::clearHistoryHotKeyEnabled)
      _clearHistoryHotKey=new QHotkey(GSettings::clearHistoryHotKey,true);

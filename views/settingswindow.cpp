@@ -48,6 +48,7 @@ void SettingsWindow::initializeElements()
   ui->pasteLastCB->setChecked(GSettings::pasteLastHotKeyEnabled);
   ui->openManagerCB->setChecked(GSettings::openManagerHotkeyEnabled);
   ui->openSettingsCB->setChecked(GSettings::openSettingsHotKeyEnabled);
+  ui->selectorShortcutcb->setChecked(GSettings::selectorEnabled);
 
   ui->SBCPreview->setStyleSheet("QLabel{\n	background:"+GSettings::selectorItemBackgroundColor+";\n background-repeat: repeat-y;\n  background-position: left;\n}");
   ui->SBCPreview->setText(GSettings::selectorItemBackgroundColor);
@@ -94,6 +95,7 @@ void SettingsWindow::saveData()
   GSettings::pasteLastHotKeyEnabled=ui->pasteLastCB->isChecked();
   GSettings::openManagerHotkeyEnabled=ui->openManagerCB->isChecked();
   GSettings::openSettingsHotKeyEnabled=ui->openSettingsCB->isChecked();
+  GSettings::selectorEnabled=ui->selectorShortcutcb->isChecked();
 
   GSettings::selectorItemBackgroundColor=ui->SBCPreview->text();
   GSettings::selectorTextColor=ui->textColorPreview->text();

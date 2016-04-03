@@ -29,6 +29,7 @@ void GSettings::initialize()
   pasteLastHotKeyEnabled=settings.value("pasteLastHotKeyEnabled").toBool();
   openManagerHotkeyEnabled=settings.value("openManagerHotkeyEnabled").toBool();
   openSettingsHotKeyEnabled=settings.value("openSettingsHotKeyEnabled").toBool();
+  selectorEnabled=settings.value("selectorEnabled").toBool();
 
   selectorItemBackgroundColor=settings.value("selectorItemBackgroundColor").toString();
   selectorTextColor=settings.value("selectorTextColor").toString();
@@ -68,7 +69,7 @@ void GSettings::commit()
   settings.setValue("pasteLastHotKeyEnabled",pasteLastHotKeyEnabled);
   settings.setValue("openManagerHotkeyEnabled",openManagerHotkeyEnabled);
   settings.setValue("openSettingsHotKeyEnabled",openSettingsHotKeyEnabled);
-
+  settings.setValue("selectorEnabled",selectorEnabled);
   settings.setValue("selectorItemBackgroundColor",selectorItemBackgroundColor);
   settings.setValue("selectorTextColor",selectorTextColor);
   settings.setValue("selectorBorderColor",selectorBorderColor);
@@ -106,6 +107,7 @@ void GSettings::resetToDefault()
   openManagerHotkeyEnabled=true;
   openSettingsHotKeyEnabled=true;
   historyMenuHotkeyEnabled=true;
+  selectorEnabled=true;
 
 
   selectorItemBackgroundColor="#5555ff";
@@ -148,5 +150,5 @@ int GSettings::selectorAnimationDuration=100;
 int GSettings::selectorBorderRadius=1;
 int GSettings::maximumImageWidth=1;
 int GSettings::maximumImageHight=1;
-
+bool GSettings::selectorEnabled=true;
 

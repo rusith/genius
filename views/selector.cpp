@@ -25,6 +25,7 @@ void Selector::initialize()
 {
   initializeVarbs();
   initializeUI();
+  updatePositionLabel();
 }
 
 void Selector::initializeUI()
@@ -111,6 +112,11 @@ void Selector::constructLabel(QLabel *label, ClipboardEntity *entity)
         delete img;
       }
     }
+    else if(entity->hasURLs())
+    {
+      QList<QUrl> urls=entity->urls();
+      label->setText(ToolKit::URLsToPreviewText(&urls,100));
+    }
     else if(entity->hasHTML())
     {
       label->setText(entity->HTMLText(false,-1));
@@ -121,23 +127,11 @@ void Selector::constructLabel(QLabel *label, ClipboardEntity *entity)
     }
     else
     {
-
-      label->setText("content cannot display");
+      QString text=QString("formats : %1 size : %2 KB")
+                   .arg(entity->formats().size())
+                   .arg((double)entity->size()/1024);
+      label->setText(text);
     }
-//    ClipboardItem::ClipboardMimeType type=item->type();
-//    if(type==ClipboardItem::Text)
-//      label->setText(*dynamic_cast<ClipboardTextItem*>(item)->preview());
-//    else if(type==ClipboardItem::Image)
-//    {
-//      QImage *image=dynamic_cast<ClipboardImageItem*>(item)->preview();
-//      if(image)
-//      {
-//        label->setPixmap(QPixmap::fromImage(*image));
-//      }
-//    }
-//    else if(type==ClipboardItem::URLs)
-//      label->setText(dynamic_cast<ClipboardURLItem*>(item)->toString("|"));
-
 
   }
 }
@@ -370,6 +364,7 @@ void Selector::keyPressEvent(QKeyEvent *event)
   else if(key==Qt::Key_Right)
   {
     gotoPrevious();
+        updatePositionLabel();
 
   }
   else if(key==Qt::Key_Escape)
@@ -382,7 +377,7 @@ void Selector::keyPressEvent(QKeyEvent *event)
 void Selector::keyReleaseEvent(QKeyEvent *event)
 {
   int key=event->key();
-  if(key==Qt::Key_Control||key==Qt::Key_Alt)
+  if(key==Qt::Key_Control||key==Qt::Key_Shift)
     hide();
 }
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>367</width>
-    <height>327</height>
+    <height>338</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,7 @@
       <x>10</x>
       <y>10</y>
       <width>351</width>
-      <height>311</height>
+      <height>321</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -43,7 +43,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="General_Tab">
         <attribute name="title">
@@ -301,7 +301,7 @@
            <x>10</x>
            <y>10</y>
            <width>321</width>
-           <height>200</height>
+           <height>231</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
@@ -367,6 +367,33 @@
            </layout>
           </item>
           <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_13">
+            <item>
+             <widget class="QCheckBox" name="selectorShortcutcb">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;check if you want to enable &lt;span style=&quot; font-weight:600;&quot;&gt;ShowManager Global Hotkey&lt;/span&gt;&lt;/p&gt;&lt;p&gt;if you press this hotkey, The Manager Window (main window that help to manage the history) will show.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>Selector           </string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QKeySequenceEdit" name="openManager_2">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;hotkey for Show Manager Window&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="keySequence">
+               <string>Ctrl+Shift+X</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
              <widget class="QCheckBox" name="openManagerCB">
@@ -374,7 +401,7 @@
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;check if you want to enable &lt;span style=&quot; font-weight:600;&quot;&gt;ShowManager Global Hotkey&lt;/span&gt;&lt;/p&gt;&lt;p&gt;if you press this hotkey, The Manager Window (main window that help to manage the history) will show.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="text">
-               <string>Manager           </string>
+               <string>Manager          </string>
               </property>
              </widget>
             </item>
@@ -392,7 +419,7 @@
             <item>
              <widget class="QCheckBox" name="historyMenu_cb">
               <property name="text">
-               <string>HistoryMenu   </string>
+               <string>HistoryMenu  </string>
               </property>
              </widget>
             </item>
@@ -409,7 +436,7 @@
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;check if you want to enable &lt;span style=&quot; font-weight:600;&quot;&gt;OpenSettings Global Hotkey&lt;/span&gt;&lt;/p&gt;&lt;p&gt;if you press this hotkey, this window (settings window) will open&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="text">
-               <string>Settings            </string>
+               <string>Settings           </string>
               </property>
              </widget>
             </item>
