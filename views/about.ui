@@ -93,12 +93,20 @@
         <property name="text">
          <string>License</string>
         </property>
+        <property name="icon">
+         <iconset resource="../resources/resources.qrc">
+          <normaloff>:/images/images/info16.png</normaloff>:/images/images/info16.png</iconset>
+        </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="pushButton">
         <property name="text">
          <string>Close</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../resources/resources.qrc">
+          <normaloff>:/images/images/cancel16.png</normaloff>:/images/images/cancel16.png</iconset>
         </property>
        </widget>
       </item>

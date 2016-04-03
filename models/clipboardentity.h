@@ -147,6 +147,8 @@ public:
    * @return
    */
   QList<QUrl> urls();
+
+
 private:
   /**
    * @brief refId of the object

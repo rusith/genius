@@ -11,6 +11,7 @@ void TrayIcon::constructIcon()
 {
    _icon=new QSystemTrayIcon(this);
    _menu=new QMenu(this);
+   connect(_icon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
   _icon->setIcon(QIcon(Resources::logo16));
 
@@ -314,4 +315,10 @@ void TrayIcon::exchangeLocation(int ref1, int ref2)
     action2->setToolTip(action1->toolTip());
     action1->setToolTip(TT);
   }
+}
+
+void TrayIcon::iconActivated(QSystemTrayIcon::ActivationReason reson)
+{
+    if(reson==QSystemTrayIcon::DoubleClick)
+        emit showHideManagerTriggerd();
 }

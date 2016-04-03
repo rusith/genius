@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Genius
 TEMPLATE = app
 
+win32 :RC_ICONS =genius.ico
+
 
 SOURCES += main.cpp \
     views/manager.cpp \

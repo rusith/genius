@@ -7,7 +7,8 @@ ContentViewer::ContentViewer(ClipboardEntity *entity, QWidget *parent):
   ui->setupUi(this);
   if(entity)
     _entity=entity;
-
+  else
+    reject();
   initializeBasicUI();
 }
 
@@ -19,14 +20,28 @@ ContentViewer::~ContentViewer()
 void ContentViewer::initializeBasicUI()
 {
   setLayout(ui->rootLayout);
-  if(_entity)
-  {
-    ui->lbAddedTime->setText("<b>Added Time :</b> "+_entity->addedTime()->toString("hh.mm.ss.zzz AP"));
-    addImageTab();
-    addHTMLTab();
-    addURLsTab();
-    addPlainTextTab();
-  }
+  QString addedTime=_entity->addedTime()->toString("hh.mm.ss.zzz AP");
+  int formatsCount=_entity->formats().size();
+  double size =(double)_entity->size()/1024;
+  QString lblText=QString("<b>Added Time :</b> %1   <b>Formats :</b> %2         <b>Size :</b> %3 kb")
+                  .arg(addedTime).arg(formatsCount).arg(size);
+  ui->lblBasicInfo->setText(lblText);
+
+  addImageTab();
+  addHTMLTab();
+  addURLsTab();
+  addPlainTextTab();
+  if(ui->tvFormats->count()<1)
+    replaceTabViewWithFormats();
+
+  QHBoxLayout *buttonSet=new QHBoxLayout(this);
+  buttonSet->addStretch();
+  QPushButton *closeButton=new QPushButton(this);
+  closeButton->setIcon(QIcon(Resources::cancel16));
+  closeButton->setText("close");
+  connect(closeButton,SIGNAL(clicked(bool)),this,SLOT(reject()));
+  buttonSet->addWidget(closeButton);
+  ui->rootLayout->addLayout(buttonSet);
 }
 
 void ContentViewer::addPlainTextTab()
@@ -342,7 +357,6 @@ void ContentViewer::addURLsTab()
     QString text;
     foreach (QUrl url, urls)
     {
-      qDebug()<<url.toString();
       if(url.scheme()=="file")
       {
         QString filename=url.fileName();
@@ -367,7 +381,6 @@ void ContentViewer::addURLsTab()
 
 QString ContentViewer::imageMimeTypeToText(const QString &MT)
 {
-
   if(MT=="image/png")
     return "PNG";
   else if(MT=="image/bmp")
@@ -389,7 +402,113 @@ QString ContentViewer::imageMimeTypeToText(const QString &MT)
   else
     return "";
 }
+
 void ContentViewer::on_pushButton_clicked()
 {
   reject();
+}
+
+void ContentViewer::replaceTabViewWithFormats()
+{
+  if(ui->tvFormats)
+    delete ui->tvFormats;
+  QVBoxLayout *formatsLayout=new QVBoxLayout(this);
+
+  QListWidget *lvFormats=new QListWidget(this);
+  QStringList formats=_entity->formats();
+  if(formats.isEmpty())
+    reject();
+  else
+  {
+    foreach (QString format, formats)
+    {
+      QListWidgetItem *item=new QListWidgetItem(lvFormats);
+      item->setText(format);
+      lvFormats->addItem(item);
+    }
+  }
+
+  QPlainTextEdit *rowDataViewer=new QPlainTextEdit(this);
+  rowDataViewer->setReadOnly(true);
+
+  QHBoxLayout *detailsLayout=new QHBoxLayout(this);
+  QLabel *dlabel=new QLabel(this);
+  detailsLayout->addWidget(dlabel);
+  detailsLayout->addStretch();
+  QPushButton *savebtn=new QPushButton(this);
+  savebtn->setText("save");
+  savebtn->setIcon(QIcon(Resources::save16));
+  connect(savebtn,&QPushButton::clicked,this,[lvFormats,this](){
+    if(lvFormats && this->_entity && lvFormats->count()>0)
+    {
+      int currentIndex=lvFormats->currentRow();
+      if(currentIndex<0)
+        return;
+      QByteArray *data=this->_entity->data(lvFormats->item(currentIndex)->text()); //DELETED
+      if(!data)return;
+      QFileDialog fileDialog(this);
+      fileDialog.setWindowTitle("select a file to save data ");
+      fileDialog.setWindowIcon(QIcon(Resources::save16));
+      fileDialog.setFileMode(QFileDialog::AnyFile);
+      fileDialog.setAcceptMode(QFileDialog::AcceptSave);
+      fileDialog.setDefaultSuffix("data");
+      while(true)
+      {
+        if(fileDialog.exec())
+        {
+          QString fileName=fileDialog.selectedFiles().at(0);
+          QFile file(fileName);
+          bool opened=file.open(QFile::WriteOnly);
+          if(opened)
+          {
+            file.write(*data);
+            delete data;
+            return;
+          }
+          else
+          {
+            if(QMessageBox::critical(this,"cannot save file","cannot save file as \n"+fileName+". \nchange directory and try again.\ndo you want to try again?",QMessageBox::Yes,QMessageBox::No)==QMessageBox::Yes)
+              continue;
+            else
+              break;
+          }
+        }
+        else
+          break;
+      }
+      delete data;
+    }
+
+  });
+
+  detailsLayout->addWidget(savebtn);
+
+  formatsLayout->addWidget(lvFormats);
+
+  QLabel *rowDatalbl=new QLabel(this);
+  rowDatalbl->setText("Row Data :");
+
+  formatsLayout->addWidget(rowDatalbl);
+  formatsLayout->addWidget(rowDataViewer);
+  formatsLayout->addLayout(detailsLayout);
+
+  connect(lvFormats,&QListWidget::currentRowChanged,this,[this,rowDataViewer,dlabel,lvFormats](int currentRow){
+    if(dlabel && lvFormats && this->_entity && currentRow>-1)
+    {
+
+      QListWidgetItem *item=lvFormats->item(currentRow);
+      QString name=item->text();
+      double size=((double)this->_entity->formatSize(name)/1024);
+      QByteArray *ba=this->_entity->data(name);
+      if(ba)
+      {
+        rowDataViewer->setPlainText(QString::fromUtf8(*ba));
+        delete ba;
+      }
+      dlabel->setText(QString("<b>size :</b> %1 kb ").arg(size));
+    }
+  });
+
+
+  ui->rootLayout->addLayout(formatsLayout);
 }

@@ -95,3 +95,77 @@ void ToolKit::Sort(QList<FragmentFrame> *frames)
   }
 }
 
+QString ToolKit::URLsToPreviewText(QList<QUrl> *urls,const uint &maxLenght)
+{
+  QString text;
+  if(urls)
+  {
+    if(!urls->isEmpty())
+    {
+      bool files=true;
+      foreach (QUrl url, *urls)
+      {
+        if(url.scheme()!="file")
+        {
+          files=false;
+          break;
+        }
+      }
+      if(files)
+      {
+        text=QString ("%1 files ").arg(urls->count());
+        if(maxLenght==0)
+        {
+          foreach (QUrl url, *urls)
+          {
+            text.append(url.fileName()+",");
+          }
+        }
+        else
+        {
+          foreach (QUrl url, *urls)
+          {
+            QString fn=url.fileName();
+            if(((uint)text.length()+fn.length())>maxLenght)
+            {
+              text.append(fn+",");
+              text.append(" ..");
+              return text;
+            }
+            else
+              text.append(fn+",");
+          }
+        }
+        if(text.endsWith(","))
+          text=text.left(text.length()-1);
+      }
+      else
+      {
+        text=QString ("%1 urls ").arg(urls->count());
+        if(maxLenght==0)
+        {
+          foreach (QUrl url, *urls)
+            text.append(url.toString()+",");
+        }
+        else
+        {
+          foreach (QUrl url, *urls)
+          {
+            QString str=url.toString();
+            if(((uint)text.length()+str.length())>maxLenght)
+            {
+              text.append(" ..");
+              return text;
+            }
+            else
+              text.append(str+",");
+          }
+        }
+        if(text.endsWith(","))
+          text=text.left(text.length()-1);
+      }
+    }
+  }
+  return text;
+}
+

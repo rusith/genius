@@ -50,6 +50,7 @@ public slots:
  void managerHidden();
  void menuActionTrigered(QAction *action);
  void historyMenuActionTriggered(QAction *action);
+ void iconActivated(QSystemTrayIcon::ActivationReason reson);
 
 private:
   QSystemTrayIcon *_icon=NULL;

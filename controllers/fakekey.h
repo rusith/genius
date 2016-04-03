@@ -12,10 +12,10 @@
 class FakeKey
 {
 public:
-  FakeKey();
   static void simulatePaste();
   static void simulateCopy();
 private:
+  FakeKey();
 #ifdef Q_OS_LINUX
   static XKeyEvent createKeyEventX11(Display *display, Window &win,Window &winRoot, bool press,int keycode, int modifiers);
 #endif

@@ -121,6 +121,7 @@ void GSettings::resetToDefault()
   commit();
 }
 
+
 bool GSettings::showInSingleLine=false;
 bool GSettings::limitcharLength=false;
 int GSettings::limitedCharLength=0;
@@ -129,27 +130,22 @@ bool GSettings::saveImages=false;
 bool GSettings::openMinimized=false;
 bool GSettings::pasteAutomaticlay=false;
 int GSettings::historyItemLimit=10;
-
 QKeySequence GSettings::clearHistoryHotKey=QKeySequence();
 QKeySequence GSettings::pasteLastHotKey=QKeySequence();
 QKeySequence GSettings::openManagerHotkey=QKeySequence();
 QKeySequence GSettings::openSettingsHotKey=QKeySequence();
 QKeySequence GSettings::historyMenuHotkey=QKeySequence();
-
 bool GSettings::clearHistoryHotKeyEnabled=false;
 bool GSettings::pasteLastHotKeyEnabled=false;
 bool GSettings::openManagerHotkeyEnabled=false;
 bool GSettings::openSettingsHotKeyEnabled=false;
 bool GSettings::historyMenuHotkeyEnabled=false;
-
 QString GSettings::selectorItemBackgroundColor="";
 QString GSettings::selectorTextColor="";
 QString GSettings::selectorBorderColor="";
 int GSettings::selectorBorderSize=1;
 int GSettings::selectorAnimationDuration=100;
 int GSettings::selectorBorderRadius=1;
-
-
 int GSettings::maximumImageWidth=1;
 int GSettings::maximumImageHight=1;
 

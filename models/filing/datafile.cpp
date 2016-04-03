@@ -23,25 +23,8 @@ DataFile::DataFile(const QMimeData *mimeData, const QString &filename)
         qint64 wrtn=_file->write(mimeData->data(format));
         frame.size=wrtn;
         _fragments->insert(format,frame);
-        qDebug()<<format <<"    "<<frame.size;
       }
       _file->close();
-
-      QByteArray *BA;
-      foreach (QString key, _fragments->keys())
-      {
-        FragmentFrame frame=_fragments->value(key);
-        if(frame.size>0)
-        {
-          BA=readFragment(frame);
-          if(BA)
-          {
-            qDebug()<< "data for format "<<key;
-            qDebug()<<QString::fromUtf8(*BA);
-            delete BA;
-          }
-        }
-      }
     }
   }
 }
@@ -127,7 +110,7 @@ QMimeData *DataFile::toMimeData()
 
 bool DataFile::hasPlainText()
 {
-  return _fragments->keys().contains("text/plain");
+  return _fragments->keys().contains("text/plain") || _fragments->keys().contains("text/uri-list");
 }
 
 bool DataFile::hasHtmlText()
@@ -172,13 +155,19 @@ QString DataFile::plainText(bool check, int length)
   if(count()>0 && _file && _file->exists())
   {
     FragmentFrame frame=_fragments->value("text/plain");
+    if(frame.size<1)
+      frame=_fragments->value("text/uri-list");
     if(frame.size<1 || length==0)
         return "";
     if(length!=-1 && (quint64)length<=frame.size)
       frame.size=length;
     QByteArray *BA=readFragment(frame);
-    QString str=QString::fromUtf8(*BA);
-    delete BA;
+    QString str;
+    if(BA)
+    {
+      str=QString::fromUtf8(*BA);
+      delete BA;
+    }
     return str;
   }
   else

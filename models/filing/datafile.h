@@ -178,6 +178,7 @@ public:
    * @return returns empty list if no urls availabel
    */
   QList<QUrl> urls();
+
 private:
   /**
    * @brief _fragments (Hash for manage formats)

@@ -81,6 +81,12 @@ private:
    * @return QString
    */
   QString imageMimeTypeToText(const QString &MT);
+
+  /**
+   * @brief replace the tvFormats tabview with list of formats availabel in the entity. this function should
+   * use when the content of the ClipboardEntity is cannot show.
+   */
+  void replaceTabViewWithFormats();
 };
 
 #endif // CONTENTVIEWER_H

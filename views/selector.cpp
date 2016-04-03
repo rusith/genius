@@ -370,13 +370,14 @@ void Selector::keyPressEvent(QKeyEvent *event)
   else if(key==Qt::Key_Right)
   {
     gotoPrevious();
-    updatePositionLabel();
+
   }
   else if(key==Qt::Key_Escape)
   {
     hide();
   }
 }
+
 
 void Selector::keyReleaseEvent(QKeyEvent *event)
 {

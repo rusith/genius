@@ -17,7 +17,7 @@
    <iconset resource="../resources/resources.qrc">
     <normaloff>:/images/images/info16.png</normaloff>:/images/images/info16.png</iconset>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -83,6 +83,10 @@ p, li { white-space: pre-wrap; }
        <widget class="QPushButton" name="pushButton">
         <property name="text">
          <string>Close</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../resources/resources.qrc">
+          <normaloff>:/images/images/cancel16.png</normaloff>:/images/images/cancel16.png</iconset>
         </property>
        </widget>
       </item>

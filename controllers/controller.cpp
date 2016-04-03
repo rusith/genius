@@ -233,13 +233,7 @@ void Controller::addItem(ClipboardEntity *entity, int index)
   else if(entity->hasURLs())
   {
     QList<QUrl> urls=entity->urls();
-    QString text=ToolKit::URlsToString(&urls);
-    if(GSettings::showInSingleLine)
-      ToolKit::removeNewLines(&text);
-    if(GSettings::limitcharLength)
-      if(text.length()>GSettings::limitedCharLength)
-        text=text.left(GSettings::limitedCharLength);
-
+    QString text=ToolKit::URLsToPreviewText(&urls,(GSettings::limitcharLength ? GSettings::limitedCharLength : 0));
     QString tooltipText=QString("added time : %1 ").arg(entity->addedTime()->toString("hh.mm.ss.zzz AP"));
     _manager->addTextItem(&text,&tooltipText,reference,index);
     _trayIcon->addTextAction(&text,&tooltipText,reference,index);
@@ -361,8 +355,10 @@ void Controller::selectItem(int reference)
           {
             _clipboard->setMimeData(MD);
             _history->remove(reference);
+            return;
           }
         }
+        delete MD;
       }
     }
   }
@@ -383,53 +379,70 @@ void Controller::deleteHotkeys()
   {
      _openSelectorHotkey->setRegistered(false);
      delete _openSelectorHotkey;
+     _openSelectorHotkey=NULL;
   }
 
   if(_clearHistoryHotKey)
   {
      _clearHistoryHotKey->setRegistered(false);
      delete _clearHistoryHotKey ;
+     _clearHistoryHotKey=NULL;
   }
 
   if(_pasteLastHotKey)
   {
      _pasteLastHotKey->setRegistered(false);
      delete _pasteLastHotKey;
+     _pasteLastHotKey=NULL;
   }
 
   if(_openManagerHotKey)
   {
      _openManagerHotKey->setRegistered(false);
      delete _openManagerHotKey;
+     _openManagerHotKey=NULL;
   }
 
   if(_openSettingsHotKey)
   {
      _openSettingsHotKey->setRegistered(false);
      delete _openSettingsHotKey;
+     _openSettingsHotKey=NULL;
   }
-
 
   if(_historyMenuHotKey)
   {
     _historyMenuHotKey->setRegistered(false);
     delete _historyMenuHotKey;
+    _historyMenuHotKey=NULL;
   }
 }
 
 void Controller::deleteVariables()
 {
   if(_manager)
+  {
     delete _manager;
+    _manager=NULL;
+  }
 
   if(_history)
+  {
     delete _history;
+    _history=NULL;
+  }
 
   if(_trayIcon)
+  {
     delete _trayIcon;
+    _trayIcon=NULL;
+  }
 
   if(_selector)
+  {
     delete _selector;
+    _selector=NULL;
+  }
 }
 
 void Controller::toggleManager()

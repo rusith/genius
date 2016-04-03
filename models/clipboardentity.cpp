@@ -10,7 +10,6 @@ ClipboardEntity::ClipboardEntity(QClipboard *clipboard)
     _ref=refID;
     QString FN=Resources::tempFolder.path()+QString("/%1_data.genius").arg(_ref);
     _dataFile=new DataFile(clipboard->mimeData(),FN);
-    //setContent(_dataFile);
     _addedTime=new QTime(QTime::currentTime());
   }
 }
@@ -23,7 +22,6 @@ ClipboardEntity::ClipboardEntity(const QMimeData *mimeData)
     _ref=refID;
     QString FN=Resources::tempFolder.path()+QString("/%1_data.genius").arg(_ref);
     _dataFile=new DataFile(mimeData,FN);
-    //setContent(_dataFile);
     _addedTime=new QTime(QTime::currentTime());
   }
 }

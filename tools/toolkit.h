@@ -13,6 +13,7 @@ public:
   ToolKit();
   static void removeNewLines(QString *text);
   static QString URlsToString(QList<QUrl> *urls,const QString &seperator="|",bool numbers=false,const QString &numFormat="%1. ");
+  static QString URLsToPreviewText(QList<QUrl> *urls, const uint &maxLenght=0);
   static FragmentFrame maxValue(const QList<FragmentFrame> &frames);
   static void Sort(QList<FragmentFrame> *frames);
 };
