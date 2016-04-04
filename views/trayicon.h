@@ -12,6 +12,7 @@
 #include <resources/resources.h>
 #include <views/about.h>
 #include <GUI/menuitem.h>
+#include <GUI/menu.h>
 #include <controllers/fakekey.h>
 
 class TrayIcon : public QWidget
@@ -54,6 +55,7 @@ public slots:
  void menuActionTrigered(QAction *action);
  void historyMenuActionTriggered(QAction *action);
  void iconActivated(QSystemTrayIcon::ActivationReason reson);
+ void historyMenuKeyPressed(int key);
 
 private:
   QSystemTrayIcon *_icon=NULL;
@@ -61,7 +63,7 @@ private:
   ClipboardHistory *_history=NULL;
   bool *_managerOpen;
 
-  QMenu *_historyMenu=NULL;
+  Menu *_historyMenu=NULL;
   QAction *_showHideAction=NULL;
   QAction *_exitAction=NULL;
   QAction *_clearAction=NULL;

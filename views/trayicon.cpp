@@ -15,7 +15,7 @@ void TrayIcon::constructIcon()
 
   _icon->setIcon(QIcon(Resources::logo16));
 
-  _historyMenu=new QMenu(_menu);
+  _historyMenu=new Menu(_menu);
   _historyMenu->setTitle("history");
   _historyMenu->setIcon(QIcon(Resources::history16));
   _menu->addMenu(_historyMenu);
@@ -61,7 +61,7 @@ void TrayIcon::constructIcon()
   _menu->addAction(_exitAction);
 
   connect(_historyMenu,SIGNAL(triggered(QAction*)),this,SLOT(historyMenuActionTriggered(QAction*)));
-  connect(_historyMenu,SIGNAL())
+  connect(_historyMenu,SIGNAL(keyPressed(int)),this,SLOT(historyMenuKeyPressed(int)));
   connect(_menu,SIGNAL(triggered(QAction*)),this,SLOT(menuActionTrigered(QAction*)));
   _icon->setContextMenu(_menu);
   _icon->setToolTip("system tray icon of genius ");
@@ -369,4 +369,21 @@ void TrayIcon::setIndexes()
         mi->indexed(false);
     }
   }
+}
+
+void TrayIcon::historyMenuKeyPressed(int key)
+{
+   if(key>=0x31 && key<0x3a)
+   {
+     int number=key-0x30;
+     if(_historyMenu->actions().count()>number-1)
+     {
+       QAction *act=_historyMenu->actions().at(number-1);
+       int reference=act->data().toInt();
+       _historyMenu->close();
+       itemSelected(reference);
+       if(_pasteWhenSelected)
+         FakeKey::simulatePaste();
+     }
+   }
 }
