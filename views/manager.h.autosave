@@ -177,9 +177,6 @@ private:
    * @brief update item inforamtion label
    */
   //void updateInfoLabel(const int &currentRow);
-
-
-
 };
 
 #endif // MANAGER_H

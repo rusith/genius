@@ -80,7 +80,6 @@ void Manager::initializeUI()
 {
   ui->centralwidget->setLayout(ui->rootLayout);
   setCentralWidget(ui->centralwidget);
-  ui->infoLabel->hide();
 }
 
 
@@ -310,27 +309,27 @@ void Manager::exchangeLocations(int ref1, int ref2)
     ui->list->setCurrentRow(item1Index);
 }
 
-void Manager::updateInfoLabel(const int &currentRow)
-{
-  if(ui->list->count()<1)
-    ui->infoLabel->hide();
+//void Manager::updateInfoLabel(const int &currentRow)
+//{
+//  if(ui->list->count()<1)
+//    ui->infoLabel->hide();
 
-  if(currentRow<0)
-    ui->infoLabel->hide();
-  else
-  {
-    int ref=ui->list->item(currentRow)->data(50).toInt();
-    ClipboardEntity *ent=_history->get(ref);
-    if(ent)
-    {
-      ui->infoLabel->setText(QString("<b>formats :</b> %1   <b>size :</b> %2 kb").arg(ent->formats().count()).arg((double)ent->size()/1024));
-      if(ui->infoLabel->isHidden())
-        ui->infoLabel->show();
-    }
-  }
-}
+//  if(currentRow<0)
+//    ui->infoLabel->hide();
+//  else
+//  {
+//    int ref=ui->list->item(currentRow)->data(50).toInt();
+//    ClipboardEntity *ent=_history->get(ref);
+//    if(ent)
+//    {
+//      ui->infoLabel->setText(QString("<b>formats :</b> %1   <b>size :</b> %2 kb").arg(ent->formats().count()).arg((double)ent->size()/1024));
+//      if(ui->infoLabel->isHidden())
+//        ui->infoLabel->show();
+//    }
+//  }
+//}
 
-void Manager::on_list_currentRowChanged(int currentRow)
-{
-    updateInfoLabel(currentRow);
-}
+//void Manager::on_list_currentRowChanged(int currentRow)
+//{
+    //updateInfoLabel(currentRow);
+//}
