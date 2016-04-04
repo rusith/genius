@@ -7,7 +7,6 @@
 #include <models/filing/datafile.h>
 #include <resources/resources.h>
 #include <controllers/gsettings.h>
-
 /**
  * @brief The ClipboardEntity class represent an clipboard history entity. it holds a mimeData object as a file
  * file deletes with object

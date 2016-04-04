@@ -32,7 +32,9 @@ SOURCES += main.cpp \
     tools/rtimer.cpp \
     models/filing/fragmentframe.cpp \
     views/about.cpp \
-    views/license.cpp
+    views/license.cpp \
+    GUI/menuitem.cpp \
+    controllers/runguard.cpp
 
 HEADERS  += \
     views/manager.h \
@@ -52,7 +54,9 @@ HEADERS  += \
     tools/rtimer.h \
     models/filing/fragmentframe.h \
     views/about.h \
-    views/license.h
+    views/license.h \
+    GUI/menuitem.h \
+    controllers/runguard.h
 
 FORMS    += \
     views/manager.ui \

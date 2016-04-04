@@ -28,7 +28,8 @@ public:
   const static QString up16;
   const static QString downn16;
   const static QString info16;
-
+  const static QString pause16;
+  const static QString play16;
 
   /**
    * @brief temp folder of the application

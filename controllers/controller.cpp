@@ -25,7 +25,7 @@ void Controller::itemSelected(int reference)
 
 void Controller::clipboardChanged(QClipboard::Mode mode)
 {
-  if(mode==QClipboard::Clipboard)
+  if(mode==QClipboard::Clipboard && !_paused )
   {
     if(!_holtCollection && !isClipboardEmpty())
       addClipboardContentToHistory();
@@ -312,6 +312,8 @@ void Controller::createConnections()
   connect(_trayIcon,SIGNAL(turnOffGenius()),this,SLOT(turnOffRequest()));
   connect(_trayIcon,SIGNAL(turnOnGenius()),this,SLOT(turnOnRequest()));
   connect(_trayIcon,SIGNAL(exitRequested()),this,SLOT(exitRequested()));
+  connect(_trayIcon,SIGNAL(pause()),this,SLOT(pauseRequested()));
+  connect(_trayIcon,SIGNAL(resume()),this,SLOT(resumeRequested()));
 
   connect(_selector,SIGNAL(closing(int)),this,SLOT(selectorClosed(int)));
   connect(_settingsWindow,SIGNAL(hiding()),this,SLOT(settingsWindow_hidden()));
@@ -352,8 +354,17 @@ void Controller::selectItem(int reference)
           if(index!=0)
           {
             _clipboard->setMimeData(MD);
-            _history->remove(reference);
+            if(!_paused)
+                _history->remove(reference);
             return;
+          }
+          else
+          {
+              if(_paused)
+              {
+                  _clipboard->setMimeData(MD);
+                  return;
+              }
           }
         }
         delete MD;
@@ -446,9 +457,13 @@ void Controller::deleteVariables()
 void Controller::toggleManager()
 {
   if(_managerOpened)
-    _manager->hide();
+  {
+      _manager->hide();
+  }
   else
-    _manager->show();
+  {
+      _manager->show();
+  }
 }
 
 
@@ -518,4 +533,14 @@ void Controller::locationExchanged(int ref1, int ref2)
 {
   _manager->exchangeLocations(ref1,ref2);
   _trayIcon->exchangeLocation(ref1,ref2);
+}
+
+void Controller::pauseRequested()
+{
+    _paused=true;
+}
+
+void Controller::resumeRequested()
+{
+    _paused=false;
 }

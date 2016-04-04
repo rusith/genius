@@ -31,7 +31,6 @@ public:
 
   static const int WAIT_BEFORE_PASTE=100;
 
-signals:
 private slots:
   //--------------------------basic control slots
   /**
@@ -78,6 +77,9 @@ private slots:
   void locationExchangeRequested(int ref1,int ref2);
   void locationExchanged(int ref1,int ref2);
 
+  void pauseRequested();
+  void resumeRequested();
+
 
 private:
   //------------------------basic elements
@@ -108,6 +110,8 @@ private:
    * @brief hotkey for show history menu (inside the trayIcon). then user can select item from the menu
    */
   QHotkey *_historyMenuHotKey=NULL;
+
+  bool _paused;
 
   //------------------------------ basic functions
 
@@ -151,9 +155,6 @@ private:
    * @return true or false
    */
   bool sameAsLast(ClipboardEntity *entity);
-
-
-
 
 };
 

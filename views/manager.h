@@ -158,6 +158,11 @@ private:
    */
   void initializeUI();
   /**
+   * @brief overridedd showEvent
+   * @param event
+   */
+  void showEvent(QShowEvent *event);
+  /**
    * @brief overridden hideEvent
    * @param event
    */

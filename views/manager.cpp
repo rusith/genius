@@ -250,10 +250,20 @@ void Manager::on_showContentButton_clicked()
   }
 }
 
+void Manager::showEvent(QShowEvent *event)
+{
+    if (event)
+    {
+      event->accept();
+      emit shown();
+    }
+}
+
 void Manager::hideEvent(QHideEvent *event)
 {
   if(event)
   {
+    event->accept();
     emit hidden();
   }
 }

@@ -34,7 +34,7 @@ void ContentViewer::initializeBasicUI()
   if(ui->tvFormats->count()<1)
     replaceTabViewWithFormats();
 
-  QHBoxLayout *buttonSet=new QHBoxLayout(this);
+  QHBoxLayout *buttonSet=new QHBoxLayout();
   buttonSet->addStretch();
   QPushButton *closeButton=new QPushButton(this);
   closeButton->setIcon(QIcon(Resources::cancel16));
@@ -53,7 +53,7 @@ void ContentViewer::addPlainTextTab()
     plainTextTab->setObjectName("Plain Text");
     plainTextTab->setWindowTitle("Plain Text");
 
-    QVBoxLayout *plainTextTabLayout=new QVBoxLayout(plainTextTab);
+    QVBoxLayout *plainTextTabLayout=new QVBoxLayout();
 
     QPlainTextEdit *plainTextEdit=new QPlainTextEdit(plainTextTab);
     plainTextEdit->setPlainText(_entity->plainText(false,-1));
@@ -127,14 +127,14 @@ void ContentViewer::addHTMLTab()
     tab->setObjectName("HTML");
     tab->setWindowTitle("HTML");
 
-    QVBoxLayout *tabLayout=new QVBoxLayout(tab);
+    QVBoxLayout *tabLayout=new QVBoxLayout();
 
     QTabWidget *innerTabWidget=new QTabWidget(tab);
     QWidget *previewTab=new QWidget(innerTabWidget);
     previewTab->setObjectName("preview");
     previewTab->setWindowTitle("preview");
 
-    QVBoxLayout *previewTabLayout=new QVBoxLayout(previewTab);
+    QVBoxLayout *previewTabLayout=new QVBoxLayout();
 
 
     QTextBrowser *previewTextBorowser=new QTextBrowser(tab);
@@ -173,7 +173,7 @@ void ContentViewer::addHTMLTab()
     codeTab->setObjectName("code");
     codeTab->setWindowTitle("code");
 
-    QVBoxLayout *codeTabLayout=new QVBoxLayout(codeTab);
+    QVBoxLayout *codeTabLayout=new QVBoxLayout();
     QPlainTextEdit *codeTextEdit=new QPlainTextEdit(codeTab);
     codeTextEdit->setPlainText(_entity->HTMLText(false,-1));
     codeTextEdit->setReadOnly(true);
@@ -256,7 +256,7 @@ void ContentViewer::addImageTab()
       imageTab->setObjectName("imaaddURLsTabge");
       imageTab->setWindowTitle("image");
 
-      QVBoxLayout *imageTabLayout=new QVBoxLayout(imageTab);
+      QVBoxLayout *imageTabLayout=new QVBoxLayout();
       QTabWidget *innerTabWidget=new QTabWidget(imageTab);
 
       foreach (QString format, formats)
@@ -269,7 +269,7 @@ void ContentViewer::addImageTab()
         innerTab->setObjectName(formatName);
         innerTab->setWindowTitle(formatName);
 
-        QVBoxLayout *innerTabLayout=new QVBoxLayout(innerTab);
+        QVBoxLayout *innerTabLayout=new QVBoxLayout();
 
         QGraphicsScene *graphicScene=new QGraphicsScene(innerTab);
         QGraphicsView *graphicsView=new QGraphicsView(graphicScene);
@@ -347,7 +347,7 @@ void ContentViewer::addURLsTab()
     tab->setObjectName("URLS");
     tab->setWindowTitle("URLS");
 
-    QVBoxLayout *tabLayout=new QVBoxLayout(tab);
+    QVBoxLayout *tabLayout=new QVBoxLayout();
     tabLayout->setMargin(5);
 
     QTextBrowser *textBrowser=new QTextBrowser(tab);
@@ -402,12 +402,6 @@ QString ContentViewer::imageMimeTypeToText(const QString &MT)
   else
     return "";
 }
-
-void ContentViewer::on_pushButton_clicked()
-{
-  reject();
-}
-
 void ContentViewer::replaceTabViewWithFormats()
 {
   if(ui->tvFormats)

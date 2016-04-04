@@ -19,6 +19,7 @@ DataFile::DataFile(const QMimeData *mimeData, const QString &filename)
           frame.size=wrtn;
           _fragments->insert(format,frame);
           continue;
+
         }
         qint64 wrtn=_file->write(mimeData->data(format));
         frame.size=wrtn;

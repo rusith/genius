@@ -11,6 +11,7 @@
 #include <models/clipboardhistory.h>
 #include <resources/resources.h>
 #include <views/about.h>
+#include <GUI/menuitem.h>
 #include <controllers/fakekey.h>
 
 class TrayIcon : public QWidget
@@ -45,6 +46,8 @@ signals:
   void turnOffGenius();
   void turnOnGenius();
   void exitRequested();
+  void pause();
+  void resume();
 public slots:
  void managerShown();
  void managerHidden();
@@ -65,6 +68,7 @@ private:
   QAction *_settingsAction=NULL;
   QAction *_onOffAction=NULL;
   QAction *_aboutAction=NULL;
+  QAction *_pauseResumeAction=NULL;
 
   /**
    * @brief paste when a item in historyMenu is selected

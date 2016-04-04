@@ -38,9 +38,6 @@ public:
   explicit ContentViewer(ClipboardEntity *entity,QWidget *parent=0);
   ~ContentViewer();
 
-private slots:
-  void on_pushButton_clicked();
-
 private:
   /**
    * @brief basic UI object

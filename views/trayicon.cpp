@@ -36,6 +36,12 @@ void TrayIcon::constructIcon()
   _settingsAction->setToolTip("open settings dialog");
   _menu->addAction(_settingsAction);
 
+  _pauseResumeAction=new QAction(_menu);
+  _pauseResumeAction->setIcon(QIcon(Resources::pause16));
+  _pauseResumeAction->setText("pause");
+  _pauseResumeAction->setToolTip("pause collecting clipboard changes");
+  _menu->addAction(_pauseResumeAction);
+
   _onOffAction=new QAction(_menu);
   _onOffAction->setText("turn off");
   _onOffAction->setIcon(QIcon(Resources::on16));
@@ -55,6 +61,7 @@ void TrayIcon::constructIcon()
   _menu->addAction(_exitAction);
 
   connect(_historyMenu,SIGNAL(triggered(QAction*)),this,SLOT(historyMenuActionTriggered(QAction*)));
+  connect(_historyMenu,SIGNAL())
   connect(_menu,SIGNAL(triggered(QAction*)),this,SLOT(menuActionTrigered(QAction*)));
   _icon->setContextMenu(_menu);
   _icon->setToolTip("system tray icon of genius ");
@@ -78,9 +85,9 @@ void TrayIcon::show()
 
 void TrayIcon::addImageAction(QString *text, QIcon *icon, int reference, int index)
 {
-  QAction *action=new QAction(_historyMenu);
+  MenuItem *action=new MenuItem(_historyMenu);
   action->setIcon(*icon);
-  action->setText(*text);
+  action->setTxt(*text);
   action->setData(QVariant(reference));
   if(_historyMenu->actions().isEmpty())
     _historyMenu->addAction(action);
@@ -110,8 +117,8 @@ void TrayIcon::addImageAction(QString *text, QIcon *icon, int reference, int ind
 void TrayIcon::addTextAction(QString *text, QString *tooltipText, int reference, int index)
 {
 
-  QAction *action=new QAction(_historyMenu);
-  action->setText(*text);
+  MenuItem *action=new MenuItem(_historyMenu);
+  action->setTxt(*text);
   action->setToolTip(*tooltipText);
   action->setData(QVariant(reference));
   if(_historyMenu->actions().isEmpty())
@@ -155,12 +162,12 @@ void TrayIcon::removeItem(int reference)
         {
           _historyMenu->actions().removeAt(i);
           delete action;
+          setIndexes();
           return;
         }
       }
     }
   }
-  setIndexes();
 }
 
 void TrayIcon::clearHistoryList()
@@ -199,36 +206,45 @@ void TrayIcon::menuActionTrigered(QAction *action)
   {
     emit settingsDialogRequested();
   }
+  else if(action==_pauseResumeAction)
+  {
+      if(_pauseResumeAction->text()=="pause")
+      {
+          emit pause();
+          _pauseResumeAction->setText("resume");
+          _pauseResumeAction->setIcon(QIcon(Resources::play16));
+          _pauseResumeAction->setToolTip("resume collecting clipboard changes ");
+      }
+      else
+      {
+          emit resume();
+          _pauseResumeAction->setText("pause");
+          _pauseResumeAction->setIcon(QIcon(Resources::pause16));
+          _pauseResumeAction->setToolTip("pause collecting clipboard changes ");
+      }
+  }
   else if(action==_onOffAction)
   {
-    if(_onOffAction->iconText()=="turn off")
+    if(_onOffAction->text()=="turn off")
     {
+        emit turnOffGenius();
       _onOffAction->setText("turn on");
       _onOffAction->setIcon(QIcon(Resources::off16));
       _onOffAction->setToolTip("turn on genius . new items will saved in the history");
-      emit turnOffGenius();
 
     }
     else
     {
+        emit turnOnGenius();
       _onOffAction->setText("turn off");
       _onOffAction->setIcon(QIcon(Resources::on16));
       _onOffAction->setToolTip("turn off genius . new items will not added to the list until turn on");
-      emit turnOnGenius();
     }
   }
   else if(action==_aboutAction)
   {
-    try
-    {
-      About ab(0);
-      ab.exec();
-
-    }
-    catch (int i)
-    {
-
-    }
+    About ab(0);
+    ab.exec();
   }
 }
 
@@ -240,7 +256,7 @@ void TrayIcon::historyMenuActionTriggered(QAction *action)
     emit itemSelected(reference);
     if(_pasteWhenSelected)
     {
-      QThread::msleep(100);
+      QThread::msleep(50);
       FakeKey::simulatePaste();
     }
   }
@@ -271,8 +287,8 @@ void TrayIcon::showHistoryMenu()
   if(_historyMenu->actions().count()>0)
   {
     _pasteWhenSelected=true;
-    QPoint point=_historyMenu->mapFromGlobal(QCursor::pos());
-    _historyMenu->exec(point);
+    //QPoint point=_historyMenu->mapFromGlobal(QCursor::pos());
+    _historyMenu->exec(QCursor::pos());
     _pasteWhenSelected=false;
   }
 }
@@ -329,17 +345,28 @@ void TrayIcon::iconActivated(QSystemTrayIcon::ActivationReason reson)
 
 void TrayIcon::setIndexes()
 {
-  if(GSettings::showIndexesInHistoryMenu)
+  bool indxed=GSettings::showIndexesInHistoryMenu;
+  if(indxed)
   {
     if(_historyMenu && _historyMenu->actions().isEmpty()==false && _history->isEmpty()==false)
     {
       int index=1;
       foreach (QAction *action , _historyMenu->actions())
       {
-        if(action)
-          action->setIconText(QString("%1. ").arg(index));
+        MenuItem *mi=dynamic_cast<MenuItem*>(action);
+        mi->indexed(indxed);
+        mi->index(index);
         index++;
       }
+    }
+  }
+  else
+  {
+    foreach (QAction *action , _historyMenu->actions())
+    {
+      MenuItem *mi=dynamic_cast<MenuItem*>(action);
+      if(mi->indexed())
+        mi->indexed(false);
     }
   }
 }
