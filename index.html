@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Genius by rusith</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Genius</h1>
+      <h2 class="project-tagline">powerful clipboard manager for linux and windows</h2>
+      <a href="https://github.com/rusith/genius" class="btn">View on GitHub</a>
+      <a href="https://github.com/rusith/genius/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/rusith/genius/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="genius-" class="anchor" href="#genius-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Genius </h1>
+
+<p>note : this application is still not released. keep clam and wait for the 1.0 release.</p>
+
+<p>Genius is a powerful Lightweight clipboard manager </p>
+
+<ul>
+<li><a href="https://">Downloads</a></li>
+<li><a href="https://">Web Site</a></li>
+<li><a href="https://">Wiki</a></li>
+<li><a href="https://">Donate</a></li>
+</ul>
+
+<h2>
+<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Overview</h2>
+
+<p>Genius monitors system clipboard and saves its content. and it provides 2 basic interfaces to select items from the history
+Saved clipboard can be later copied and pasted directly into any application. Clipboard data saved into the history cannot change later. 
+and Genius not change or edit data . clipboard data is restored without changing a single bit </p>
+
+<p>Items can be:</p>
+
+<ul>
+<li>Paste directly into applications using Genius hockeys</li>
+<li>or simply removed.</li>
+</ul>
+
+<h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Features</h2>
+
+<ul>
+<li>simple user interface , easy to use </li>
+<li>Support for Linux, Windows and OSX ( still not compiled for OSX) </li>
+<li>Store text, HTML, images or any other custom formats</li>
+<li>Quickly browse and items in clipboard history</li>
+<li>System-wide customizable shortcuts</li>
+<li>Paste items using ItemSelector or historyMenu</li>
+<li>Many more features</li>
+</ul>
+
+<h2>
+<a id="install-and-run" class="anchor" href="#install-and-run" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Install and Run</h2>
+
+<p>To install Genius, use binary package or installer provided for your OS or
+follow instructions in</p>
+
+<p>for build form source 
+download source and open pro file using QT Creator or visual studio (QT plug in needed.)
+build and run</p>
+
+<h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependencies</h2>
+
+<p>To build and run the application you'll need <a href="https://www.qt.io/download/">Qt</a>
+library.</p>
+
+<h2>
+<a id="keyboard-shortcuts-these-shortcuts-can-be-customized-" class="anchor" href="#keyboard-shortcuts-these-shortcuts-can-be-customized-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Keyboard Shortcuts (these shortcuts can be customized )</h2>
+
+<ul>
+<li>
+<p><code>Ctrl+Alt+Shift+C</code></p>
+
+<p>clear history and all data</p>
+</li>
+<li>
+<p><code>Ctrl+Alt+V</code></p>
+
+<p>paste last item (not current content) of the history into current application</p>
+</li>
+<li>
+<p><code>Ctrl+Shift+X</code></p>
+
+<p>open selector window (nice interface for use to navigate thought the history and select an item)</p>
+</li>
+<li>
+<p><code>Ctrl+Alt+Shift+M</code></p>
+
+<p>open clipboard manager window</p>
+</li>
+<li>
+<p><code>Ctrl+Shift+V</code></p>
+
+<p>show history menu (this can be use for select an item from history very easily )</p>
+</li>
+<li>
+<p><code>Ctrl+Alt+Shift+S</code></p>
+
+<p>open settings window</p>
+</li>
+</ul>
+
+<h2>
+<a id="basic-usage" class="anchor" href="#basic-usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Basic Usage</h2>
+
+<p>recommended to add Genius to startup application list.
+when clipboard is changed changed data is saved in the application's clipboard history.
+this data cannot edit lated only can delete when not needed.
+user can manage the Clipboard History using  Clipboard Manager window.
+user can 
+    changed items positions ,
+    view content of the items,
+    delete items,
+    clear the history
+using this window.</p>
+
+<p>user can select item form history using Selector window or history list.</p>
+
+<p>Selector window is a fancy UI with nice animations. user can navigate through the 
+clipboard history using left right keys when user release the Shift key or Alt key currently selected item will
+paste into the current application.default shortcut to bring this component is (Ctrl+Alt+X)</p>
+
+<p>History menu is a basic menu contains items of the history. user can select item and press enter to paste item.
+in History menu , user can enable index numbers. if this option is enabled index of the item will show in front of the item
+user can select item by pressing index number (1-9)</p>
+
+<p>user can turn off or on Genius any time. when turned off newly copied items will not add to the history.
+and all shortcuts will be disabled.</p>
+
+<p>user can pause and resume Genius. if user want to use some items over and over again this is useful.
+when Genius is paused new items will not add to the history and. and when user select an item from the history history will not change 
+shortcuts will work in this mode</p>
+
+<p>user can view content of items .Genius can view HTML , URI lists, plain text, images. if the content  cannot render row data is presented.
+user can export data as files.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/rusith/genius">Genius</a> is maintained by <a href="https://github.com/rusith">rusith</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
