@@ -139,7 +139,7 @@ public:
    * @param format for get size
    * @return size of givent format if format not availabel -->0;
    */
-  quint64 formatSize(const QString &format);
+  quint32 formatSize(const QString &format);
 
   /**
    * @brief used to get only present image formats
@@ -165,7 +165,7 @@ public:
    * @brief used to get size of the object's data
    * @return size
    */
-  quint64 size();
+  quint32 size();
 
   /**
    * @brief used to check the data file contais list of URLS
@@ -203,7 +203,7 @@ private:
    * @param sequence to store
    * @return bytes read
    */
-  qint64 readFragment(const FragmentFrame &frame, char *cha);
+  quint32 readFragment(const FragmentFrame &frame, char *cha);
 
   /**
    * @brief read given fragment and return byte array (byteArray must delete manually)

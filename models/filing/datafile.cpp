@@ -2,6 +2,7 @@
 
 DataFile::DataFile(const QMimeData *mimeData, const QString &filename)
 {
+     qDebug()<<"file opened";
   _fragments=new QHash<QString,FragmentFrame>();
   if(mimeData)
   {
@@ -9,6 +10,7 @@ DataFile::DataFile(const QMimeData *mimeData, const QString &filename)
     {
       _file=new QFile(filename);
       _file->open(QFile::WriteOnly);
+
       foreach (QString format, mimeData->formats())
       {
         FragmentFrame frame;
@@ -16,6 +18,7 @@ DataFile::DataFile(const QMimeData *mimeData, const QString &filename)
         if(format=="text/html")
         {
           qint64 wrtn=_file->write(mimeData->html().toUtf8());
+          qDebug()<<"file written"<<wrtn;
           frame.size=wrtn;
           _fragments->insert(format,frame);
           continue;
@@ -160,7 +163,7 @@ QString DataFile::plainText(bool check, int length)
       frame=_fragments->value("text/uri-list");
     if(frame.size<1 || length==0)
         return "";
-    if(length!=-1 && (quint64)length<=frame.size)
+    if(length!=-1 && (quint32)length<=frame.size)
       frame.size=length;
     QByteArray *BA=readFragment(frame);
     QString str;
@@ -186,7 +189,7 @@ QString DataFile::HTMLText(bool check,int length)
     FragmentFrame frame=_fragments->value("text/html");
     if(frame.size<1 || length==0)
       return "";
-    if(length!=-1 && (quint64)length<=frame.size)
+    if(length!=-1 && (quint32)length<=frame.size)
       frame.size=length;
     QByteArray *BA=readFragment(frame);
     QString str=QString::fromUtf8(*BA);
@@ -247,7 +250,7 @@ QImage *DataFile::image(bool check,const int &width, const int &hight)
     return NULL;
 }
 
-qint64 DataFile::readFragment(const FragmentFrame &frame,char *cha)
+quint32 DataFile::readFragment(const FragmentFrame &frame,char *cha)
 {
   _file->open(QFile::ReadOnly);
   _file->seek(frame.start);
@@ -277,7 +280,7 @@ QStringList DataFile::formats()
   return QStringList();
 }
 
-quint64 DataFile::formatSize(const QString &format)
+quint32 DataFile::formatSize(const QString &format)
 {
   if(_fragments)
   {
@@ -400,9 +403,9 @@ bool DataFile::operator ==(DataFile *rhs) const
     return false;
 }
 
-quint64 DataFile::size()
+quint32 DataFile::size()
 {
-  quint64 sz=0;
+  quint32 sz=0;
   foreach (FragmentFrame frame, _fragments->values())
   {
     sz=sz+frame.size;

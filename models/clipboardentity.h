@@ -114,7 +114,7 @@ public:
    * @param format for get size
    * @return size of givent format if format not availabel -->0;
    */
-  quint64 formatSize(const QString &format);
+  quint32 formatSize(const QString &format);
 
 
   /**
@@ -133,7 +133,7 @@ public:
    * @brief returns the size of the objects all data
    * @return size
    */
-  quint64 size();
+  quint32 size();
 
   /**
    * @brief used to check the data file has list of urls

@@ -121,7 +121,7 @@ QStringList ClipboardEntity::contentFormats()
     return QStringList();
 }
 
-quint64 ClipboardEntity::formatSize(const QString &format)
+quint32 ClipboardEntity::formatSize(const QString &format)
 {
   if(_dataFile)
     return _dataFile->formatSize(format);
@@ -141,7 +141,7 @@ QStringList ClipboardEntity::formats()
   return _dataFile->formats();
 }
 
-quint64 ClipboardEntity::size()
+quint32 ClipboardEntity::size()
 {
   return _dataFile->size();
 }

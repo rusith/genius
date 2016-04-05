@@ -7,6 +7,7 @@ Controller::Controller(QObject *parent) : QObject(parent)
   _managerOpened=false;
   _settingsWindowOpened=false;
   _selectorOpen=false;
+  _paused=false;
   GSettings::initialize();
 }
 
@@ -25,6 +26,7 @@ void Controller::itemSelected(int reference)
 
 void Controller::clipboardChanged(QClipboard::Mode mode)
 {
+
   if(mode==QClipboard::Clipboard && !_paused )
   {
     if(!_holtCollection && !isClipboardEmpty())
