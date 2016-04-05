@@ -23,5 +23,7 @@
         <file>images/info16.png</file>
         <file>images/pause16.png</file>
         <file>images/play16.png</file>
+        <file>images/help16.png</file>
+        <file>images/homepage16.png</file>
     </qresource>
 </RCC>

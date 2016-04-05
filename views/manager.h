@@ -10,9 +10,11 @@
 #include <QMenu>
 #include <QFileSystemModel>
 #include <QDir>
+#include <QDesktopServices>
 #include <models/clipboardhistory.h>
 #include <tools/toolkit.h>
 #include <resources/resources.h>
+#include <views/help.h>
 
 namespace Ui {
 class Manager;
@@ -138,6 +140,12 @@ private slots:
   void on_showContentButton_clicked();
 
   //void on_list_currentRowChanged(int currentRow);
+
+  void on_searchbar_textChanged(const QString &text);
+
+  void on_helpButton_clicked();
+
+  void on_homePageButton_clicked();
 
 private:
 

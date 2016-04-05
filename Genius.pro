@@ -35,7 +35,8 @@ SOURCES += main.cpp \
     views/license.cpp \
     GUI/menuitem.cpp \
     controllers/runguard.cpp \
-    GUI/menu.cpp
+    GUI/menu.cpp \
+    views/help.cpp
 
 HEADERS  += \
     views/manager.h \
@@ -58,7 +59,8 @@ HEADERS  += \
     views/license.h \
     GUI/menuitem.h \
     controllers/runguard.h \
-    GUI/menu.h
+    GUI/menu.h \
+    views/help.h
 
 FORMS    += \
     views/manager.ui \
@@ -66,7 +68,8 @@ FORMS    += \
     views/settingswindow.ui \
     views/contentviewer.ui \
     views/about.ui \
-    views/license.ui
+    views/license.ui \
+    views/help.ui
 
 DISTFILES +=
 

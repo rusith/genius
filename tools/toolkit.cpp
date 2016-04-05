@@ -113,7 +113,7 @@ QString ToolKit::URLsToPreviewText(QList<QUrl> *urls,const uint &maxLenght)
       }
       if(files)
       {
-        text=QString ("%1 files ").arg(urls->count());
+        text=(urls->count()==1 ?QString("file - "): QString ("%1 files - ").arg(urls->count()));
         if(maxLenght==0)
         {
           foreach (QUrl url, *urls)

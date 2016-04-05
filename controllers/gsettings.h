@@ -134,6 +134,10 @@ public:
    * @brief option for turn on or off index numbers in the history menu
    */
   static bool showIndexesInHistoryMenu;
+  /**
+   * @brief enable searching throught data
+   */
+  static bool enableDeepSearch;
 };
 
 #endif // GSETTINGS_H

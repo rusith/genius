@@ -67,6 +67,8 @@ void SettingsWindow::initializeElements()
   ui->historyMenuHotkey_kse->setKeySequence(GSettings::historyMenuHotkey);
   ui->historyMenu_cb->setChecked(GSettings::historyMenuHotkeyEnabled);
   ui->cbShowIndexes->setChecked(GSettings::showIndexesInHistoryMenu);
+
+  ui->deepSearch->setChecked(GSettings::enableDeepSearch);
 }
 
 void SettingsWindow::saveData()
@@ -111,6 +113,7 @@ void SettingsWindow::saveData()
   GSettings::historyMenuHotkeyEnabled=ui->historyMenu_cb->isChecked();
   GSettings::historyMenuHotkey=ui->historyMenuHotkey_kse->keySequence();
   GSettings::showIndexesInHistoryMenu=ui->cbShowIndexes->isChecked();
+  GSettings::enableDeepSearch=ui->deepSearch->isChecked();
 
   GSettings::commit();
 }

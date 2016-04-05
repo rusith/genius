@@ -2,7 +2,6 @@
 
 DataFile::DataFile(const QMimeData *mimeData, const QString &filename)
 {
-     qDebug()<<"file opened";
   _fragments=new QHash<QString,FragmentFrame>();
   if(mimeData)
   {
@@ -18,7 +17,6 @@ DataFile::DataFile(const QMimeData *mimeData, const QString &filename)
         if(format=="text/html")
         {
           qint64 wrtn=_file->write(mimeData->html().toUtf8());
-          qDebug()<<"file written"<<wrtn;
           frame.size=wrtn;
           _fragments->insert(format,frame);
           continue;

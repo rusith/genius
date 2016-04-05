@@ -333,3 +333,62 @@ void Manager::exchangeLocations(int ref1, int ref2)
 //{
     //updateInfoLabel(currentRow);
 //}
+
+void Manager::on_searchbar_textChanged(const QString &text)
+{
+  auto list=ui->list;
+  if(list->count()>0)
+  {
+    int count=list->count();
+    QListWidgetItem *item;
+    if(GSettings::enableDeepSearch)
+    {
+      ClipboardEntity *entity;
+      for(int i=0;i<count;i++)
+      {
+        item=list->item(i);
+        if(item)
+        {
+          item->setHidden(false);
+          entity=_history->get(item->data(50).toInt());
+          if(entity)
+          {
+            if(entity->hasPlainText())
+            {
+              item->setHidden(!entity->plainText(false,-1).contains(text));
+            }
+            else if(entity->hasHTML())
+            {
+              item->setHidden(!entity->HTMLText(false,-1).contains(text));
+            }
+            else
+              item->setHidden(true);
+          }
+        }
+      }
+    }
+    else
+    {
+      for(int i=0;i<count;i++)
+      {
+        item=list->item(i);
+        if(item)
+        {
+          item->setHidden(!item->text().contains(text));
+        }
+      }
+    }
+
+  }
+}
+
+void Manager::on_helpButton_clicked()
+{
+    Help help;
+    help.exec();
+}
+
+void Manager::on_homePageButton_clicked()
+{
+    QDesktopServices::openUrl(QUrl("http://rusith.github.io/genius/"));
+}

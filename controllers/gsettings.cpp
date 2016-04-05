@@ -46,6 +46,7 @@ void GSettings::initialize()
   historyMenuHotkey=QKeySequence(settings.value("historyMenuHotkey").toString());
 
   showIndexesInHistoryMenu=settings.value("showIndexesInHistoryMenu").toBool();
+  enableDeepSearch=settings.value("enableDeepSearch").toBool();
 }
 
 void GSettings::commit()
@@ -87,6 +88,7 @@ void GSettings::commit()
   settings.setValue("historyMenuHotkey",historyMenuHotkey.toString(QKeySequence::NativeText));
 
   settings.setValue("showIndexesInHistoryMenu",showIndexesInHistoryMenu);
+  settings.setValue("enableDeepSearch",enableDeepSearch);
 }
 
 void GSettings::resetToDefault()
@@ -125,6 +127,7 @@ void GSettings::resetToDefault()
   maximumImageHight=50;
 
   showIndexesInHistoryMenu=true;
+  enableDeepSearch=true;
 
   commit();
 }
@@ -158,3 +161,4 @@ int GSettings::maximumImageWidth=1;
 int GSettings::maximumImageHight=1;
 bool GSettings::selectorEnabled=true;
 bool GSettings::showIndexesInHistoryMenu=true;
+bool GSettings::enableDeepSearch=false;

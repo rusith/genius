@@ -15,6 +15,7 @@ void MenuItem::index(const int &inde)
     QString otext(text());
     QString txt=otext.mid(indexLength_,otext.length());
     setText(indexString+txt);
+    indexLength_=indexString.length();
   }
 }
 
@@ -84,7 +85,6 @@ void MenuItem::indexed(bool inde)
 //      setText(text());
 //    }
 //  }
-
 }
 
 void MenuItem::setTxt(const QString &text)

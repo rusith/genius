@@ -43,7 +43,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="General_Tab">
         <attribute name="title">
@@ -160,7 +160,7 @@
            <x>10</x>
            <y>10</y>
            <width>321</width>
-           <height>165</height>
+           <height>184</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="VL3">
@@ -295,6 +295,13 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QCheckBox" name="deepSearch">
+            <property name="text">
+             <string>Enable Deep Search</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </widget>
@@ -426,7 +433,7 @@
             <item>
              <widget class="QCheckBox" name="historyMenu_cb">
               <property name="text">
-               <string>HistoryMenu  </string>
+               <string>HistoryMenu    </string>
               </property>
              </widget>
             </item>
@@ -775,12 +782,12 @@ background-color:red;
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>97</x>
-     <y>106</y>
+     <x>110</x>
+     <y>105</y>
     </hint>
     <hint type="destinationlabel">
      <x>341</x>
-     <y>108</y>
+     <y>106</y>
     </hint>
    </hints>
   </connection>
@@ -791,12 +798,12 @@ background-color:red;
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>106</x>
-     <y>140</y>
+     <x>119</x>
+     <y>137</y>
     </hint>
     <hint type="destinationlabel">
      <x>341</x>
-     <y>142</y>
+     <y>139</y>
     </hint>
    </hints>
   </connection>
@@ -807,12 +814,12 @@ background-color:red;
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>91</x>
-     <y>209</y>
+     <x>104</x>
+     <y>202</y>
     </hint>
     <hint type="destinationlabel">
      <x>341</x>
-     <y>211</y>
+     <y>204</y>
     </hint>
    </hints>
   </connection>
@@ -823,12 +830,12 @@ background-color:red;
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>124</x>
-     <y>277</y>
+     <x>127</x>
+     <y>267</y>
     </hint>
     <hint type="destinationlabel">
      <x>341</x>
-     <y>280</y>
+     <y>269</y>
     </hint>
    </hints>
   </connection>
