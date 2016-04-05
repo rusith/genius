@@ -1,13 +1,9 @@
 Genius 
 =====
 
-note : this application is still not released. keep clam and wait for the 1.0 release.
-
 Genius is a powerful Lightweight clipboard manager 
-- [Downloads](https://)
-- [Web Site](https://)
-- [Wiki](https://)
-- [Donate](https://)
+- [Downloads](https://github.com/rusith/genius/releases)
+- [Web Site](http://rusith.github.io/genius/)
 
 
 Overview
