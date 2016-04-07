@@ -2,6 +2,7 @@
 
 Controller::Controller(QObject *parent) : QObject(parent)
 {
+
   _history=new ClipboardHistory();
   _clipboard=QApplication::clipboard();
   _managerOpened=false;
@@ -189,7 +190,8 @@ void Controller::start()
 void Controller::addClipboardContentToHistory()
 {
   ClipboardEntity *entity=new ClipboardEntity(_clipboard);
-  if(sameAsLast(entity))
+//  _trayIcon->showMessage("mes",QString("formats : %1").arg(entity->formats().size()),QSystemTrayIcon::Warning,1000);
+  if(!entity ||sameAsLast(entity)  || entity->formats().isEmpty() || entity->size()<1)
   {
     delete entity;
     return;
@@ -212,6 +214,7 @@ void Controller::showViews()
   if(!_managerOpened && !GSettings::openMinimized)
     _manager->show();
   _trayIcon->show();
+  //_trayIcon->showMessage("files folder",Resources::tempFolder.path(),QSystemTrayIcon::Information,1000);
 }
 
 void Controller::addItem(ClipboardEntity *entity, int index)

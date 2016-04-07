@@ -1,9 +1,9 @@
 #ifndef RESOURCES_H
 #define RESOURCES_H
+#include <QFile>
 #include <QString>
 #include <QTemporaryDir>
 #include <controllers/tempfolder.h>
-
 class Resources
 {
 public:
@@ -35,6 +35,7 @@ public:
    * @brief temp folder of the application
    */
   static TempFolder tempFolder;
+
 
 };
 

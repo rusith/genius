@@ -15,7 +15,7 @@
 #include <tools/rtimer.h>
 #include <tools/toolkit.h>
 #include <models/filing/fragmentframe.h>
-
+#include <resources/resources.h>
 /**
  * @brief The DataFile class provides interface for manage QMimeData object as a file
  * this file is saved as given file name

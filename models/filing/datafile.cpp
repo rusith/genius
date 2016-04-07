@@ -9,22 +9,28 @@ DataFile::DataFile(const QMimeData *mimeData, const QString &filename)
     {
       _file=new QFile(filename);
       _file->open(QFile::WriteOnly);
-
       foreach (QString format, mimeData->formats())
       {
         FragmentFrame frame;
         frame.start=_file->pos();
         if(format=="text/html")
         {
-          qint64 wrtn=_file->write(mimeData->html().toUtf8());
+          quint64 wrtn=_file->write(mimeData->html().toUtf8());
           frame.size=wrtn;
           _fragments->insert(format,frame);
-          continue;
-
         }
-        qint64 wrtn=_file->write(mimeData->data(format));
-        frame.size=wrtn;
-        _fragments->insert(format,frame);
+        else if(format=="text/plain")
+        {
+          quint64 wrtn=_file->write(mimeData->text().toUtf8());
+          frame.size=wrtn;
+          _fragments->insert(format,frame);
+        }
+        else
+        {
+          quint64 wrtn=_file->write(mimeData->data(format));
+          frame.size=wrtn;
+          _fragments->insert(format,frame);
+        }
       }
       _file->close();
     }
@@ -122,7 +128,6 @@ bool DataFile::hasHtmlText()
 
 bool DataFile::hasImage()
 {
- // qDebug()<<_fragments;
   if(_fragments==nullptr)
       return false;
   foreach (QString key, _fragments->keys())
@@ -357,45 +362,40 @@ bool DataFile::operator ==(const DataFile &rhs)const
 
 bool DataFile::operator ==(DataFile *rhs) const
 {
-  //RTimer t("DataFile::operator ==(DataFile *rhs)","compairing two DataFiles with data");
   if(!rhs)return false;
-    //check has _fragments
   if(_fragments && rhs->_fragments)
   {
     if(_fragments->keys()==rhs->_fragments->keys())
     {
       QByteArray* baThis;
       QByteArray* baRhs;
+      auto keys=_fragments->keys();
+      ToolKit::removeItem(&keys,QString("TIMESTAMP"));
       foreach (QString key,this->_fragments->keys() )
       {
-        if(key!="TIMESTAMP")
+        FragmentFrame fThis=_fragments->value(key);
+        FragmentFrame fRhs=rhs->_fragments->value(key);
+        if(!(fRhs==fThis))
+          return false;
+        baThis=readFragment(fThis);
+        baRhs=rhs->readFragment(fRhs);
+        if(baThis)
         {
-          FragmentFrame fThis=_fragments->value(key);
-          FragmentFrame fRhs=rhs->_fragments->value(key);
-          if(!(fRhs==fThis))
-            return false;
-          baThis=readFragment(fThis);
-          baRhs=rhs->readFragment(fRhs);
-          if(baThis)
+          if(baRhs)
           {
-            if(baRhs)
+            if(*baThis!=*baRhs)
             {
-              if(*baThis!=*baRhs)
-              {
-                delete baThis;
-                delete baRhs;
-                return false;
-              }
+              delete baThis;
               delete baRhs;
+              return false;
             }
-            delete baThis;
+            delete baRhs;
           }
+          delete baThis;
         }
       }
-      return true;
     }
-    else
-      return false;
+    return true;
   }
   else
     return false;
