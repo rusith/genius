@@ -331,7 +331,7 @@ bool DataFile::operator ==(DataFile *rhs) const
       QByteArray* baRhs;
       auto keys=_fragments->keys();
       ToolKit::removeItem(&keys,QString("TIMESTAMP"));
-      foreach (QString key,this->_fragments->keys() )
+      foreach (QString key,keys)
       {
         FragmentFrame fThis=_fragments->value(key);
         FragmentFrame fRhs=rhs->_fragments->value(key);
