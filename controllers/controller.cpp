@@ -110,12 +110,14 @@ void Controller::turnOffRequest()
 {
   _holtCollection=true;
   enableHotkeys(false);
+  _trayIcon->showMessage("genius is turned off","genius is successfully turned off. now any clipboard change will not be monitored",QSystemTrayIcon::Information,500);
 }
 
 void Controller::turnOnRequest()
 {
   _holtCollection=false;
   enableHotkeys(true);
+  _trayIcon->showMessage("genius is turned on","genius is successfully turned on. now all clipboard changes will be monitored",QSystemTrayIcon::Information,500);
 }
 
 void Controller::exitRequested()
@@ -191,12 +193,15 @@ void Controller::addClipboardContentToHistory()
 {
   ClipboardEntity *entity=new ClipboardEntity(_clipboard);
 //  _trayIcon->showMessage("mes",QString("formats : %1").arg(entity->formats().size()),QSystemTrayIcon::Warning,1000);
-  if(!entity ||sameAsLast(entity)  || entity->formats().isEmpty() || entity->size()<1)
+  if(entity)
   {
-    delete entity;
-    return;
+    if(sameAsLast(entity)  || entity->formats().isEmpty() || entity->size()<1)
+    {
+      delete entity;
+      return;
+    }
+    _history->pushFront(entity);
   }
-  _history->pushFront(entity);
 }
 
 
@@ -214,7 +219,6 @@ void Controller::showViews()
   if(!_managerOpened && !GSettings::openMinimized)
     _manager->show();
   _trayIcon->show();
-  //_trayIcon->showMessage("files folder",Resources::tempFolder.path(),QSystemTrayIcon::Information,1000);
 }
 
 void Controller::addItem(ClipboardEntity *entity, int index)
@@ -543,9 +547,12 @@ void Controller::locationExchanged(int ref1, int ref2)
 void Controller::pauseRequested()
 {
     _paused=true;
+    _trayIcon->showMessage("genius is paused","genius is now paused. new clipboard changes will not add to the history. but you can use the history.(static set of items)",QSystemTrayIcon::Information,500);
+
 }
 
 void Controller::resumeRequested()
 {
-    _paused=false;
+  _paused=false;
+  _trayIcon->showMessage("genius is resumed","genius is now in normal state. new clipboard changes will be add to the history",QSystemTrayIcon::Information,500);
 }

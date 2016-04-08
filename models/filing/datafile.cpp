@@ -5,11 +5,12 @@ DataFile::DataFile(const QMimeData *mimeData, const QString &filename)
   _fragments=new QHash<QString,FragmentFrame>();
   if(mimeData)
   {
-    if(mimeData->formats().count()>0)
+    auto formats=mimeData->formats();
+    if(!formats.isEmpty())
     {
       _file=new QFile(filename);
       _file->open(QFile::WriteOnly);
-      foreach (QString format, mimeData->formats())
+      foreach (QString format, formats)
       {
         FragmentFrame frame;
         frame.start=_file->pos();
@@ -128,12 +129,15 @@ bool DataFile::hasHtmlText()
 
 bool DataFile::hasImage()
 {
-  if(_fragments==nullptr)
+  if(!_fragments || _fragments->isEmpty())
       return false;
   foreach (QString key, _fragments->keys())
   {
       if (key.startsWith("image"))
-        return true;
+      {
+        if(_fragments->value(key).size>0)
+          return true;
+      }
   }
   return false;
 }
@@ -156,10 +160,9 @@ bool DataFile::hasFormat(const QStringList &strlst)
 
 QString DataFile::plainText(bool check, int length)
 {
-  if(check)
-    if(!hasPlainText())
+  if(check && !hasPlainText())
       return "";
-  if(count()>0 && _file && _file->exists())
+  if(!_fragments->isEmpty() && _file && _file->exists())
   {
     FragmentFrame frame=_fragments->value("text/plain");
     if(frame.size<1)
@@ -184,15 +187,14 @@ QString DataFile::plainText(bool check, int length)
 
 QString DataFile::HTMLText(bool check,int length)
 {
-  if(check)
-    if(!hasHtmlText())
+  if(check && !hasHtmlText())
       return "";
-  if(_fragments && count()>0 && _file && _file->exists())
+  if(count()>0 && _file && _file->exists())
   {
     FragmentFrame frame=_fragments->value("text/html");
     if(frame.size<1 || length==0)
       return "";
-    if(length!=-1 && (quint32)length<=frame.size)
+    if(length!=-1 && (quint64)length<=frame.size)
       frame.size=length;
     QByteArray *BA=readFragment(frame);
     QString str=QString::fromUtf8(*BA);
@@ -205,10 +207,9 @@ QString DataFile::HTMLText(bool check,int length)
 
 QImage *DataFile::image(bool check,const int &width, const int &hight)
 {
-  if(check)
-    if(!hasImage())
+  if(check && !hasImage())
       return NULL;
-  if(count()>0 && _file && _file->exists())
+  if(!_fragments->isEmpty() && _file && _file->exists())
   {
     QList<FragmentFrame> imgs;
     foreach (QString key, _fragments->keys())
@@ -220,8 +221,11 @@ QImage *DataFile::image(bool check,const int &width, const int &hight)
       }
       else continue;
     }
+    if(imgs.isEmpty())
+      return NULL;
     FragmentFrame max=ToolKit::maxValue(imgs);
-    if(max.size==0) return NULL;
+    if(max.size==0)
+      return NULL;
     QImage *img;
     if(width>0 && hight>0)
     {
@@ -253,7 +257,7 @@ QImage *DataFile::image(bool check,const int &width, const int &hight)
     return NULL;
 }
 
-quint32 DataFile::readFragment(const FragmentFrame &frame,char *cha)
+quint64 DataFile::readFragment(const FragmentFrame &frame,char *cha)
 {
   _file->open(QFile::ReadOnly);
   _file->seek(frame.start);
@@ -283,7 +287,7 @@ QStringList DataFile::formats()
   return QStringList();
 }
 
-quint32 DataFile::formatSize(const QString &format)
+quint64 DataFile::formatSize(const QString &format)
 {
   if(_fragments)
   {
@@ -314,50 +318,6 @@ QStringList DataFile::imageFormats()
   }
   else
     return QStringList();
-}
-
-
-bool DataFile::operator ==(const DataFile &rhs)const
-{
-  if(_fragments && rhs._fragments)
-  {
-    if(_fragments->keys()==rhs._fragments->keys())
-    {
-      QByteArray* baThis;
-      QByteArray* baRhs;
-      foreach (QString key,this->_fragments->keys() )
-      {
-        if(key!="TIMESTAMP")
-        {
-          FragmentFrame fThis=_fragments->value(key);
-          FragmentFrame fRhs=rhs._fragments->value(key);
-          if(!(fRhs==fThis))
-            return false;
-          baThis=readFragment(fThis);
-          baRhs=rhs.readFragment(fRhs);
-          if(baThis)
-          {
-            if(baRhs)
-            {
-              if(*baThis!=*baRhs)
-              {
-                delete baThis;
-                delete baRhs;
-                return false;
-              }
-              delete baRhs;
-            }
-            delete baThis;
-          }
-        }
-      }
-      return true;
-    }
-    else
-      return false;
-  }
-  else
-    return false;
 }
 
 bool DataFile::operator ==(DataFile *rhs) const
@@ -394,16 +354,18 @@ bool DataFile::operator ==(DataFile *rhs) const
           delete baThis;
         }
       }
+      return true;
     }
-    return true;
+    else
+      return false;
   }
   else
     return false;
 }
 
-quint32 DataFile::size()
+quint64 DataFile::size()
 {
-  quint32 sz=0;
+  quint64 sz=0;
   foreach (FragmentFrame frame, _fragments->values())
   {
     sz=sz+frame.size;
