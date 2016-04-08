@@ -14,8 +14,8 @@
 #include <QHideEvent>
 #include <QDebug>
 #include <models/clipboardhistory.h>
-
-
+#include <QDesktopWidget>
+#include <QFocusEvent>
 namespace Ui {
 class Selector;
 }
@@ -63,8 +63,8 @@ private:
   void keyReleaseEvent(QKeyEvent *event);
   void showEvent(QShowEvent *event);
   void hideEvent(QHideEvent *event);
-
   void updatePositionLabel();
+  void changeEvent(QEvent *event);
 };
 
 #endif // SELECTOR_H

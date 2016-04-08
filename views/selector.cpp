@@ -30,7 +30,11 @@ void Selector::initialize()
 
 void Selector::initializeUI()
 {
-
+//  QRect r=frameGeometry();
+//  r.moveCenter(availableGeometry());
+//  move(r.topLeft());
+//  adjustSize()
+  move(QApplication::desktop()->screen()->rect().center()-rect().center());
   QApplication::setActiveWindow(this);
   int length=_history->length();
   if(length>1)
@@ -392,7 +396,7 @@ void Selector::showEvent(QShowEvent *event)
   if(event)
   {
    initialize();
-   event->accept();
+   event->ignore();
   }
 }
 
@@ -400,4 +404,18 @@ void Selector::updatePositionLabel()
 {
   ui->lblPosition->setText(QString("<b>%1/%2</b>").arg(_currentIndex).arg(_history->length()));
 }
+
+
+void Selector::changeEvent(QEvent *event)
+{
+  QWidget::changeEvent(event);
+  if(event->type()==QEvent::ActivationChange)
+  {
+    if(isActiveWindow()==false)
+      hide();
+  }
+
+}
+
+
 
