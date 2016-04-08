@@ -32,6 +32,7 @@ DataFile::DataFile(const QMimeData *mimeData, const QString &filename)
           frame.size=wrtn;
           _fragments->insert(format,frame);
         }
+        qDebug()<<"format :"<<format<<" size :" <<frame.size;
       }
       _file->close();
     }

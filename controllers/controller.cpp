@@ -192,7 +192,6 @@ void Controller::start()
 void Controller::addClipboardContentToHistory()
 {
   ClipboardEntity *entity=new ClipboardEntity(_clipboard);
-//  _trayIcon->showMessage("mes",QString("formats : %1").arg(entity->formats().size()),QSystemTrayIcon::Warning,1000);
   if(entity)
   {
     if(sameAsLast(entity)  || entity->formats().isEmpty() || entity->size()<1)
@@ -219,7 +218,6 @@ void Controller::showViews()
   if(!_managerOpened && !GSettings::openMinimized)
     _manager->show();
   _trayIcon->show();
-  _trayIcon->showMessage("version","pre relese - bug no content ",QSystemTrayIcon::Information,500);
 }
 
 void Controller::addItem(ClipboardEntity *entity, int index)
