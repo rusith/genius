@@ -1,13 +1,9 @@
 Genius 
 =====
 
-note : this application is still not released. keep clam and wait for the 1.0 release.
-
 Genius is a powerful Lightweight clipboard manager 
-- [Downloads](https://)
-- [Web Site](https://)
-- [Wiki](https://)
-- [Donate](https://)
+- [Downloads](https://github.com/rusith/genius/releases)
+- [Web Site](http://rusith.github.io/genius/)
 
 
 Overview
@@ -15,7 +11,7 @@ Overview
 
 Genius monitors system clipboard and saves its content. and it provides 2 basic interfaces to select items from the history
 Saved clipboard can be later copied and pasted directly into any application. Clipboard data saved into the history cannot change later. 
-and Genius not change or edit data . clipboard data is restored without changing a single bit 
+and Genius dose not change or edit any data. clipboard data is restored without changing a single bit 
 
 Items can be:
 
