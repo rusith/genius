@@ -219,6 +219,7 @@ void Controller::showViews()
   if(!_managerOpened && !GSettings::openMinimized)
     _manager->show();
   _trayIcon->show();
+  _trayIcon->showMessage("version","pre relese - bug no content ",QSystemTrayIcon::Information,500);
 }
 
 void Controller::addItem(ClipboardEntity *entity, int index)
