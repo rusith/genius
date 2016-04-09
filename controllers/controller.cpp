@@ -10,6 +10,7 @@ Controller::Controller(QObject *parent) : QObject(parent)
   _selectorOpen=false;
   _paused=false;
   _holtCollection=false;
+  adding_=false;
   GSettings::initialize();
 }
 
@@ -28,10 +29,12 @@ void Controller::itemSelected(int reference)
 
 void Controller::clipboardChanged(QClipboard::Mode mode)
 {
-  if(mode==QClipboard::Clipboard && !_paused )
+  if(mode==QClipboard::Clipboard && !_paused)
   {
     if(!_holtCollection && !isClipboardEmpty())
-      addClipboardContentToHistory();
+    {
+       addClipboardContentToHistory();
+    }
     else return;
   }
   else return;

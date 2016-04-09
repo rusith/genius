@@ -156,6 +156,9 @@ private:
    */
   bool sameAsLast(ClipboardEntity *entity);
 
+
+  bool adding_=false;
+
 };
 
 #endif // CONTROLLER_H
