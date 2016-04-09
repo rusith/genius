@@ -182,7 +182,6 @@ void Controller::openSettingsHKTriggered()
 
 void Controller::start()
 {
-  GSettings::initialize();
   createViews();
   createHotkeys();
   createConnections();
