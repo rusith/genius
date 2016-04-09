@@ -389,7 +389,7 @@ bool DataFile::operator ==(DataFile *rhs)
 //    return false;
   if(!rhs)
   {
-    qDebug()<<"not same";
+    //qDebug()<<"not same";
     return false;
   }
   if(_fragments && rhs->_fragments)
@@ -398,7 +398,7 @@ bool DataFile::operator ==(DataFile *rhs)
     {
       if(!rhs->_fragments->keys().contains(key))
       {
-        qDebug()<<QString("not same . %1 not contains in rhs").arg(key);
+       // qDebug()<<QString("not same . %1 not contains in rhs").arg(key);
         return false;
       }
     }
