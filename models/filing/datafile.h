@@ -152,7 +152,7 @@ public:
    * @param right hand side object
    * @return true if equal
    */
-  bool operator ==(DataFile *rhs) const;
+  bool operator ==(DataFile *rhs);
 
   /**
    * @brief used to get size of the object's data

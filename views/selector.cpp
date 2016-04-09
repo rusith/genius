@@ -34,8 +34,18 @@ void Selector::initializeUI()
 //  r.moveCenter(availableGeometry());
 //  move(r.topLeft());
 //  adjustSize()
+
+  raise();
+ // QApplication::setActiveWindow(this);
   move(QApplication::desktop()->screen()->rect().center()-rect().center());
-  QApplication::setActiveWindow(this);
+
+//  for(int i=0;i<10;i++)
+//  {
+//    if(isActiveWindow()==false)
+//      QApplication::setActiveWindow(this);
+//    else
+//      break;
+//  }
   int length=_history->length();
   if(length>1)
   {

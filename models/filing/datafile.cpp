@@ -320,47 +320,112 @@ QStringList DataFile::imageFormats()
     return QStringList();
 }
 
-bool DataFile::operator ==(DataFile *rhs) const
+bool DataFile::operator ==(DataFile *rhs)
 {
   if(!rhs)return false;
   if(_fragments && rhs->_fragments)
   {
     if(_fragments->keys()==rhs->_fragments->keys())
     {
-      QByteArray* baThis;
-      QByteArray* baRhs;
-      auto keys=_fragments->keys();
-      ToolKit::removeItem(&keys,QString("TIMESTAMP"));
-      foreach (QString key,keys)
+      if(rhs->hasHtmlText() && hasHtmlText())
+        return HTMLText(false,-1)==rhs->HTMLText(false,-1);
+      else if(rhs->hasPlainText() && hasPlainText())
+        return plainText(false,-1)==rhs->plainText(false,-1);
+      else if(rhs->hasUrls() && hasUrls())
+        return urls()==rhs->urls();
+      else if(rhs->hasImage() && hasImage())
       {
-        FragmentFrame fThis=_fragments->value(key);
-        FragmentFrame fRhs=rhs->_fragments->value(key);
-        if(!(fRhs==fThis))
-          return false;
-        baThis=readFragment(fThis);
-        baRhs=rhs->readFragment(fRhs);
-        if(baThis)
+        QImage *rImg=rhs->image(false,-1,-1);
+        QImage *tImg=image(false,-1,-1);
+        if(rImg)
         {
-          if(baRhs)
+          if(tImg)
           {
-            if(*baThis!=*baRhs)
-            {
-              delete baThis;
-              delete baRhs;
-              return false;
-            }
-            delete baRhs;
+            bool b= *tImg==*tImg;
+            delete rImg;
+            delete tImg;
+            return b;
           }
-          delete baThis;
+          delete rImg;
         }
+        return false;
       }
-      return true;
+      else
+      {
+        QByteArray* baThis;
+        QByteArray* baRhs;
+        auto keys=_fragments->keys();
+        ToolKit::removeItem(&keys,QString("TIMESTAMP"));
+        foreach (QString key,keys)
+        {
+          FragmentFrame fThis=_fragments->value(key);
+          FragmentFrame fRhs=rhs->_fragments->value(key);
+          if(!(fRhs==fThis))
+            return false;
+          baThis=readFragment(fThis);
+          baRhs=rhs->readFragment(fRhs);
+          if(baThis)
+          {
+            if(baRhs)
+            {
+              if(*baThis!=*baRhs)
+              {
+                delete baThis;
+                delete baRhs;
+                return false;
+              }
+              delete baRhs;
+            }
+            delete baThis;
+          }
+        }
+        return true;
+      }
     }
     else
       return false;
   }
   else
     return false;
+//  if(!rhs)return false;
+//  if(_fragments && rhs->_fragments)
+//  {
+//    if(_fragments->keys()==rhs->_fragments->keys())
+//    {
+//      QByteArray* baThis;
+//      QByteArray* baRhs;
+//      auto keys=_fragments->keys();
+//      ToolKit::removeItem(&keys,QString("TIMESTAMP"));
+//      foreach (QString key,keys)
+//      {
+//        FragmentFrame fThis=_fragments->value(key);
+//        FragmentFrame fRhs=rhs->_fragments->value(key);
+//        if(!(fRhs==fThis))
+//          return false;
+//        baThis=readFragment(fThis);
+//        baRhs=rhs->readFragment(fRhs);
+//        if(baThis)
+//        {
+//          if(baRhs)
+//          {
+//            if(*baThis!=*baRhs)
+//            {
+//              delete baThis;
+//              delete baRhs;
+//              return false;
+//            }
+//            delete baRhs;
+//          }
+//          delete baThis;
+//        }
+//      }
+//      return true;
+//    }
+//    else
+//      return false;
+//  }
+//  else
+//    return false;
 }
 
 quint64 DataFile::size()

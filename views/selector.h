@@ -65,6 +65,10 @@ private:
   void hideEvent(QHideEvent *event);
   void updatePositionLabel();
   void changeEvent(QEvent *event);
+
 };
+
+
+
 
 #endif // SELECTOR_H
