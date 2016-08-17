@@ -11,6 +11,8 @@ DefaultGroupName=Genius
 UninstallDisplayIcon={app}\Genius.exe
 AppCopyright=Copyright (C) 2015-2020 Shanaka Rusith
 SetupIconFile=genius.ico
+AppPublisher=Shanaka Rusith
+AppPublisherURL=http://facebook.com/shanaka.rusith
 
 [Files]
 Source: "Genius.exe"; DestDir: "{app}"
