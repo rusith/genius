@@ -14,10 +14,9 @@ function setDocunloadCount()
 				for(v=0;v<assets_count;v++)
 				{
 					dc=dc+data[i].assets[v].download_count;
-
 				}
 			}
-			$("#downloadcountdisplay").text("downloads : "+dc);
+			$("#downloadcountdisplay").text(dc+" downloads");
 		}
 	});
 }
