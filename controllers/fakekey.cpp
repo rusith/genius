@@ -1,6 +1,11 @@
 
 #include "fakekey.h"
 
+#ifdef Q_OS_MAC
+#include <ApplicationServices/ApplicationServices.h>
+#include <Carbon/Carbon.h>
+#endif
+
 FakeKey::FakeKey()
 {
 
@@ -22,6 +27,20 @@ void FakeKey::simulatePaste()
   XSendEvent(PressEventV.display, PressEventV.window, True, KeyPressMask, (XEvent *)&PressEventV);
   XSendEvent(ReleasEventV.display, ReleasEventV.window, True, KeyReleaseMask, (XEvent *)&ReleasEventV);
   XCloseDisplay(display);
+#endif
+#ifdef Q_OS_MAC
+  CGKeyCode inputKeyCode = kVK_ANSI_V;
+  CGEventSourceRef source = CGEventSourceCreate(kCGEventSourceStateCombinedSessionState);
+  CGEventRef saveCommandDown = CGEventCreateKeyboardEvent(source, inputKeyCode, 1);
+  CGEventSetFlags(saveCommandDown, kCGEventFlagMaskCommand);
+  CGEventRef saveCommandUp = CGEventCreateKeyboardEvent(source, inputKeyCode, 0);
+
+  CGEventPost(kCGAnnotatedSessionEventTap, saveCommandDown);
+  CGEventPost(kCGAnnotatedSessionEventTap, saveCommandUp);
+
+  CFRelease(saveCommandUp);
+  CFRelease(saveCommandDown);
+  CFRelease(source);
 #endif
 #ifdef Q_OS_WIN
   keybd_event(VK_CONTROL,0x9d,0 , 0);
@@ -47,6 +66,20 @@ void FakeKey::simulateCopy()
   XSendEvent(PressEventV.display, PressEventV.window, True, KeyPressMask, (XEvent *)&PressEventV);
   XSendEvent(ReleasEventV.display, ReleasEventV.window, True, KeyReleaseMask, (XEvent *)&ReleasEventV);
   XCloseDisplay(display);
+#endif
+#ifdef Q_OS_MAC
+  CGKeyCode inputKeyCode = kVK_ANSI_C;
+  CGEventSourceRef source = CGEventSourceCreate(kCGEventSourceStateCombinedSessionState);
+  CGEventRef saveCommandDown = CGEventCreateKeyboardEvent(source, inputKeyCode, 1);
+  CGEventSetFlags(saveCommandDown, kCGEventFlagMaskCommand);
+  CGEventRef saveCommandUp = CGEventCreateKeyboardEvent(source, inputKeyCode, 0);
+
+  CGEventPost(kCGAnnotatedSessionEventTap, saveCommandDown);
+  CGEventPost(kCGAnnotatedSessionEventTap, saveCommandUp);
+
+  CFRelease(saveCommandUp);
+  CFRelease(saveCommandDown);
+  CFRelease(source);
 #endif
 #ifdef Q_OS_WIN
   keybd_event(VK_CONTROL,0x9D,0 , 0);
@@ -86,4 +119,6 @@ XKeyEvent FakeKey::createKeyEventX11(Display *display, Window &win,Window &winRo
 }
 
 #endif
+
+
 

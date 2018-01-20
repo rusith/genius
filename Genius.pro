@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT += core gui
 CONFIG += c++11
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -77,3 +77,5 @@ RESOURCES += \
     resources/resources.qrc
 
 include(./plugins/QHotkey/qhotkey.pri)
+
+LIBS += -framework ApplicationServices
