@@ -78,4 +78,7 @@ RESOURCES += \
 
 include(./plugins/QHotkey/qhotkey.pri)
 
-LIBS += -framework ApplicationServices
+mac {
+   LIBS += -framework ApplicationServices
+}
+

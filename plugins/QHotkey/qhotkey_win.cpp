@@ -196,9 +196,9 @@ quint32 QHotkeyPrivateWin::nativeKeycode(Qt::Key keycode)
 		return VK_LAUNCH_APP2;
 
 	case Qt::Key_Massyo:
-		return VK_OEM_FJ_MASSHOU;
+        return 0x93;
 	case Qt::Key_Touroku:
-		return VK_OEM_FJ_TOUROKU;
+        return 0x94;
 
 	default:
 		return 0;
